@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eaf6ff">
+  <meta name="description" content="Ein Adventskalender voller kleiner Quizze und Überraschungen.">
+  <title>Dein Adventskalender</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient--ice" aria-hidden="true"></div>
+  <div class="ambient ambient--blue" aria-hidden="true"></div>
+  <div class="snowfall" aria-hidden="true">
+    <span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span>
+    <span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span>
+    <span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span><span>❄</span>
+  </div>
+
+  <main class="page-shell">
+    <header class="hero">
+      <p class="eyebrow"><span class="eyebrow-star" aria-hidden="true">✦</span> Nur für dich, mit ganz viel Liebe <span class="eyebrow-star" aria-hidden="true">✦</span></p>
+      <h1>Dein <span>Adventskalender</span></h1>
+      <p class="hero-copy">24 kleine Türchen. Kleine Quizze, schöne Momente und vielleicht der eine oder andere Punkt für dich.</p>
+    </header>
+
+    <section class="scoreboard glass-panel" aria-label="Dein Punktestand">
+      <span class="score-icon" aria-hidden="true">❄</span>
+      <span class="score-label">Dein Punktestand</span>
+      <strong class="score-value" id="score">0</strong>
+      <span class="score-unit">PUNKTE</span>
+    </section>
+
+    <section class="calendar-section" aria-labelledby="calendar-heading">
+      <div class="section-heading">
+        <span class="section-sparkle" aria-hidden="true">✳</span>
+        <h2 id="calendar-heading">Ein Türchen für jeden Tag</h2>
+        <span class="section-sparkle" aria-hidden="true">✳</span>
+      </div>
+      <section class="calendar" id="calendar" aria-label="Adventskalender-Türchen"></section>
+    </section>
+
+    <footer class="page-footer">
+      <span class="footer-heart" aria-hidden="true">♥</span>
+      <p>Ganz für dich gemacht <span aria-hidden="true">·</span> Dein Fortschritt bleibt auf diesem Gerät gespeichert</p>
+    </footer>
+  </main>
+
+  <div class="overlay" id="overlay" hidden>
+    <section class="dialog glass-panel" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+      <button class="close-button" id="close-dialog" type="button" aria-label="Türchen schließen">×</button>
+      <span class="dialog-ornament" aria-hidden="true">✦</span>
+      <p class="dialog-day" id="dialog-day"></p>
+      <h2 id="dialog-title"></h2>
+      <div class="dialog-content" id="dialog-content"></div>
+    </section>
+  </div>
+
+  <p class="storage-warning" id="storage-warning" role="alert" hidden></p>
+</body>
+</html>
