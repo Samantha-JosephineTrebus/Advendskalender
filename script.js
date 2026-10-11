@@ -14,7 +14,21 @@ const QUIZZES = [
       { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "T V E N D A", answer: "ADVENT", points: 1 }
     ]
   },
-  { title: "Türchen 2", questions: [{ question: "Wie nennt man die traditionelle Weihnachtsdekoration aus Tannenzweigen?", options: ["Kranz", "Girlande", "Schmuck", "Kette"], answer: 1, points: 2 }] },
+  {
+    title: "Türchen 2",
+    questions: [
+      { type: "image", image: "winter_splash_arts/nunu-winter-splash-art-zoom.jpg", revealImage: "winter_splash_arts/nunu-winter-splash-art.jpg", answer: "Nunu", points: 2 },
+      { type: "image", image: "winter_splash_arts/winrer-wonder-zeri-splash-art-zoom.jpg", revealImage: "winter_splash_arts/winrer-wonder-zeri-splash-art.jpg", answer: "Zeri", points: 2 },
+      { type: "image", image: "winter_splash_arts/hecarim-winter-splash-art-zoom.jpg", revealImage: "winter_splash_arts/hecarim-winter-splash-art.jpg", answer: "Hecarim", points: 2 },
+      { type: "image", image: "winter_splash_arts/smolder-reindeer-splash-art-zoom.jpg", revealImage: "winter_splash_arts/smolder-reindeer-splash-art.jpg", answer: "Smolder", points: 2 },
+      { type: "image", image: "winter_splash_arts/masteryi-splash-art-winter-zoom.jpg", revealImage: "winter_splash_arts/masteryi-splash-art-winter.jpg", answer: "Master Yi", acceptedAnswers: ["Masteryi"], points: 2 },
+      { type: "image", image: "winter_splash_arts/mundo-splash-art-winter-zoom.jpg", revealImage: "winter_splash_arts/mundo-splash-art-winter.jpg", answer: "Mundo", acceptedAnswers: ["Dr. Mundo", "Dr Mundo"], points: 2 },
+      { type: "image", image: "winter_splash_arts/soraka-winter-splash-art-zoom.jpg", revealImage: "winter_splash_arts/soraka-winter-splash-art.jpg", answer: "Soraka", points: 2 },
+      { type: "image", image: "winter_splash_arts/neeko-splash-art-winter-zoom.jpg", revealImage: "winter_splash_arts/neeko-splash-art-winter.jpg", answer: "Neeko", points: 2 },
+      { type: "image", image: "winter_splash_arts/diana-splash-art-winter-zoom.jpg", revealImage: "winter_splash_arts/diana-splash-art-winter.jpg", answer: "Diana", points: 2 },
+      { type: "image", image: "winter_splash_arts/warwick-splash-art-winter-zoom.jpg", revealImage: "winter_splash_arts/warwick-splash-art-winter.jpg", answer: "Warwick", points: 2 }
+    ]
+  },
   { title: "Türchen 3", questions: [{ question: "Was steckt in einer Weihnachtsbaumspitze meistens oben dran?", options: ["Stern", "Kugel", "Engel", "Lampe"], answer: 0, points: 2 }] },
   { title: "Türchen 4", questions: [{ question: "Welche Farbe passt besonders gut zu Schnee und Eis?", options: ["Grün", "Blau", "Orange", "Rot"], answer: 1, points: 2 }] },
   { title: "Türchen 5", questions: [{ question: "Wie nennt man das Lied mit dem Satz: 'Stille Nacht, heilige Nacht'?", options: ["Adventslied", "Weihnachtslied", "Winterlied", "Morgenlied"], answer: 1, points: 2 }] },
@@ -40,7 +54,8 @@ const QUIZZES = [
 ];
 
 const DOOR_ORDER = [18, 3, 12, 7, 22, 1, 15, 9, 24, 5, 20, 11, 4, 17, 2, 14, 8, 21, 6, 19, 10, 23, 13, 16];
-const STORAGE_KEY = "adventskalender-fortschritt-v2";
+const STORAGE_KEY = "adventskalender-fortschritt-v3";
+const LEGACY_STORAGE_KEY = "adventskalender-fortschritt-v2";
 const calendar = document.querySelector("#calendar");
 const scoreDisplay = document.querySelector("#score");
 const overlay = document.querySelector("#overlay");
@@ -58,12 +73,19 @@ let wordDeadline = null;
 
 function loadProgress() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
     if (saved === null) return {};
 
     const parsed = JSON.parse(saved);
-    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) return parsed;
-    throw new Error("Gespeicherter Fortschritt hat ein unerwartetes Format.");
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      throw new Error("Gespeicherter Fortschritt hat ein unerwartetes Format.");
+    }
+
+    if (localStorage.getItem(STORAGE_KEY) === null) {
+      if (typeof parsed[1]?.[0] === "number") delete parsed[1];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    }
+    return parsed;
   } catch (error) {
     console.error("Der gespeicherte Fortschritt konnte nicht geladen werden.", error);
     showStorageWarning("Der gespeicherte Fortschritt konnte nicht gelesen werden. Der Kalender startet mit leerem Fortschritt.");
@@ -103,6 +125,12 @@ function isCorrectAnswer(question, answer) {
   if (question.type === "word") {
     return typeof answer === "string"
       && answer.trim().toLocaleLowerCase("de-DE") === question.answer.toLocaleLowerCase("de-DE");
+  }
+  if (question.type === "image") {
+    if (typeof answer !== "string") return false;
+    const normalize = (value) => value.trim().toLocaleLowerCase("de-DE").replace(/[.\s_-]/g, "");
+    const acceptedAnswers = [question.answer, ...(question.acceptedAnswers ?? [])];
+    return acceptedAnswers.some((acceptedAnswer) => normalize(answer) === normalize(acceptedAnswer));
   }
   return answer === question.answer;
 }
@@ -178,6 +206,8 @@ function renderIntro() {
   description.className = "quiz-intro";
   if (quiz.questions[0].type === "word") {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Entwirre die Buchstaben und gib das richtige Wort ein. Für jedes Wort hast du 30 Sekunden Zeit und für jede richtige Lösung bekommst du Punkte.`;
+  } else if (quiz.questions[0].type === "image") {
+    description.textContent = `Erkenne die Champions auf den Bildern und gib ihre Namen ein. Pro Bild hast du 30 Sekunden Zeit. Für jede richtige Antwort bekommst du Punkte.`;
   } else {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} ${quiz.questions.length === 1 ? "Frage" : "Fragen"} auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.`;
   }
@@ -232,6 +262,11 @@ function renderQuestion() {
 
   if (question.type === "word") {
     renderWordQuestion(question, questionIndex, progressText, questionText);
+    return;
+  }
+
+  if (question.type === "image") {
+    renderImageQuestion(question, questionIndex, progressText);
     return;
   }
 
@@ -292,6 +327,50 @@ function renderWordQuestion(question, questionIndex, progressText, questionText)
   input.focus();
 }
 
+function renderImageQuestion(question, questionIndex, progressText) {
+  const image = document.createElement("img");
+  image.className = "image-quiz-image";
+  image.src = question.image;
+  image.alt = "Winterliches Champion-Bild zum Erraten";
+
+  const questionText = document.createElement("p");
+  questionText.className = "question-text";
+  questionText.textContent = "Welcher Champion ist auf dem Bild zu sehen?";
+
+  const timerDisplay = document.createElement("p");
+  timerDisplay.className = "word-timer";
+  timerDisplay.setAttribute("role", "timer");
+
+  const form = document.createElement("form");
+  form.className = "answers";
+  const input = document.createElement("input");
+  input.className = "word-input";
+  input.type = "text";
+  input.autocomplete = "off";
+  input.spellcheck = false;
+  input.placeholder = "Name des Champions";
+  input.setAttribute("aria-label", "Name des Champions");
+
+  const submitButton = document.createElement("button");
+  submitButton.className = "primary-button";
+  submitButton.type = "submit";
+  submitButton.textContent = "Antwort prüfen";
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!input.value.trim()) {
+      input.focus();
+      return;
+    }
+    submitWordAnswer(questionIndex, input.value.trim());
+  });
+
+  form.append(input, submitButton);
+  dialogContent.append(progressText, image, questionText, timerDisplay, form);
+  startWordTimer(questionIndex, timerDisplay);
+  input.focus();
+}
+
 function startWordTimer(questionIndex, timerDisplay) {
   const timerKey = `${openDay}:${questionIndex}`;
   if (wordTimerKey !== timerKey) {
@@ -333,6 +412,11 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
 
   const isCorrect = isCorrectAnswer(question, answer);
   dialogContent.replaceChildren();
+  if (question.type === "image") {
+    renderImageResolution(question, answer, isCorrect, timedOut, questionIndex, quiz);
+    return;
+  }
+
   const feedback = document.createElement("p");
   feedback.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
   if (timedOut) {
@@ -349,6 +433,43 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
   dialogContent.append(feedback, nextButton);
+  nextButton.focus();
+}
+
+function renderImageResolution(question, answer, isCorrect, timedOut, questionIndex, quiz) {
+  const feedback = document.createElement("p");
+  feedback.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
+  if (timedOut) {
+    feedback.textContent = "Die Zeit ist abgelaufen.";
+  } else if (isCorrect) {
+    feedback.textContent = `Richtig! +${question.points} Punkte`;
+  } else {
+    feedback.textContent = "Leider nicht richtig.";
+  }
+
+  const image = document.createElement("img");
+  image.className = "image-quiz-image image-quiz-image--reveal";
+  image.src = question.revealImage;
+  image.alt = `${question.answer} im vollständigen Winter-Splash-Art-Bild`;
+
+  const solution = document.createElement("p");
+  solution.className = "image-quiz-solution";
+  solution.textContent = `Lösung: ${question.answer}`;
+
+  const nextButton = document.createElement("button");
+  nextButton.className = "primary-button";
+  nextButton.type = "button";
+  nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
+  nextButton.addEventListener("click", renderQuestion);
+
+  dialogContent.append(feedback, image, solution);
+  if (!isCorrect && !timedOut && answer) {
+    const submittedAnswer = document.createElement("p");
+    submittedAnswer.className = "image-quiz-submitted-answer";
+    submittedAnswer.textContent = `Deine Antwort: ${answer}`;
+    dialogContent.append(submittedAnswer);
+  }
+  dialogContent.append(nextButton);
   nextButton.focus();
 }
 
@@ -413,7 +534,7 @@ function renderResult() {
     questionLabel.className = "answer-summary-question";
     questionLabel.textContent = `Frage ${questionIndex + 1}`;
 
-    const userAnswer = question.type === "word"
+    const userAnswer = question.type === "word" || question.type === "image"
       ? (typeof answer === "string" && answer.trim() ? answer.trim() : "Keine Antwort (Zeit abgelaufen)")
       : question.options[answer] ?? "Keine Antwort";
     const answerText = document.createElement("span");
@@ -424,7 +545,7 @@ function renderResult() {
     if (!isCorrect) {
       const correctAnswer = document.createElement("span");
       correctAnswer.className = "answer-summary-correct";
-      correctAnswer.textContent = `Richtige Antwort: ${question.type === "word" ? question.answer : question.options[question.answer]}`;
+      correctAnswer.textContent = `Richtige Antwort: ${question.type === "word" || question.type === "image" ? question.answer : question.options[question.answer]}`;
       item.append(correctAnswer);
     }
     summary.append(item);
