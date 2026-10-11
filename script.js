@@ -50,8 +50,37 @@ const QUIZZES = [
       { type: "audio", audio: "pick_voicelane/Yunara_Select.ogg", answer: "Yunara", points: 2 }
     ]
   },
-  { title: "Türchen 4", questions: [{ question: "Welche Farbe passt besonders gut zu Schnee und Eis?", options: ["Grün", "Blau", "Orange", "Rot"], answer: 1, points: 2 }] },
-  { title: "Türchen 5", questions: [{ question: "Wie nennt man das Lied mit dem Satz: 'Stille Nacht, heilige Nacht'?", options: ["Adventslied", "Weihnachtslied", "Winterlied", "Morgenlied"], answer: 1, points: 2 }] },
+  {
+    title: "Türchen 4",
+    questions: [
+      { type: "text", question: "Was ist mein Lieblingsgetränk?", answer: "RedBull", points: 2 },
+      { type: "text", question: "Welcher Red Bull ist mein Lieblings-Red-Bull?", answer: "Weiß", acceptedAnswers: ["Kokosnuss"], points: 2 },
+      { type: "text", question: "Was ist mein Lieblingsessen?", answer: "Sushi", points: 2 },
+      { type: "text", question: "Was gab es bei unserem ersten Date zu essen?", answer: "Nudeln", acceptedAnswers: ["Nudeln mit Pesto"], points: 2 },
+      { type: "text", question: "Welchen Film haben wir bei unserem ersten Date geschaut?", answer: "Captain Marvel", points: 2 },
+      { type: "text", question: "Was ist mein Lieblingsauto?", answer: "Camaro", points: 2 },
+      { type: "text", question: "Welches Pokémon haben wir aus Knete gebastelt?", answer: "Plinfa", points: 2 },
+      { type: "text", question: "Was haben die Angestellten in Ägypten aus unseren Handtüchern gefaltet?", answer: "Affe", acceptedAnswers: ["Elefant", "Herz"], points: 2 },
+      { type: "text", question: "In welchem Jahr sind wir zusammengekommen?", answer: "2022", points: 2 },
+      { type: "text", question: "Wie heißt mein Lieblingsbuch?", answer: "Izara", points: 2 }
+    ]
+  },
+  {
+    title: "Türchen 5",
+    timeLimit: false,
+    questions: [
+      { type: "image", image: "daten-champions/akali-daten-blured.png", revealImage: "daten-champions/akali-daten.png", answer: "Akali", points: 2 },
+      { type: "image", image: "daten-champions/ashe-daten-blured.png", revealImage: "daten-champions/ashe-daten.png", answer: "Ashe", points: 2 },
+      { type: "image", image: "daten-champions/ezreal-daten-blured.png", revealImage: "daten-champions/ezreal-daten.png", answer: "Ezreal", points: 2 },
+      { type: "image", image: "daten-champions/jhin-daten-blured.png", revealImage: "daten-champions/jhin-daten.png", answer: "Jhin", points: 2 },
+      { type: "image", image: "daten-champions/lulu-daten-blured.png", revealImage: "daten-champions/lulu-daten.png", answer: "Lulu", points: 2 },
+      { type: "image", image: "daten-champions/rell-daten-blured.png", revealImage: "daten-champions/rell-daten.png", answer: "Rell", points: 2 },
+      { type: "image", image: "daten-champions/smolder-daten-blured.png", revealImage: "daten-champions/smolder-daten.png", answer: "Smolder", points: 2 },
+      { type: "image", image: "daten-champions/soraka-daten-blured.png", revealImage: "daten-champions/soraka-daten.png", answer: "Soraka", points: 2 },
+      { type: "image", image: "daten-champions/yasuo-daten-blured.png", revealImage: "daten-champions/yasuo-daten.png", answer: "Yasuo", points: 2 },
+      { type: "image", image: "daten-champions/zed-daten-blured.png", revealImage: "daten-champions/zed-daten.png", answer: "Zed", points: 2 }
+    ]
+  },
   { title: "Türchen 6", questions: [{ question: "Welches Fest beginnt am 24. Dezember?", options: ["Heiligabend", "Easter", "Halloween", "Martinstag"], answer: 0, points: 2 }] },
   { title: "Türchen 7", questions: [{ question: "Welches Gewürz ist bei Plätzchen besonders typisch?", options: ["Kardamom", "Zimt", "Paprika", "Koriander"], answer: 1, points: 2 }] },
   { title: "Türchen 8", questions: [{ question: "Was ist ein typischer Weihnachtsmann-Name in vielen Geschichten?", options: ["Nikolaus", "Gustav", "Tobias", "Marius"], answer: 0, points: 2 }] },
@@ -105,13 +134,11 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    if (typeof parsed[1]?.[0] === "number") {
-      delete parsed[1];
-      progressChanged = true;
-    }
-    if (typeof parsed[2]?.[0] === "number") {
-      delete parsed[2];
-      progressChanged = true;
+    for (const dayIndex of [1, 2, 3, 4]) {
+      if (typeof parsed[dayIndex]?.[0] === "number") {
+        delete parsed[dayIndex];
+        progressChanged = true;
+      }
     }
     if (currentProgress === null || progressChanged) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
@@ -166,6 +193,12 @@ function isCorrectAnswer(question, answer) {
   if (question.type === "audio") {
     return typeof answer === "string"
       && answer.trim().toLocaleLowerCase("de-DE") === question.answer.toLocaleLowerCase("de-DE");
+  }
+  if (question.type === "text") {
+    if (typeof answer !== "string") return false;
+    const normalize = (value) => value.trim().toLocaleLowerCase("de-DE").replace(/\s+/g, " ");
+    const acceptedAnswers = [question.answer, ...(question.acceptedAnswers ?? [])];
+    return acceptedAnswers.some((acceptedAnswer) => normalize(answer) === normalize(acceptedAnswer));
   }
   return answer === question.answer;
 }
@@ -242,9 +275,13 @@ function renderIntro() {
   if (quiz.questions[0].type === "word") {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Entwirre die Buchstaben und gib das richtige Wort ein. Für jedes Wort hast du 30 Sekunden Zeit und für jede richtige Lösung bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "image") {
-    description.textContent = `Erkenne die Champions auf den Bildern und gib ihre Namen ein. Pro Bild hast du 30 Sekunden Zeit. Für jede richtige Antwort bekommst du Punkte.`;
+    description.textContent = quiz.timeLimit === false
+      ? `Erkenne die Champions auf den Bildern und gib ihre Namen ein. Für jede richtige Antwort bekommst du Punkte.`
+      : `Erkenne die Champions auf den Bildern und gib ihre Namen ein. Pro Bild hast du 30 Sekunden Zeit. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "audio") {
     description.textContent = `Erkenne die Champions an ihrer Pick-Voiceline. Jede Audiodatei kannst du bis zu 3-mal abspielen. Gib danach den Namen des Champions ein. Für jede richtige Antwort bekommst du Punkte.`;
+  } else if (quiz.questions[0].type === "text") {
+    description.textContent = `Beantworte die Fragen über uns. Gib deine Antwort jeweils ins Textfeld ein. Für jede richtige Antwort bekommst du Punkte.`;
   } else {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} ${quiz.questions.length === 1 ? "Frage" : "Fragen"} auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.`;
   }
@@ -313,6 +350,11 @@ function renderQuestion() {
     return;
   }
 
+  if (question.type === "text") {
+    renderTextQuestion(question, questionIndex, progressText, questionText);
+    return;
+  }
+
   const choices = document.createElement("div");
   choices.className = "answers";
   choices.setAttribute("role", "group");
@@ -336,9 +378,12 @@ function renderWordQuestion(question, questionIndex, progressText, questionText)
   scrambledWord.setAttribute("aria-label", "Buchstabensalat");
   scrambledWord.textContent = question.scrambled;
 
-  const timerDisplay = document.createElement("p");
-  timerDisplay.className = "word-timer";
-  timerDisplay.setAttribute("role", "timer");
+  const quiz = QUIZZES[openDay];
+  const timerDisplay = quiz.timeLimit === false ? null : document.createElement("p");
+  if (timerDisplay) {
+    timerDisplay.className = "word-timer";
+    timerDisplay.setAttribute("role", "timer");
+  }
 
   const form = document.createElement("form");
   form.className = "answers";
@@ -371,18 +416,21 @@ function renderWordQuestion(question, questionIndex, progressText, questionText)
 }
 
 function renderImageQuestion(question, questionIndex, progressText) {
+  const quiz = QUIZZES[openDay];
   const image = document.createElement("img");
-  image.className = "image-quiz-image";
+  image.className = `image-quiz-image${quiz.timeLimit === false ? " image-quiz-image--large" : ""}`;
   image.src = question.image;
-  image.alt = "Winterliches Champion-Bild zum Erraten";
+  image.alt = "Unscharfes Champion-Bild zum Erraten";
 
   const questionText = document.createElement("p");
   questionText.className = "question-text";
   questionText.textContent = "Welcher Champion ist auf dem Bild zu sehen?";
 
-  const timerDisplay = document.createElement("p");
-  timerDisplay.className = "word-timer";
-  timerDisplay.setAttribute("role", "timer");
+  const timerDisplay = quiz.timeLimit === false ? null : document.createElement("p");
+  if (timerDisplay) {
+    timerDisplay.className = "word-timer";
+    timerDisplay.setAttribute("role", "timer");
+  }
 
   const form = document.createElement("form");
   form.className = "answers";
@@ -409,8 +457,10 @@ function renderImageQuestion(question, questionIndex, progressText) {
   });
 
   form.append(input, submitButton);
-  dialogContent.append(progressText, image, questionText, timerDisplay, form);
-  startWordTimer(questionIndex, timerDisplay);
+  dialogContent.append(progressText, image, questionText);
+  if (timerDisplay) dialogContent.append(timerDisplay);
+  dialogContent.append(form);
+  if (timerDisplay) startWordTimer(questionIndex, timerDisplay);
   input.focus();
 }
 
@@ -489,6 +539,35 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
   input.focus();
 }
 
+function renderTextQuestion(question, questionIndex, progressText, questionText) {
+  const form = document.createElement("form");
+  form.className = "answers";
+  const input = document.createElement("input");
+  input.className = "word-input";
+  input.type = "text";
+  input.autocomplete = "off";
+  input.spellcheck = false;
+  input.placeholder = "Deine Antwort";
+  input.setAttribute("aria-label", "Deine Antwort");
+  const submitButton = document.createElement("button");
+  submitButton.className = "primary-button";
+  submitButton.type = "submit";
+  submitButton.textContent = "Antwort prüfen";
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!input.value.trim()) {
+      input.focus();
+      return;
+    }
+    submitWordAnswer(questionIndex, input.value.trim());
+  });
+
+  form.append(input, submitButton);
+  dialogContent.append(progressText, questionText, form);
+  input.focus();
+}
+
 function startWordTimer(questionIndex, timerDisplay) {
   const timerKey = `${openDay}:${questionIndex}`;
   if (wordTimerKey !== timerKey) {
@@ -540,6 +619,10 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
     renderAudioResolution(question, answer, isCorrect, questionIndex, quiz);
     return;
   }
+  if (question.type === "text") {
+    renderTextResolution(question, answer, isCorrect, questionIndex, quiz);
+    return;
+  }
 
   const feedback = document.createElement("p");
   feedback.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
@@ -557,6 +640,31 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
   dialogContent.append(feedback, nextButton);
+  nextButton.focus();
+}
+
+function renderTextResolution(question, answer, isCorrect, questionIndex, quiz) {
+  const feedback = document.createElement("p");
+  feedback.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
+  feedback.textContent = isCorrect
+    ? `Richtig! +${question.points} ${question.points === 1 ? "Punkt" : "Punkte"}`
+    : "Leider nicht richtig.";
+
+  const solution = document.createElement("p");
+  solution.className = "image-quiz-solution";
+  solution.textContent = `Richtige Antwort: ${question.answer}`;
+
+  const submittedAnswer = document.createElement("p");
+  submittedAnswer.className = "image-quiz-submitted-answer";
+  submittedAnswer.textContent = `Deine Antwort: ${answer}`;
+
+  const nextButton = document.createElement("button");
+  nextButton.className = "primary-button";
+  nextButton.type = "button";
+  nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
+  nextButton.addEventListener("click", renderQuestion);
+
+  dialogContent.append(feedback, solution, submittedAnswer, nextButton);
   nextButton.focus();
 }
 
@@ -599,7 +707,7 @@ function renderImageResolution(question, answer, isCorrect, timedOut, questionIn
   const image = document.createElement("img");
   image.className = "image-quiz-image image-quiz-image--reveal";
   image.src = question.revealImage;
-  image.alt = `${question.answer} im vollständigen Winter-Splash-Art-Bild`;
+  image.alt = `${question.answer} im vollständigen Bild`;
 
   const solution = document.createElement("p");
   solution.className = "image-quiz-solution";
@@ -683,7 +791,7 @@ function renderResult() {
     questionLabel.className = "answer-summary-question";
     questionLabel.textContent = `Frage ${questionIndex + 1}`;
 
-    const userAnswer = question.type === "word" || question.type === "image" || question.type === "audio"
+    const userAnswer = question.type === "word" || question.type === "image" || question.type === "audio" || question.type === "text"
       ? (typeof answer === "string" && answer.trim() ? answer.trim() : "Keine Antwort (Zeit abgelaufen)")
       : question.options[answer] ?? "Keine Antwort";
     const answerText = document.createElement("span");
@@ -694,7 +802,7 @@ function renderResult() {
     if (!isCorrect) {
       const correctAnswer = document.createElement("span");
       correctAnswer.className = "answer-summary-correct";
-      correctAnswer.textContent = `Richtige Antwort: ${question.type === "word" || question.type === "image" || question.type === "audio" ? question.answer : question.options[question.answer]}`;
+      correctAnswer.textContent = `Richtige Antwort: ${question.type === "word" || question.type === "image" || question.type === "audio" || question.type === "text" ? question.answer : question.options[question.answer]}`;
       item.append(correctAnswer);
     }
     summary.append(item);

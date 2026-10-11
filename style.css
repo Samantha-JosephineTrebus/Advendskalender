@@ -491,6 +491,7 @@ h1 span {
 }
 
 .image-quiz-image--reveal { max-height: min(34vh, 300px); }
+.image-quiz-image--large { max-height: min(68vh, 640px); }
 .image-quiz-solution { margin: 8px 0 0; color: var(--ice-bright); font-size: 1.2rem; font-weight: 700; text-align: center; }
 .image-quiz-submitted-answer { margin: 8px 0 0; color: var(--muted); text-align: center; }
 
