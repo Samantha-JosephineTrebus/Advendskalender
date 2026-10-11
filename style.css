@@ -494,6 +494,12 @@ h1 span {
 .image-quiz-solution { margin: 8px 0 0; color: var(--ice-bright); font-size: 1.2rem; font-weight: 700; text-align: center; }
 .image-quiz-submitted-answer { margin: 8px 0 0; color: var(--muted); text-align: center; }
 
+.audio-quiz-player { display: grid; gap: 8px; margin: 0 0 20px; }
+.audio-quiz-player .primary-button { text-align: center; }
+.audio-quiz-player .primary-button:disabled { cursor: not-allowed; opacity: .65; }
+.audio-quiz-attempts, .audio-quiz-status { margin: 0; color: var(--ice-bright); font-size: .95rem; text-align: center; }
+.audio-quiz-status { color: #ffc1d0; }
+
 .word-input {
   width: 100%;
   padding: 16px 18px;

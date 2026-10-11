@@ -2,16 +2,21 @@ const QUIZZES = [
   {
     title: "Türchen 1",
     questions: [
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "T R I W E N", answer: "WINTER", points: 1 },
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "E S N H C E", answer: "SCHNEE", points: 1 },
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "N R E T S", answer: "STERN", points: 1 },
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "Z E R E K", answer: "KERZE", points: 1 },
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "G E N E L", answer: "ENGEL", points: 1 },
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "O A K A K", answer: "KAKAO", points: 1 },
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "B E L N E", answer: "NEBEL", points: 1 },
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "K E F O C L", answer: "FLOCKE", points: 1 },
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "Z T Ü M E", answer: "MÜTZE", points: 1 },
-      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "T V E N D A", answer: "ADVENT", points: 1 }
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "R E G E B A N I A T", answer: "RAGEBAITEN", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "A T A C A H R N", answer: "NACHTARA", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "Z H T S H C C R A E S F Ü", answer: "SCHARFSCHÜTZE", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "A E I K T N", answer: "AKTIEN", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "E T L H R I K E P O", answer: "HELIKOPTER", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "I I T N O B C", answer: "BITCOIN", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "L S I P D E O I V E", answer: "VIDEOSPIEL", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "T S S H C E N E U N P R P", answer: "STERNSCHNUPPE", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "I P O W H L L R O", answer: "WHIRLPOOL", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "K U S Y H", answer: "HUSKY", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "C H C N U E H T S A T", answer: "TASCHENTUCH", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "E A R T H", answer: "HATER", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "N E E V T S I E N I R", answer: "INVESTIEREN", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "D U P L E R S E H", answer: "SUPERHELD", points: 1 },
+      { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "E I G P Z U E L S", answer: "SPIELZEUG", points: 1 }
     ]
   },
   {
@@ -29,7 +34,22 @@ const QUIZZES = [
       { type: "image", image: "winter_splash_arts/warwick-splash-art-winter-zoom.jpg", revealImage: "winter_splash_arts/warwick-splash-art-winter.jpg", answer: "Warwick", points: 2 }
     ]
   },
-  { title: "Türchen 3", questions: [{ question: "Was steckt in einer Weihnachtsbaumspitze meistens oben dran?", options: ["Stern", "Kugel", "Engel", "Lampe"], answer: 0, points: 2 }] },
+  {
+    title: "Türchen 3",
+    questions: [
+      { type: "audio", audio: "pick_voicelane/Aatrox_Select.ogg", answer: "Aatrox", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Brand_Select.ogg", answer: "Brand", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Garen_Select.ogg", answer: "Garen", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Kai'Sa_Select.ogg", answer: "Kai'Sa", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Kayle_Select.ogg", answer: "Kayle", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Kindred_Select.ogg", answer: "Kindred", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Lux_Select.ogg", answer: "Lux", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Smolder_Select.ogg", answer: "Smolder", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Veigar_Select.ogg", answer: "Veigar", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Viego_Select.ogg", answer: "Viego", points: 2 },
+      { type: "audio", audio: "pick_voicelane/Yunara_Select.ogg", answer: "Yunara", points: 2 }
+    ]
+  },
   { title: "Türchen 4", questions: [{ question: "Welche Farbe passt besonders gut zu Schnee und Eis?", options: ["Grün", "Blau", "Orange", "Rot"], answer: 1, points: 2 }] },
   { title: "Türchen 5", questions: [{ question: "Wie nennt man das Lied mit dem Satz: 'Stille Nacht, heilige Nacht'?", options: ["Adventslied", "Weihnachtslied", "Winterlied", "Morgenlied"], answer: 1, points: 2 }] },
   { title: "Türchen 6", questions: [{ question: "Welches Fest beginnt am 24. Dezember?", options: ["Heiligabend", "Easter", "Halloween", "Martinstag"], answer: 0, points: 2 }] },
@@ -70,10 +90,13 @@ let openDay = null;
 let wordTimer = null;
 let wordTimerKey = null;
 let wordDeadline = null;
+let activeAudio = null;
+const audioPlayCounts = {};
 
 function loadProgress() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
+    const currentProgress = localStorage.getItem(STORAGE_KEY);
+    const saved = currentProgress ?? localStorage.getItem(LEGACY_STORAGE_KEY);
     if (saved === null) return {};
 
     const parsed = JSON.parse(saved);
@@ -81,8 +104,16 @@ function loadProgress() {
       throw new Error("Gespeicherter Fortschritt hat ein unerwartetes Format.");
     }
 
-    if (localStorage.getItem(STORAGE_KEY) === null) {
-      if (typeof parsed[1]?.[0] === "number") delete parsed[1];
+    let progressChanged = false;
+    if (typeof parsed[1]?.[0] === "number") {
+      delete parsed[1];
+      progressChanged = true;
+    }
+    if (typeof parsed[2]?.[0] === "number") {
+      delete parsed[2];
+      progressChanged = true;
+    }
+    if (currentProgress === null || progressChanged) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
     }
     return parsed;
@@ -131,6 +162,10 @@ function isCorrectAnswer(question, answer) {
     const normalize = (value) => value.trim().toLocaleLowerCase("de-DE").replace(/[.\s_-]/g, "");
     const acceptedAnswers = [question.answer, ...(question.acceptedAnswers ?? [])];
     return acceptedAnswers.some((acceptedAnswer) => normalize(answer) === normalize(acceptedAnswer));
+  }
+  if (question.type === "audio") {
+    return typeof answer === "string"
+      && answer.trim().toLocaleLowerCase("de-DE") === question.answer.toLocaleLowerCase("de-DE");
   }
   return answer === question.answer;
 }
@@ -208,6 +243,8 @@ function renderIntro() {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Entwirre die Buchstaben und gib das richtige Wort ein. Für jedes Wort hast du 30 Sekunden Zeit und für jede richtige Lösung bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "image") {
     description.textContent = `Erkenne die Champions auf den Bildern und gib ihre Namen ein. Pro Bild hast du 30 Sekunden Zeit. Für jede richtige Antwort bekommst du Punkte.`;
+  } else if (quiz.questions[0].type === "audio") {
+    description.textContent = `Erkenne die Champions an ihrer Pick-Voiceline. Jede Audiodatei kannst du bis zu 3-mal abspielen. Gib danach den Namen des Champions ein. Für jede richtige Antwort bekommst du Punkte.`;
   } else {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} ${quiz.questions.length === 1 ? "Frage" : "Fragen"} auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.`;
   }
@@ -258,7 +295,8 @@ function renderQuestion() {
   progressText.textContent = `Frage ${questionIndex + 1} von ${quiz.questions.length}`;
   const questionText = document.createElement("p");
   questionText.className = "question-text";
-  questionText.textContent = question.question;
+  questionText.textContent = question.question
+    ?? (question.type === "audio" ? "Welcher Champion ist in der Pick-Voiceline zu hören?" : "");
 
   if (question.type === "word") {
     renderWordQuestion(question, questionIndex, progressText, questionText);
@@ -267,6 +305,11 @@ function renderQuestion() {
 
   if (question.type === "image") {
     renderImageQuestion(question, questionIndex, progressText);
+    return;
+  }
+
+  if (question.type === "audio") {
+    renderAudioQuestion(question, questionIndex, progressText, questionText);
     return;
   }
 
@@ -371,6 +414,81 @@ function renderImageQuestion(question, questionIndex, progressText) {
   input.focus();
 }
 
+function renderAudioQuestion(question, questionIndex, progressText, questionText) {
+  const attemptKey = `${openDay}:${questionIndex}`;
+  const audio = new Audio(question.audio);
+  audio.preload = "none";
+  activeAudio = audio;
+
+  const player = document.createElement("div");
+  player.className = "audio-quiz-player";
+  const playButton = document.createElement("button");
+  playButton.className = "primary-button";
+  playButton.type = "button";
+  const attempts = document.createElement("p");
+  attempts.className = "audio-quiz-attempts";
+  attempts.setAttribute("aria-live", "polite");
+  const status = document.createElement("p");
+  status.className = "audio-quiz-status";
+  status.setAttribute("role", "status");
+
+  const updateAttempts = () => {
+    const playsLeft = 3 - (audioPlayCounts[attemptKey] ?? 0);
+    playButton.textContent = audio.paused ? "Voiceline abspielen" : "Voiceline wird abgespielt …";
+    playButton.disabled = playsLeft === 0 || !audio.paused;
+    attempts.textContent = `Noch ${playsLeft} ${playsLeft === 1 ? "Wiedergabe" : "Wiedergaben"}`;
+  };
+
+  playButton.addEventListener("click", () => {
+    if ((audioPlayCounts[attemptKey] ?? 0) >= 3 || !audio.paused) return;
+    audioPlayCounts[attemptKey] = (audioPlayCounts[attemptKey] ?? 0) + 1;
+    status.textContent = "";
+    updateAttempts();
+    audio.currentTime = 0;
+    audio.load();
+    audio.play().catch((error) => {
+      audio.pause();
+      audioPlayCounts[attemptKey] -= 1;
+      updateAttempts();
+      status.textContent = "Die Voiceline konnte nicht abgespielt werden. Bitte versuche es erneut.";
+      console.error("Die Champion-Voiceline konnte nicht abgespielt werden.", error);
+    });
+  });
+  audio.addEventListener("ended", updateAttempts);
+  audio.addEventListener("error", () => {
+    status.textContent = "Die Audiodatei konnte nicht geladen werden.";
+  });
+  updateAttempts();
+  player.append(playButton, attempts, status);
+
+  const form = document.createElement("form");
+  form.className = "answers";
+  const input = document.createElement("input");
+  input.className = "word-input";
+  input.type = "text";
+  input.autocomplete = "off";
+  input.spellcheck = false;
+  input.placeholder = "Name des Champions";
+  input.setAttribute("aria-label", "Name des Champions");
+  const submitButton = document.createElement("button");
+  submitButton.className = "primary-button";
+  submitButton.type = "submit";
+  submitButton.textContent = "Antwort prüfen";
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!input.value.trim()) {
+      input.focus();
+      return;
+    }
+    submitWordAnswer(questionIndex, input.value.trim());
+  });
+
+  form.append(input, submitButton);
+  dialogContent.append(progressText, questionText, player, form);
+  input.focus();
+}
+
 function startWordTimer(questionIndex, timerDisplay) {
   const timerKey = `${openDay}:${questionIndex}`;
   if (wordTimerKey !== timerKey) {
@@ -402,6 +520,8 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
   wordTimer = null;
   wordTimerKey = null;
   wordDeadline = null;
+  activeAudio?.pause();
+  activeAudio = null;
 
   const quiz = QUIZZES[openDay];
   const question = quiz.questions[questionIndex];
@@ -414,6 +534,10 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
   dialogContent.replaceChildren();
   if (question.type === "image") {
     renderImageResolution(question, answer, isCorrect, timedOut, questionIndex, quiz);
+    return;
+  }
+  if (question.type === "audio") {
+    renderAudioResolution(question, answer, isCorrect, questionIndex, quiz);
     return;
   }
 
@@ -433,6 +557,31 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
   dialogContent.append(feedback, nextButton);
+  nextButton.focus();
+}
+
+function renderAudioResolution(question, answer, isCorrect, questionIndex, quiz) {
+  const feedback = document.createElement("p");
+  feedback.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
+  feedback.textContent = isCorrect
+    ? `Richtig! +${question.points} ${question.points === 1 ? "Punkt" : "Punkte"}`
+    : "Leider nicht richtig.";
+
+  const solution = document.createElement("p");
+  solution.className = "image-quiz-solution";
+  solution.textContent = `Der Champion war: ${question.answer}`;
+
+  const submittedAnswer = document.createElement("p");
+  submittedAnswer.className = "image-quiz-submitted-answer";
+  submittedAnswer.textContent = `Deine Antwort: ${answer}`;
+
+  const nextButton = document.createElement("button");
+  nextButton.className = "primary-button";
+  nextButton.type = "button";
+  nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
+  nextButton.addEventListener("click", renderQuestion);
+
+  dialogContent.append(feedback, solution, submittedAnswer, nextButton);
   nextButton.focus();
 }
 
@@ -534,7 +683,7 @@ function renderResult() {
     questionLabel.className = "answer-summary-question";
     questionLabel.textContent = `Frage ${questionIndex + 1}`;
 
-    const userAnswer = question.type === "word" || question.type === "image"
+    const userAnswer = question.type === "word" || question.type === "image" || question.type === "audio"
       ? (typeof answer === "string" && answer.trim() ? answer.trim() : "Keine Antwort (Zeit abgelaufen)")
       : question.options[answer] ?? "Keine Antwort";
     const answerText = document.createElement("span");
@@ -545,7 +694,7 @@ function renderResult() {
     if (!isCorrect) {
       const correctAnswer = document.createElement("span");
       correctAnswer.className = "answer-summary-correct";
-      correctAnswer.textContent = `Richtige Antwort: ${question.type === "word" || question.type === "image" ? question.answer : question.options[question.answer]}`;
+      correctAnswer.textContent = `Richtige Antwort: ${question.type === "word" || question.type === "image" || question.type === "audio" ? question.answer : question.options[question.answer]}`;
       item.append(correctAnswer);
     }
     summary.append(item);
@@ -558,6 +707,8 @@ function renderResult() {
 function closeDialog() {
   clearInterval(wordTimer);
   wordTimer = null;
+  activeAudio?.pause();
+  activeAudio = null;
   overlay.hidden = true;
   openDay = null;
 }
