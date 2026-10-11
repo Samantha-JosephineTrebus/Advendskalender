@@ -39,6 +39,7 @@ const QUIZZES = [
   { title: "Türchen 24", questions: [{ question: "Welches Gefühl passt am besten zu einem perfekten Adventskalender?", options: ["Freude", "Trost", "Betrübnis", "Langeweile"], answer: 0, points: 4 }] }
 ];
 
+const DOOR_ORDER = [18, 3, 12, 7, 22, 1, 15, 9, 24, 5, 20, 11, 4, 17, 2, 14, 8, 21, 6, 19, 10, 23, 13, 16];
 const STORAGE_KEY = "adventskalender-fortschritt-v2";
 const calendar = document.querySelector("#calendar");
 const scoreDisplay = document.querySelector("#score");
@@ -114,12 +115,14 @@ function isComplete(dayIndex) {
 
 function renderCalendar() {
   calendar.replaceChildren();
-  QUIZZES.forEach((quiz, index) => {
+  DOOR_ORDER.forEach((dayNumber) => {
+    const index = dayNumber - 1;
+    const quiz = QUIZZES[index];
     const completed = isComplete(index);
     const button = document.createElement("button");
     button.className = `door${completed ? " is-complete" : ""}`;
     button.type = "button";
-    button.setAttribute("aria-label", `${quiz.title}${completed ? ", abgeschlossen" : ""}`);
+    button.setAttribute("aria-label", `Türchen ${dayNumber}${completed ? ", abgeschlossen" : ""}`);
 
     if (completed) {
       const check = document.createElement("span");
@@ -131,7 +134,7 @@ function renderCalendar() {
 
     const number = document.createElement("span");
     number.className = "door-number";
-    number.textContent = String(index + 1).padStart(2, "0");
+    number.textContent = String(dayNumber).padStart(2, "0");
     const label = document.createElement("span");
     label.className = "door-label";
     label.textContent = completed ? `${pointsFor(index)} Punkte` : "Öffnen";
