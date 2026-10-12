@@ -102,7 +102,21 @@ const QUIZZES = [
       { question: "Lied von Helge Schneider: ...klo", answer: "Katzeklo", points: 2 }
     ]
   },
-  { title: "Türchen 8", questions: [{ question: "Was ist ein typischer Weihnachtsmann-Name in vielen Geschichten?", options: ["Nikolaus", "Gustav", "Tobias", "Marius"], answer: 0, points: 2 }] },
+  {
+    title: "Türchen 8",
+    questions: [
+      { type: "song", audio: "songs-erraten/Alles_was_ich_sein_will_-_Papaplatte.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Alles was ich sein will", points: 2 },
+      { type: "song", audio: "songs-erraten/DURCHGEHEND_ONLINE_Musikvideo_YouAreHero.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Durchgehend online", points: 2 },
+      { type: "song", audio: "songs-erraten/t-low_-_CRASHEN.mp3", question: "Welcher Songtitel ist zu hören?", answer: "crashen", points: 2 },
+      { type: "song", audio: "songs-erraten/CRO_-_Bad_Chick.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Bad chick", points: 2 },
+      { type: "song", audio: "songs-erraten/Dame_-_12_Millionen.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Wow song", points: 2 },
+      { type: "song", audio: "songs-erraten/NSYNC_-_Bye_Bye_Bye.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Bye bye Bye", points: 2 },
+      { type: "song", audio: "songs-erraten/Linkin_Park_-_Heavy_Is_the_Crown.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Heavy Is the Crown", points: 2 },
+      { type: "song", audio: "songs-erraten/Rihanna_-_Umbrella.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Umbrella", points: 2 },
+      { type: "song", audio: "songs-erraten/Shawn_Mendes_-_Mercy.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Mercy", points: 2 },
+      { type: "song", audio: "songs-erraten/Bruno_Mars_-_Just_The_Way_You_Are.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Just The Way You Are", points: 2 }
+    ]
+  },
   { title: "Türchen 9", questions: [{ question: "Welches Getränk passt besonders zu einem kalten Winterabend?", options: ["Kakao", "Limonade", "Soda", "Eistee"], answer: 0, points: 2 }] },
   { title: "Türchen 10", questions: [{ question: "Was wird in der Weihnachtszeit oft auf dem Adventskranz gesetzt?", options: ["Kerzen", "Bilder", "Steine", "Blumen"], answer: 0, points: 2 }] },
   { title: "Türchen 11", questions: [{ question: "Welches Wort beschreibt eine besonders schöne, kalte Winterstimmung?", options: ["Frostig", "Staubig", "Vulkanisch", "Sonnig"], answer: 0, points: 2 }] },
@@ -154,7 +168,7 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    for (const dayIndex of [1, 2, 3, 4, 6]) {
+    for (const dayIndex of [1, 2, 3, 4, 6, 7]) {
       if (typeof parsed[dayIndex]?.[0] === "number") {
         delete parsed[dayIndex];
         progressChanged = true;
@@ -213,6 +227,11 @@ function isCorrectAnswer(question, answer) {
   if (question.type === "audio") {
     return typeof answer === "string"
       && answer.trim().toLocaleLowerCase("de-DE") === question.answer.toLocaleLowerCase("de-DE");
+  }
+  if (question.type === "song") {
+    return typeof answer === "string"
+      && answer.trim().toLocaleLowerCase("de-DE").replace(/\s+/g, " ")
+        === question.answer.toLocaleLowerCase("de-DE").replace(/\s+/g, " ");
   }
   if (question.type === "text" || (typeof question.answer === "string" && !question.options)) {
     if (typeof answer !== "string") return false;
@@ -311,6 +330,8 @@ function renderIntro() {
       : `Erkenne die Champions auf den Bildern und gib ihre Namen ein. Pro Bild hast du 30 Sekunden Zeit. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "audio") {
     description.textContent = `Erkenne die Champions an ihrer Pick-Voiceline. Jede Audiodatei kannst du bis zu 3-mal abspielen. Gib danach den Namen des Champions ein. Für jede richtige Antwort bekommst du Punkte.`;
+  } else if (quiz.questions[0].type === "song") {
+    description.textContent = `Höre dir den Song an und errate den Titel. Du kannst die Audiodatei bis zu 3-mal abspielen. Für die richtige Antwort bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "text") {
     description.textContent = `Beantworte die Fragen über uns. Gib deine Antwort jeweils ins Textfeld ein. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.type === "live") {
@@ -373,7 +394,9 @@ function renderQuestion() {
   const questionText = document.createElement("p");
   questionText.className = "question-text";
   questionText.textContent = question.question
-    ?? (question.type === "audio" ? "Welcher Champion ist in der Pick-Voiceline zu hören?" : "");
+    ?? (question.type === "audio"
+      ? "Welcher Champion ist in der Pick-Voiceline zu hören?"
+      : question.type === "song" ? "Welcher Songtitel ist zu hören?" : "");
 
   if (question.type === "word") {
     renderWordQuestion(question, questionIndex, progressText, questionText);
@@ -386,6 +409,11 @@ function renderQuestion() {
   }
 
   if (question.type === "audio") {
+    renderAudioQuestion(question, questionIndex, progressText, questionText);
+    return;
+  }
+
+  if (question.type === "song") {
     renderAudioQuestion(question, questionIndex, progressText, questionText);
     return;
   }
@@ -611,8 +639,8 @@ function renderImageQuestion(question, questionIndex, progressText) {
   input.type = "text";
   input.autocomplete = "off";
   input.spellcheck = false;
-  input.placeholder = "Name des Champions";
-  input.setAttribute("aria-label", "Name des Champions");
+  input.placeholder = isSong ? "Songtitel" : "Name des Champions";
+  input.setAttribute("aria-label", isSong ? "Songtitel" : "Name des Champions");
 
   const submitButton = document.createElement("button");
   submitButton.className = "primary-button";
@@ -638,6 +666,7 @@ function renderImageQuestion(question, questionIndex, progressText) {
 
 function renderAudioQuestion(question, questionIndex, progressText, questionText) {
   const attemptKey = `${openDay}:${questionIndex}`;
+  const isSong = question.type === "song";
   const audio = new Audio(question.audio);
   audio.preload = "none";
   activeAudio = audio;
@@ -656,7 +685,8 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
 
   const updateAttempts = () => {
     const playsLeft = 3 - (audioPlayCounts[attemptKey] ?? 0);
-    playButton.textContent = audio.paused ? "Voiceline abspielen" : "Voiceline wird abgespielt …";
+    const audioLabel = isSong ? "Song" : "Voiceline";
+    playButton.textContent = audio.paused ? `${audioLabel} abspielen` : `${audioLabel} wird abgespielt …`;
     playButton.disabled = playsLeft === 0 || !audio.paused;
     attempts.textContent = `Noch ${playsLeft} ${playsLeft === 1 ? "Wiedergabe" : "Wiedergaben"}`;
   };
@@ -672,13 +702,15 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
       audio.pause();
       audioPlayCounts[attemptKey] -= 1;
       updateAttempts();
-      status.textContent = "Die Voiceline konnte nicht abgespielt werden. Bitte versuche es erneut.";
-      console.error("Die Champion-Voiceline konnte nicht abgespielt werden.", error);
+      status.textContent = isSong
+        ? "Der Song konnte nicht abgespielt werden. Bitte versuche es erneut."
+        : "Die Voiceline konnte nicht abgespielt werden. Bitte versuche es erneut.";
+      console.error(`Die ${isSong ? "Audiodatei" : "Champion-Voiceline"} konnte nicht abgespielt werden.`, error);
     });
   });
   audio.addEventListener("ended", updateAttempts);
   audio.addEventListener("error", () => {
-    status.textContent = "Die Audiodatei konnte nicht geladen werden.";
+    status.textContent = `Die ${isSong ? "Songdatei" : "Audiodatei"} konnte nicht geladen werden.`;
   });
   updateAttempts();
   player.append(playButton, attempts, status);
@@ -690,8 +722,8 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
   input.type = "text";
   input.autocomplete = "off";
   input.spellcheck = false;
-  input.placeholder = "Name des Champions";
-  input.setAttribute("aria-label", "Name des Champions");
+  input.placeholder = isSong ? "Songtitel" : "Name des Champions";
+  input.setAttribute("aria-label", isSong ? "Songtitel" : "Name des Champions");
   const submitButton = document.createElement("button");
   submitButton.className = "primary-button";
   submitButton.type = "submit";
@@ -787,7 +819,7 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
     renderImageResolution(question, answer, isCorrect, timedOut, questionIndex, quiz);
     return;
   }
-  if (question.type === "audio") {
+  if (question.type === "audio" || question.type === "song") {
     renderAudioResolution(question, answer, isCorrect, questionIndex, quiz);
     return;
   }
@@ -795,7 +827,6 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
     renderTextResolution(question, answer, isCorrect, questionIndex, quiz);
     return;
   }
-
   const feedback = document.createElement("p");
   feedback.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
   if (timedOut) {
@@ -849,7 +880,9 @@ function renderAudioResolution(question, answer, isCorrect, questionIndex, quiz)
 
   const solution = document.createElement("p");
   solution.className = "image-quiz-solution";
-  solution.textContent = `Der Champion war: ${question.answer}`;
+  solution.textContent = question.type === "song"
+    ? `Der Songtitel war: ${question.answer}`
+    : `Der Champion war: ${question.answer}`;
 
   const submittedAnswer = document.createElement("p");
   submittedAnswer.className = "image-quiz-submitted-answer";
