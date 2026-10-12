@@ -81,7 +81,7 @@ const QUIZZES = [
       { type: "image", image: "daten-champions/zed-daten-blured.png", revealImage: "daten-champions/zed-daten.png", answer: "Zed", points: 2 }
     ]
   },
-  { title: "Türchen 6", challenge: "Minigame-Tag", questions: [] },
+  { title: "Türchen 6", challenge: "Minigame-Tag", manualScore: true, questions: [] },
   {
     title: "Türchen 7",
     type: "live",
@@ -183,7 +183,7 @@ const QUIZZES = [
       { year: "2026", answer: "Avengers: Doomsday", points: 2 }
     ]
   },
-  { title: "Türchen 11", questions: [{ question: "Welches Wort beschreibt eine besonders schöne, kalte Winterstimmung?", options: ["Frostig", "Staubig", "Vulkanisch", "Sonnig"], answer: 0, points: 2 }] },
+  { title: "Türchen 11", challenge: "Minigame-Tag", manualScore: true, questions: [] },
   { title: "Türchen 12", questions: [{ question: "Welche Farbe ist in vielen Weihnachtsdekorationen besonders verbreitet?", options: ["Silber", "Lila", "Braun", "Pink"], answer: 0, points: 2 }] },
   { title: "Türchen 13", questions: [{ question: "Was ist eine klassische Weihnachtsgabe?", options: ["Buch", "Schaufel", "Hammer", "Mauer"], answer: 0, points: 3 }] },
   { title: "Türchen 14", questions: [{ question: "Wie nennt man die kleinen, süßen Kekse aus der Weihnachtszeit oft?", options: ["Plätzchen", "Brötchen", "Croissants", "Baguette"], answer: 0, points: 3 }] },
@@ -232,7 +232,7 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9]) {
+    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10]) {
       if (typeof parsed[dayIndex]?.[0] === "number") {
         delete parsed[dayIndex];
         progressChanged = true;
@@ -272,6 +272,11 @@ function answersFor(dayIndex) {
 function pointsFor(dayIndex) {
   const quiz = QUIZZES[dayIndex];
   const answers = answersFor(dayIndex);
+  if (quiz.manualScore) {
+    return Number.isSafeInteger(answers._manualPoints) && answers._manualPoints >= 0
+      ? answers._manualPoints
+      : 0;
+  }
   return quiz.questions.reduce((total, question, questionIndex) => (
     total + (isCorrectAnswer(question, answers[questionIndex]) ? question.points : 0)
   ), 0);
@@ -311,6 +316,10 @@ function isCorrectAnswer(question, answer) {
 
 function isComplete(dayIndex) {
   const quiz = QUIZZES[dayIndex];
+  if (quiz.manualScore) {
+    return Number.isSafeInteger(answersFor(dayIndex)._manualPoints)
+      && answersFor(dayIndex)._manualPoints >= 0;
+  }
   return quiz.questions.length > 0
     && quiz.questions.every((_, questionIndex) => Object.hasOwn(answersFor(dayIndex), questionIndex));
 }
@@ -377,6 +386,7 @@ function renderIntro() {
       challenge.className = "minigame-challenge";
       challenge.textContent = quiz.challenge;
       dialogContent.append(challenge);
+      if (quiz.manualScore) renderManualScoreInput(answers);
       return;
     }
 
@@ -436,6 +446,59 @@ function renderIntro() {
   dialogContent.append(description);
   if (progressMessage.textContent) dialogContent.append(progressMessage);
   dialogContent.append(startButton);
+}
+
+function renderManualScoreInput(answers) {
+  const form = document.createElement("form");
+  form.className = "answers";
+
+  const label = document.createElement("label");
+  label.className = "live-quiz-question";
+  label.htmlFor = "manual-score-input";
+  label.textContent = "Wie viele Punkte hast du verdient?";
+
+  const input = document.createElement("input");
+  input.className = "word-input";
+  input.id = "manual-score-input";
+  input.type = "number";
+  input.min = "0";
+  input.max = String(Number.MAX_SAFE_INTEGER);
+  input.step = "1";
+  input.required = true;
+  input.inputMode = "numeric";
+  input.value = Number.isSafeInteger(answers._manualPoints) ? String(answers._manualPoints) : "";
+  input.setAttribute("aria-label", label.textContent);
+
+  const feedback = document.createElement("p");
+  feedback.className = "feedback";
+  feedback.setAttribute("aria-live", "polite");
+
+  const submit = document.createElement("button");
+  submit.className = "primary-button";
+  submit.type = "submit";
+  submit.textContent = "Punktzahl speichern";
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const points = input.valueAsNumber;
+    if (!Number.isSafeInteger(points) || points < 0) {
+      feedback.className = "feedback incorrect";
+      feedback.textContent = "Bitte gib eine gültige nichtnegative ganze Punktzahl ein.";
+      input.focus();
+      return;
+    }
+
+    const currentAnswers = answersFor(openDay);
+    currentAnswers._manualPoints = points;
+    progress[openDay] = currentAnswers;
+    saveProgress();
+    renderCalendar();
+    feedback.className = "feedback correct";
+    feedback.textContent = `${points} ${points === 1 ? "Punkt" : "Punkte"} gespeichert.`;
+  });
+
+  form.append(label, input, submit, feedback);
+  dialogContent.append(form);
 }
 
 function renderQuestion() {
