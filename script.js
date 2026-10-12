@@ -184,9 +184,56 @@ const QUIZZES = [
     ]
   },
   { title: "Türchen 11", challenge: "Minigame-Tag", manualScore: true, questions: [] },
-  { title: "Türchen 12", questions: [{ question: "Welche Farbe ist in vielen Weihnachtsdekorationen besonders verbreitet?", options: ["Silber", "Lila", "Braun", "Pink"], answer: 0, points: 2 }] },
-  { title: "Türchen 13", questions: [{ question: "Was ist eine klassische Weihnachtsgabe?", options: ["Buch", "Schaufel", "Hammer", "Mauer"], answer: 0, points: 3 }] },
-  { title: "Türchen 14", questions: [{ question: "Wie nennt man die kleinen, süßen Kekse aus der Weihnachtszeit oft?", options: ["Plätzchen", "Brötchen", "Croissants", "Baguette"], answer: 0, points: 3 }] },
+  {
+    title: "Türchen 12",
+    audioPrompt: "Welcher Champion ist in seiner Laugh-Voiceline zu hören?",
+    audioDescription: "Erkenne die Champions an ihrem Laugh. Jede Audiodatei kannst du bis zu 3-mal abspielen. Für jede richtige Antwort bekommst du Punkte.",
+    questions: [
+      { type: "audio", audio: "champion-laugh/Bel'Veth_Original_Laugh.ogg", answer: "Bel'Veth", acceptedAnswers: ["BelVeth", "Bel Veth"], points: 2 },
+      { type: "audio", audio: "champion-laugh/Cassiopeia_Original_Laugh_3.ogg", answer: "Cassiopeia", points: 2 },
+      { type: "audio", audio: "champion-laugh/Fizz_Original_Laugh_0.ogg", answer: "Fizz", points: 2 },
+      { type: "audio", audio: "champion-laugh/Kindred_Original_Laugh_0.ogg", answer: "Kindred", points: 2 },
+      { type: "audio", audio: "champion-laugh/Malphite_Original_Laugh_1.ogg", answer: "Malphite", points: 2 },
+      { type: "audio", audio: "champion-laugh/Nilah_Original_Laugh.ogg", answer: "Nilah", points: 2 },
+      { type: "audio", audio: "champion-laugh/Sett_Original_Laugh_0.ogg", answer: "Sett", points: 2 },
+      { type: "audio", audio: "champion-laugh/Smolder_Original_Laugh.ogg", answer: "Smolder", points: 2 },
+      { type: "audio", audio: "champion-laugh/Yunara_Original_Laugh.ogg", answer: "Yunara", points: 2 },
+      { type: "audio", audio: "champion-laugh/Yuumi_Original_Laugh.ogg", answer: "Yuumi", points: 2 }
+    ]
+  },
+  {
+    title: "Türchen 13",
+    questionTimeLimit: 30,
+    textDescription: "Erkenne Filme, Anime und Serien anhand der Emojis. Du hast pro Frage 30 Sekunden Zeit. Gib den gesuchten Titel ein. Für jede richtige Antwort bekommst du Punkte.",
+    questions: [
+      { type: "text", question: "👹⚔️", answer: "Demon Slayer", points: 3 },
+      { type: "text", question: "🎈⬆️", answer: "Up", points: 3 },
+      { type: "text", question: "⚔️👑🐉", answer: "Game of Thrones", points: 3 },
+      { type: "text", question: "⚡🪄", answer: "Harry Potter", points: 3 },
+      { type: "text", question: "1️⃣⬆️🗡️", answer: "Solo Leveling", points: 3 },
+      { type: "text", question: "☣️🌍👩🏼👦🏻", answer: "The 100", points: 3 },
+      { type: "text", question: "⚫🍀", answer: "Black Clover", points: 3 },
+      { type: "text", question: "🕵️🎩🔍", answer: "Sherlock", acceptedAnswers: ["Sherlock Holmes"], points: 3 },
+      { type: "text", question: "🔵🔴🧑‍🦯👹", answer: "Jujutsu Kaisen", points: 3 },
+      { type: "text", question: "🦸🦸‍♀️💜", answer: "Avengers Endgame", points: 3 }
+    ]
+  },
+  {
+    title: "Türchen 14",
+    abilityAudioQuiz: true,
+    questions: [
+      { type: "ability-audio", audio: "abilities-sound/Alistar_Original_SFX_W_OnCast_0.ogg", champion: "Alistar", answer: "W", points: 3 },
+      { type: "ability-audio", audio: "abilities-sound/Galio_Original_SFX_Q_OnCast.ogg", champion: "Galio", answer: "Q", points: 3 },
+      { type: "ability-audio", audio: "abilities-sound/Gnar_Original_SFX_Q_OnCast_0.ogg", champion: "Gnar", answer: "Q", points: 3 },
+      { type: "ability-audio", audio: "abilities-sound/Kled_Original_R_SFX_2.ogg", champion: "Kled", answer: "R", points: 3 },
+      { type: "ability-audio", audio: "abilities-sound/Mordekaiser_Original_SFX_W_cast_0_0.ogg", champion: "Mordekaiser", answer: "W", points: 3 },
+      { type: "ability-audio", audio: "abilities-sound/Pyke_Original_W_SFX_0.ogg", champion: "Pyke", answer: "W", points: 3 },
+      { type: "ability-audio", audio: "abilities-sound/Renekton_Original_SFX_E_OnCast_0.ogg", champion: "Renekton", answer: "E", points: 3 },
+      { type: "ability-audio", audio: "abilities-sound/Seraphine_Original_SFX_Q_OnCast_0.ogg", champion: "Seraphine", answer: "Q", points: 3 },
+      { type: "ability-audio", audio: "abilities-sound/Smolder_Original_SFX_R_OnCast.ogg", champion: "Smolder", answer: "R", points: 3 },
+      { type: "ability-audio", audio: "abilities-sound/Yasuo_Original_SFX_W_MovingWall_OnCast_0.ogg", champion: "Yasuo", answer: "W", points: 3 }
+    ]
+  },
   { title: "Türchen 15", questions: [{ question: "Welche Stimmung passt am besten zu einer Schneelandschaft?", options: ["Winterlich", "Tropisch", "Wüstenscharf", "Stürmisch"], answer: 0, points: 3 }] },
   { title: "Türchen 16", questions: [{ question: "Was ist das Gegenteil von warm?", options: ["Kalt", "Nass", "Leicht", "Fett"], answer: 0, points: 3 }] },
   { title: "Türchen 17", questions: [{ question: "Wie nennt man das Klingeln von Glocken im Winter?", options: ["Festlichkeit", "Oberton", "Winterklingen", "Windschein"], answer: 0, points: 3 }] },
@@ -232,7 +279,7 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10]) {
+    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13]) {
       if (typeof parsed[dayIndex]?.[0] === "number") {
         delete parsed[dayIndex];
         progressChanged = true;
@@ -293,9 +340,17 @@ function isCorrectAnswer(question, answer) {
     const acceptedAnswers = [question.answer, ...(question.acceptedAnswers ?? [])];
     return acceptedAnswers.some((acceptedAnswer) => normalize(answer) === normalize(acceptedAnswer));
   }
-  if (question.type === "audio") {
-    return typeof answer === "string"
-      && answer.trim().toLocaleLowerCase("de-DE") === question.answer.toLocaleLowerCase("de-DE");
+  if (question.type === "audio" || question.type === "ability-audio") {
+    if (typeof answer !== "string") return false;
+    if (question.type === "ability-audio") {
+      const normalize = (value) => value.trim().toLocaleLowerCase("de-DE").replace(/[\s_-]+/g, "");
+      return normalize(answer) === normalize(`${question.champion} ${question.answer}`);
+    }
+    const normalizedAnswer = answer.trim().toLocaleLowerCase("de-DE");
+    const acceptedAnswers = [question.answer, ...(question.acceptedAnswers ?? [])];
+    return acceptedAnswers.some((acceptedAnswer) => (
+      normalizedAnswer === acceptedAnswer.toLocaleLowerCase("de-DE")
+    ));
   }
   if (question.type === "song") {
     return typeof answer === "string"
@@ -409,11 +464,15 @@ function renderIntro() {
       ? `${subject} Für jede richtige Antwort bekommst du Punkte.`
       : `${subject} Pro Bild hast du 30 Sekunden Zeit. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "audio") {
-    description.textContent = `Erkenne die Champions an ihrer Pick-Voiceline. Jede Audiodatei kannst du bis zu 3-mal abspielen. Gib danach den Namen des Champions ein. Für jede richtige Antwort bekommst du Punkte.`;
+    description.textContent = quiz.audioDescription
+      ?? `Erkenne die Champions an ihrer Voiceline. Jede Audiodatei kannst du bis zu 3-mal abspielen. Gib danach den Namen des Champions ein. Für jede richtige Antwort bekommst du Punkte.`;
+  } else if (quiz.abilityAudioQuiz) {
+    description.textContent = "Höre dir den Fähigkeitssound an und gib den Championnamen zusammen mit Q, W, E oder R ein. Jede Audiodatei kannst du bis zu 3-mal abspielen. Für jede richtige Antwort bekommst du Punkte.";
   } else if (quiz.questions[0].type === "song") {
     description.textContent = `Höre dir den Song an und errate den Titel. Du kannst die Audiodatei bis zu 3-mal abspielen. Für die richtige Antwort bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "text") {
-    description.textContent = `Beantworte die Fragen über uns. Gib deine Antwort jeweils ins Textfeld ein. Für jede richtige Antwort bekommst du Punkte.`;
+    description.textContent = quiz.textDescription
+      ?? `Beantworte die Fragen über uns. Gib deine Antwort jeweils ins Textfeld ein. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.type === "live") {
     const minutes = Math.floor(quiz.timeLimit / 60);
     const seconds = quiz.timeLimit % 60;
@@ -532,8 +591,10 @@ function renderQuestion() {
   const questionText = document.createElement("p");
   questionText.className = "question-text";
   questionText.textContent = question.question
-    ?? (question.type === "audio"
-      ? "Welcher Champion ist in der Pick-Voiceline zu hören?"
+    ?? (question.type === "ability-audio"
+      ? `${question.champion}: Welche Fähigkeit hörst du?`
+      : question.type === "audio"
+      ? quiz.audioPrompt ?? "Welcher Champion ist in der Voiceline zu hören?"
       : question.type === "song" ? "Welcher Songtitel ist zu hören?" : "");
 
   if (question.type === "word") {
@@ -546,7 +607,7 @@ function renderQuestion() {
     return;
   }
 
-  if (question.type === "audio") {
+  if (question.type === "audio" || question.type === "ability-audio") {
     renderAudioQuestion(question, questionIndex, progressText, questionText);
     return;
   }
@@ -837,6 +898,8 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
   const audio = new Audio(question.audio);
   audio.preload = "none";
   activeAudio = audio;
+  const isAbilityAudio = question.type === "ability-audio";
+  const audioLabel = isAbilityAudio ? "Fähigkeitssound" : isSong ? "Song" : "Voiceline";
 
   const player = document.createElement("div");
   player.className = "audio-quiz-player";
@@ -852,7 +915,6 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
 
   const updateAttempts = () => {
     const playsLeft = 3 - (audioPlayCounts[attemptKey] ?? 0);
-    const audioLabel = isSong ? "Song" : "Voiceline";
     playButton.textContent = audio.paused ? `${audioLabel} abspielen` : `${audioLabel} wird abgespielt …`;
     playButton.disabled = playsLeft === 0 || !audio.paused;
     attempts.textContent = `Noch ${playsLeft} ${playsLeft === 1 ? "Wiedergabe" : "Wiedergaben"}`;
@@ -869,10 +931,8 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
       audio.pause();
       audioPlayCounts[attemptKey] -= 1;
       updateAttempts();
-      status.textContent = isSong
-        ? "Der Song konnte nicht abgespielt werden. Bitte versuche es erneut."
-        : "Die Voiceline konnte nicht abgespielt werden. Bitte versuche es erneut.";
-      console.error(`Die ${isSong ? "Audiodatei" : "Champion-Voiceline"} konnte nicht abgespielt werden.`, error);
+      status.textContent = `Die Audiodatei konnte nicht abgespielt werden. Bitte versuche es erneut.`;
+      console.error(`Die Audiodatei für ${audioLabel} konnte nicht abgespielt werden.`, error);
     });
   });
   audio.addEventListener("ended", updateAttempts);
@@ -889,8 +949,10 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
   input.type = "text";
   input.autocomplete = "off";
   input.spellcheck = false;
-  input.placeholder = isSong ? "Songtitel" : "Name des Champions";
-  input.setAttribute("aria-label", isSong ? "Songtitel" : "Name des Champions");
+  input.placeholder = isAbilityAudio
+    ? "Champion und Fähigkeit (z. B. Alistar W)"
+    : isSong ? "Songtitel" : "Name des Champions";
+  input.setAttribute("aria-label", isAbilityAudio ? "Championname und Fähigkeitstaste" : isSong ? "Songtitel" : "Name des Champions");
   const submitButton = document.createElement("button");
   submitButton.className = "primary-button";
   submitButton.type = "submit";
@@ -911,6 +973,13 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
 }
 
 function renderTextQuestion(question, questionIndex, progressText, questionText) {
+  const quiz = QUIZZES[openDay];
+  const timerDisplay = Number.isFinite(quiz.questionTimeLimit) ? document.createElement("p") : null;
+  if (timerDisplay) {
+    timerDisplay.className = "word-timer";
+    timerDisplay.setAttribute("role", "timer");
+  }
+
   const form = document.createElement("form");
   form.className = "answers";
   const input = document.createElement("input");
@@ -935,16 +1004,19 @@ function renderTextQuestion(question, questionIndex, progressText, questionText)
   });
 
   form.append(input, submitButton);
-  dialogContent.append(progressText, questionText, form);
+  dialogContent.append(progressText, questionText);
+  if (timerDisplay) dialogContent.append(timerDisplay);
+  dialogContent.append(form);
+  if (timerDisplay) startWordTimer(questionIndex, timerDisplay, quiz.questionTimeLimit);
   input.focus();
 }
 
-function startWordTimer(questionIndex, timerDisplay) {
+function startWordTimer(questionIndex, timerDisplay, durationSeconds = 30) {
   const timerKey = `${openDay}:${questionIndex}`;
   if (wordTimerKey !== timerKey) {
     clearInterval(wordTimer);
     wordTimerKey = timerKey;
-    wordDeadline = Date.now() + 30_000;
+    wordDeadline = Date.now() + durationSeconds * 1000;
   }
 
   clearInterval(wordTimer);
@@ -986,12 +1058,12 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
     renderImageResolution(question, answer, isCorrect, timedOut, questionIndex, quiz);
     return;
   }
-  if (question.type === "audio" || question.type === "song") {
+  if (question.type === "audio" || question.type === "song" || question.type === "ability-audio") {
     renderAudioResolution(question, answer, isCorrect, questionIndex, quiz);
     return;
   }
   if (question.type === "text") {
-    renderTextResolution(question, answer, isCorrect, questionIndex, quiz);
+    renderTextResolution(question, answer, isCorrect, timedOut, questionIndex, quiz);
     return;
   }
   const feedback = document.createElement("p");
@@ -1013,20 +1085,24 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
   nextButton.focus();
 }
 
-function renderTextResolution(question, answer, isCorrect, questionIndex, quiz) {
+function renderTextResolution(question, answer, isCorrect, timedOut, questionIndex, quiz) {
   const feedback = document.createElement("p");
   feedback.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
-  feedback.textContent = isCorrect
-    ? `Richtig! +${question.points} ${question.points === 1 ? "Punkt" : "Punkte"}`
-    : "Leider nicht richtig.";
+  feedback.textContent = timedOut
+    ? "Die Zeit ist abgelaufen."
+    : isCorrect
+      ? `Richtig! +${question.points} ${question.points === 1 ? "Punkt" : "Punkte"}`
+      : "Leider nicht richtig.";
 
   const solution = document.createElement("p");
   solution.className = "image-quiz-solution";
   solution.textContent = `Richtige Antwort: ${question.answer}`;
 
-  const submittedAnswer = document.createElement("p");
-  submittedAnswer.className = "image-quiz-submitted-answer";
-  submittedAnswer.textContent = `Deine Antwort: ${answer}`;
+  const submittedAnswer = timedOut ? null : document.createElement("p");
+  if (submittedAnswer) {
+    submittedAnswer.className = "image-quiz-submitted-answer";
+    submittedAnswer.textContent = `Deine Antwort: ${answer}`;
+  }
 
   const nextButton = document.createElement("button");
   nextButton.className = "primary-button";
@@ -1034,7 +1110,9 @@ function renderTextResolution(question, answer, isCorrect, questionIndex, quiz) 
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
 
-  dialogContent.append(feedback, solution, submittedAnswer, nextButton);
+  dialogContent.append(feedback, solution);
+  if (submittedAnswer) dialogContent.append(submittedAnswer);
+  dialogContent.append(nextButton);
   nextButton.focus();
 }
 
@@ -1049,7 +1127,9 @@ function renderAudioResolution(question, answer, isCorrect, questionIndex, quiz)
   solution.className = "image-quiz-solution";
   solution.textContent = question.type === "song"
     ? `Der Songtitel war: ${question.answer}`
-    : `Der Champion war: ${question.answer}`;
+    : question.type === "ability-audio"
+      ? `Gesucht war: ${question.champion} ${question.answer}`
+      : `Der Champion war: ${question.answer}`;
 
   const submittedAnswer = document.createElement("p");
   submittedAnswer.className = "image-quiz-submitted-answer";
