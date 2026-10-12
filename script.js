@@ -117,7 +117,24 @@ const QUIZZES = [
       { type: "song", audio: "songs-erraten/Bruno_Mars_-_Just_The_Way_You_Are.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Just The Way You Are", points: 2 }
     ]
   },
-  { title: "Türchen 9", questions: [{ question: "Welches Getränk passt besonders zu einem kalten Winterabend?", options: ["Kakao", "Limonade", "Soda", "Eistee"], answer: 0, points: 2 }] },
+  {
+    title: "Türchen 9",
+    imagePrompt: "Welche Fähigkeit ist auf dem Bild zu sehen?",
+    imageAlt: "League-of-Legends-Fähigkeit zum Erraten",
+    imageAnswerPlaceholder: "Name der Fähigkeit",
+    questions: [
+      { type: "image", image: "abilities-einzeln/Bard-E.png", answer: "Bard E", points: 2 },
+      { type: "image", image: "abilities-einzeln/Diana-E.png", answer: "Diana E", points: 2 },
+      { type: "image", image: "abilities-einzeln/Draven-w.png", answer: "Draven w", points: 2 },
+      { type: "image", image: "abilities-einzeln/Graves-r.png", answer: "Graves r", points: 2 },
+      { type: "image", image: "abilities-einzeln/Jax-E.png", answer: "Jax E", points: 2 },
+      { type: "image", image: "abilities-einzeln/KSante-W.png", answer: "KSante W", points: 2 },
+      { type: "image", image: "abilities-einzeln/Kindred-Q.png", answer: "Kindred Q", points: 2 },
+      { type: "image", image: "abilities-einzeln/MF-passive.png", answer: "Miss Fortune passive", points: 2 },
+      { type: "image", image: "abilities-einzeln/Shyvana-E.png", answer: "Shyvana E", points: 2 },
+      { type: "image", image: "abilities-einzeln/Soraka-R.png", answer: "Soraka R", points: 2 }
+    ]
+  },
   { title: "Türchen 10", questions: [{ question: "Was wird in der Weihnachtszeit oft auf dem Adventskranz gesetzt?", options: ["Kerzen", "Bilder", "Steine", "Blumen"], answer: 0, points: 2 }] },
   { title: "Türchen 11", questions: [{ question: "Welches Wort beschreibt eine besonders schöne, kalte Winterstimmung?", options: ["Frostig", "Staubig", "Vulkanisch", "Sonnig"], answer: 0, points: 2 }] },
   { title: "Türchen 12", questions: [{ question: "Welche Farbe ist in vielen Weihnachtsdekorationen besonders verbreitet?", options: ["Silber", "Lila", "Braun", "Pink"], answer: 0, points: 2 }] },
@@ -168,7 +185,7 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    for (const dayIndex of [1, 2, 3, 4, 6, 7]) {
+    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8]) {
       if (typeof parsed[dayIndex]?.[0] === "number") {
         delete parsed[dayIndex];
         progressChanged = true;
@@ -325,9 +342,12 @@ function renderIntro() {
   if (quiz.questions[0].type === "word") {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Entwirre die Buchstaben und gib das richtige Wort ein. Für jedes Wort hast du 30 Sekunden Zeit und für jede richtige Lösung bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "image") {
+    const subject = quiz.imagePrompt
+      ? "Erkenne die Fähigkeiten auf den Bildern und gib ihre Namen ein."
+      : "Erkenne die Champions auf den Bildern und gib ihre Namen ein.";
     description.textContent = quiz.timeLimit === false
-      ? `Erkenne die Champions auf den Bildern und gib ihre Namen ein. Für jede richtige Antwort bekommst du Punkte.`
-      : `Erkenne die Champions auf den Bildern und gib ihre Namen ein. Pro Bild hast du 30 Sekunden Zeit. Für jede richtige Antwort bekommst du Punkte.`;
+      ? `${subject} Für jede richtige Antwort bekommst du Punkte.`
+      : `${subject} Pro Bild hast du 30 Sekunden Zeit. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "audio") {
     description.textContent = `Erkenne die Champions an ihrer Pick-Voiceline. Jede Audiodatei kannst du bis zu 3-mal abspielen. Gib danach den Namen des Champions ein. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "song") {
@@ -620,11 +640,11 @@ function renderImageQuestion(question, questionIndex, progressText) {
   const image = document.createElement("img");
   image.className = `image-quiz-image${quiz.timeLimit === false ? " image-quiz-image--large" : ""}`;
   image.src = question.image;
-  image.alt = "Unscharfes Champion-Bild zum Erraten";
+  image.alt = quiz.imageAlt ?? "Bild zum Erraten";
 
   const questionText = document.createElement("p");
   questionText.className = "question-text";
-  questionText.textContent = "Welcher Champion ist auf dem Bild zu sehen?";
+  questionText.textContent = quiz.imagePrompt ?? "Welcher Champion ist auf dem Bild zu sehen?";
 
   const timerDisplay = quiz.timeLimit === false ? null : document.createElement("p");
   if (timerDisplay) {
@@ -639,8 +659,8 @@ function renderImageQuestion(question, questionIndex, progressText) {
   input.type = "text";
   input.autocomplete = "off";
   input.spellcheck = false;
-  input.placeholder = isSong ? "Songtitel" : "Name des Champions";
-  input.setAttribute("aria-label", isSong ? "Songtitel" : "Name des Champions");
+  input.placeholder = quiz.imageAnswerPlaceholder ?? "Name des Champions";
+  input.setAttribute("aria-label", input.placeholder);
 
   const submitButton = document.createElement("button");
   submitButton.className = "primary-button";
@@ -909,11 +929,6 @@ function renderImageResolution(question, answer, isCorrect, timedOut, questionIn
     feedback.textContent = "Leider nicht richtig.";
   }
 
-  const image = document.createElement("img");
-  image.className = "image-quiz-image image-quiz-image--reveal";
-  image.src = question.revealImage;
-  image.alt = `${question.answer} im vollständigen Bild`;
-
   const solution = document.createElement("p");
   solution.className = "image-quiz-solution";
   solution.textContent = `Lösung: ${question.answer}`;
@@ -924,7 +939,15 @@ function renderImageResolution(question, answer, isCorrect, timedOut, questionIn
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
 
-  dialogContent.append(feedback, image, solution);
+  dialogContent.append(feedback);
+  if (question.revealImage) {
+    const image = document.createElement("img");
+    image.className = "image-quiz-image image-quiz-image--reveal";
+    image.src = question.revealImage;
+    image.alt = `${question.answer} im vollständigen Bild`;
+    dialogContent.append(image);
+  }
+  dialogContent.append(solution);
   if (!isCorrect && !timedOut && answer) {
     const submittedAnswer = document.createElement("p");
     submittedAnswer.className = "image-quiz-submitted-answer";
