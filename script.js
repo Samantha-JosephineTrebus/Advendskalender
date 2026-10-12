@@ -135,7 +135,54 @@ const QUIZZES = [
       { type: "image", image: "abilities-einzeln/Soraka-R.png", answer: "Soraka R", points: 2 }
     ]
   },
-  { title: "Türchen 10", questions: [{ question: "Was wird in der Weihnachtszeit oft auf dem Adventskranz gesetzt?", options: ["Kerzen", "Bilder", "Steine", "Blumen"], answer: 0, points: 2 }] },
+  {
+    title: "Türchen 10",
+    type: "live",
+    timeLimit: 300,
+    liveLayout: "movie-list",
+    correctAnswerColor: "green",
+    questions: [
+      { year: "2008", answer: "Iron Man", points: 2 },
+      { year: "2008", answer: "Der unglaubliche Hulk", points: 2 },
+      { year: "2010", answer: "Iron Man 2", points: 2 },
+      { year: "2011", answer: "Thor", points: 2 },
+      { year: "2011", answer: "Captain America: The First Avenger", points: 2 },
+      { year: "2012", answer: "Marvel's The Avengers", points: 2 },
+      { year: "2013", answer: "Iron Man 3", points: 2 },
+      { year: "2013", answer: "Thor – The Dark Kingdom", points: 2 },
+      { year: "2014", answer: "The Return of the First Avenger", points: 2 },
+      { year: "2014", answer: "Guardians of the Galaxy", points: 2 },
+      { year: "2015", answer: "Avengers: Age of Ultron", points: 2 },
+      { year: "2015", answer: "Ant-Man", points: 2 },
+      { year: "2016", answer: "The First Avenger: Civil War", points: 2 },
+      { year: "2016", answer: "Doctor Strange", points: 2 },
+      { year: "2017", answer: "Guardians of the Galaxy Vol. 2", points: 2 },
+      { year: "2017", answer: "Spider-Man: Homecoming", points: 2 },
+      { year: "2017", answer: "Thor: Tag der Entscheidung", points: 2 },
+      { year: "2018", answer: "Black Panther", points: 2 },
+      { year: "2018", answer: "Avengers: Infinity War", points: 2 },
+      { year: "2018", answer: "Ant-Man and the Wasp", points: 2 },
+      { year: "2019", answer: "Captain Marvel", points: 2 },
+      { year: "2019", answer: "Avengers: Endgame", points: 2 },
+      { year: "2019", answer: "Spider-Man: Far From Home", points: 2 },
+      { year: "2021", answer: "Black Widow", points: 2 },
+      { year: "2021", answer: "Shang-Chi and the Legend of the Ten Rings", points: 2 },
+      { year: "2021", answer: "Eternals", points: 2 },
+      { year: "2021", answer: "Spider-Man: No Way Home", points: 2 },
+      { year: "2022", answer: "Doctor Strange in the Multiverse of Madness", points: 2 },
+      { year: "2022", answer: "Thor: Love and Thunder", points: 2 },
+      { year: "2022", answer: "Black Panther: Wakanda forever", points: 2 },
+      { year: "2023", answer: "Ant-Man and the Wasp: Quantumania", points: 2 },
+      { year: "2023", answer: "Guardians of the Galaxy Vol. 3", points: 2 },
+      { year: "2023", answer: "The Marvels", points: 2 },
+      { year: "2024", answer: "Deadpool & Wolverine", points: 2 },
+      { year: "2025", answer: "Captain America Brave New World", points: 2 },
+      { year: "2025", answer: "Thunderbolts*", points: 2 },
+      { year: "2025", answer: "The Fantastic Four: First Steps", points: 2 },
+      { year: "2026", answer: "Spider-Man: Brand New Day", points: 2 },
+      { year: "2026", answer: "Avengers: Doomsday", points: 2 }
+    ]
+  },
   { title: "Türchen 11", questions: [{ question: "Welches Wort beschreibt eine besonders schöne, kalte Winterstimmung?", options: ["Frostig", "Staubig", "Vulkanisch", "Sonnig"], answer: 0, points: 2 }] },
   { title: "Türchen 12", questions: [{ question: "Welche Farbe ist in vielen Weihnachtsdekorationen besonders verbreitet?", options: ["Silber", "Lila", "Braun", "Pink"], answer: 0, points: 2 }] },
   { title: "Türchen 13", questions: [{ question: "Was ist eine klassische Weihnachtsgabe?", options: ["Buch", "Schaufel", "Hammer", "Mauer"], answer: 0, points: 3 }] },
@@ -185,7 +232,7 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8]) {
+    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9]) {
       if (typeof parsed[dayIndex]?.[0] === "number") {
         delete parsed[dayIndex];
         progressChanged = true;
@@ -252,7 +299,10 @@ function isCorrectAnswer(question, answer) {
   }
   if (question.type === "text" || (typeof question.answer === "string" && !question.options)) {
     if (typeof answer !== "string") return false;
-    const normalize = (value) => value.trim().toLocaleLowerCase("de-DE").replace(/\s+/g, " ");
+    const normalize = (value) => value.trim().toLocaleLowerCase("de-DE")
+      .replace(/\*/g, "")
+      .replace(/[-–—:：]/g, " ")
+      .replace(/\s+/g, " ");
     const acceptedAnswers = [question.answer, ...(question.acceptedAnswers ?? [])];
     return acceptedAnswers.some((acceptedAnswer) => normalize(answer) === normalize(acceptedAnswer));
   }
@@ -355,7 +405,12 @@ function renderIntro() {
   } else if (quiz.questions[0].type === "text") {
     description.textContent = `Beantworte die Fragen über uns. Gib deine Antwort jeweils ins Textfeld ein. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.type === "live") {
-    description.textContent = `Beantworte so viele Fragen wie möglich. Für alle Fragen hast du zusammen 1 Minute Zeit. Falsche Antworten kannst du erneut versuchen.`;
+    const minutes = Math.floor(quiz.timeLimit / 60);
+    const seconds = quiz.timeLimit % 60;
+    const timeLimit = seconds === 0
+      ? `${minutes} ${minutes === 1 ? "Minute" : "Minuten"}`
+      : `${minutes} Minute${minutes === 1 ? "" : "n"} und ${seconds} Sekunden`;
+    description.textContent = `Beantworte so viele Fragen wie möglich. Für alle Fragen hast du zusammen ${timeLimit} Zeit. Falsche Antworten kannst du erneut versuchen.`;
   } else {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} ${quiz.questions.length === 1 ? "Frage" : "Fragen"} auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.`;
   }
@@ -495,11 +550,31 @@ function renderLiveQuiz() {
   timer.className = "word-timer";
   timer.setAttribute("role", "timer");
   const list = document.createElement("div");
-  list.className = "live-quiz-list";
+  list.className = `live-quiz-list${quiz.liveLayout === "movie-list" ? " live-quiz-list--movie" : ""}`;
+  const movieColumns = quiz.liveLayout === "movie-list"
+    ? Array.from({ length: 2 }, () => {
+      const column = document.createElement("div");
+      column.className = "live-quiz-column";
+      const header = document.createElement("div");
+      header.className = "live-quiz-column-header";
+      const yearHeading = document.createElement("span");
+      yearHeading.textContent = "Jahr";
+      const filmHeading = document.createElement("span");
+      filmHeading.textContent = "Film";
+      header.append(yearHeading, filmHeading);
+      column.append(header);
+      return column;
+    })
+    : null;
+  movieColumns?.forEach((column) => list.append(column));
 
   const updateTimer = () => {
     const secondsLeft = Math.max(0, Math.ceil((answers._deadline - Date.now()) / 1000));
-    timer.textContent = `Noch ${secondsLeft} Sekunden`;
+    const minutesLeft = Math.floor(secondsLeft / 60);
+    const remainingSeconds = String(secondsLeft % 60).padStart(2, "0");
+    timer.textContent = secondsLeft >= 60
+      ? `Noch ${minutesLeft}:${remainingSeconds} Minuten`
+      : `Noch ${secondsLeft} Sekunden`;
     timer.classList.toggle("word-timer--urgent", secondsLeft <= 10);
     if (secondsLeft === 0) finishLiveQuiz(true);
   };
@@ -507,11 +582,11 @@ function renderLiveQuiz() {
   quiz.questions.forEach((question, questionIndex) => {
     const row = document.createElement("form");
     const savedAnswer = answers[questionIndex];
-    row.className = `live-quiz-row${savedAnswer !== undefined ? " is-correct" : ""}`;
+    row.className = `live-quiz-row${quiz.liveLayout === "movie-list" ? " live-quiz-row--movie" : ""}${savedAnswer !== undefined ? " is-correct" : ""}`;
     const label = document.createElement("label");
     label.className = "live-quiz-question";
     label.htmlFor = `live-answer-${questionIndex}`;
-    label.textContent = question.question;
+    label.textContent = question.year ?? question.question;
 
     const input = document.createElement("input");
     input.className = "word-input live-quiz-input";
@@ -522,7 +597,10 @@ function renderLiveQuiz() {
     input.placeholder = "Antwort";
     input.value = savedAnswer ?? "";
     input.disabled = savedAnswer !== undefined;
-    input.setAttribute("aria-label", `Antwort: ${question.question}`);
+    input.setAttribute("aria-label", `Antwort für ${question.year ?? question.question}`);
+    if (savedAnswer !== undefined && quiz.correctAnswerColor === "green") {
+      input.value = question.answer;
+    }
 
     const feedback = document.createElement("span");
     feedback.className = "live-quiz-feedback";
@@ -550,6 +628,7 @@ function renderLiveQuiz() {
       const currentAnswers = answersFor(openDay);
       currentAnswers[questionIndex] = answer;
       progress[openDay] = currentAnswers;
+      if (quiz.correctAnswerColor === "green") input.value = question.answer;
       input.disabled = true;
       submit.disabled = true;
       row.classList.add("is-correct");
@@ -563,7 +642,12 @@ function renderLiveQuiz() {
     });
 
     row.append(label, input, submit, feedback);
-    list.append(row);
+    if (movieColumns) {
+      const columnIndex = questionIndex < Math.ceil(quiz.questions.length / 2) ? 0 : 1;
+      movieColumns[columnIndex].append(row);
+    } else {
+      list.append(row);
+    }
   });
 
   dialogContent.replaceChildren(timer, list);
@@ -1025,7 +1109,9 @@ function renderResult() {
     status.textContent = isCorrect ? "Richtig" : "Falsch";
     const questionLabel = document.createElement("span");
     questionLabel.className = "answer-summary-question";
-    questionLabel.textContent = quiz.type === "live" ? question.question : `Frage ${questionIndex + 1}`;
+    questionLabel.textContent = quiz.type === "live"
+      ? question.year ?? question.question
+      : `Frage ${questionIndex + 1}`;
 
     const userAnswer = question.type === "word" || question.type === "image" || question.type === "audio" || question.type === "text" || typeof question.answer === "string"
       ? (typeof answer === "string" && answer.trim() ? answer.trim() : "Keine Antwort (Zeit abgelaufen)")

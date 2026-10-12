@@ -512,6 +512,19 @@ h1 span {
 .audio-quiz-status { color: #ffc1d0; }
 
 .live-quiz-list { display: grid; gap: 10px; }
+.live-quiz-list--movie { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 8px 14px; }
+.live-quiz-column { display: grid; align-content: start; gap: 8px; min-width: 0; }
+.live-quiz-column-header {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--snow);
+  background: rgb(75 111 200 / 72%);
+  font-size: .78rem;
+  font-weight: 700;
+}
 .live-quiz-row {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(120px, .8fr) auto;
@@ -522,8 +535,11 @@ h1 span {
   border-radius: 12px;
   background: rgb(255 255 255 / 4%);
 }
+.live-quiz-row--movie { grid-template-columns: 42px minmax(0, 1fr) auto; gap: 6px; padding: 8px; border-radius: 8px; }
 .live-quiz-question { color: var(--snow); font-size: .98rem; line-height: 1.4; }
+.live-quiz-row--movie .live-quiz-question { font-weight: 700; }
 .live-quiz-input { min-width: 0; padding: 10px 12px; font-size: .98rem; }
+.live-quiz-row--movie .live-quiz-input { min-height: 38px; padding: 6px 8px; font-size: .8rem; }
 .live-quiz-submit {
   padding: 10px 12px;
   border: 1px solid rgb(171 195 255 / 48%);
@@ -536,6 +552,7 @@ h1 span {
 .live-quiz-submit:disabled { cursor: default; opacity: .6; }
 .live-quiz-row.is-correct { border-color: rgb(99 220 153 / 58%); background: rgb(31 129 78 / 12%); }
 .live-quiz-row.is-correct .live-quiz-input { border-color: #63dc99; color: #b8ffd2; background: rgb(31 129 78 / 26%); }
+.live-quiz-row--movie.is-correct .live-quiz-input { border-color: #63dc99; color: #8ff0b5; background: rgb(31 129 78 / 26%); }
 .live-quiz-feedback { grid-column: 1 / -1; min-height: 1.2em; color: #ffc1d0; font-size: .85rem; }
 .live-quiz-row.is-correct .live-quiz-feedback { color: #8ff0b5; }
 
@@ -685,6 +702,9 @@ h1 span {
   .question-text { font-size: 1.16rem; }
   .live-quiz-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 10px; }
   .live-quiz-submit { grid-column: 2; }
+  .live-quiz-list--movie { grid-template-columns: 1fr; }
+  .live-quiz-row--movie { grid-template-columns: 42px minmax(0, 1fr) auto; gap: 6px; padding: 8px; }
+  .live-quiz-row--movie .live-quiz-submit { grid-column: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
