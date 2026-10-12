@@ -81,8 +81,27 @@ const QUIZZES = [
       { type: "image", image: "daten-champions/zed-daten-blured.png", revealImage: "daten-champions/zed-daten.png", answer: "Zed", points: 2 }
     ]
   },
-  { title: "Türchen 6", questions: [{ question: "Welches Fest beginnt am 24. Dezember?", options: ["Heiligabend", "Easter", "Halloween", "Martinstag"], answer: 0, points: 2 }] },
-  { title: "Türchen 7", questions: [{ question: "Welches Gewürz ist bei Plätzchen besonders typisch?", options: ["Kardamom", "Zimt", "Paprika", "Koriander"], answer: 1, points: 2 }] },
+  { title: "Türchen 6", challenge: "Minigame-Tag", questions: [] },
+  {
+    title: "Türchen 7",
+    type: "live",
+    timeLimit: 60,
+    questions: [
+      { question: "Welcher Vogel kann rückwärts fliegen?", answer: "Kolibri", acceptedAnswers: ["Kolibris"], points: 2 },
+      { question: "Welches Tier ist das höchste an Land?", answer: "Giraffe", points: 2 },
+      { question: "Welches Tier frisst nur Bambus?", answer: "Panda", acceptedAnswers: ["Großer Panda"], points: 2 },
+      { question: "Welches Tier ist das langsamste der Welt, das nur an Land lebt?", answer: "Faultier", acceptedAnswers: ["Dreifingerfaultier"], points: 2 },
+      { question: "Welches Tier ist am engsten mit dem Menschen verwandt?", answer: "Schimpanse", acceptedAnswers: ["Bonobo"], points: 2 },
+      { question: "Welches Säugetier legt Eier?", answer: "Schnabeltier", points: 2 },
+      { question: "Welche Tierart hat acht Beine?", answer: "Spinne", acceptedAnswers: ["Spinnen"], points: 2 },
+      { question: "Welches Tier ist das bekannteste von Neuseeland?", answer: "Kiwi", points: 2 },
+      { question: "Welches Tier gilt als bester Freund des Menschen?", answer: "Hund", points: 2 },
+      { question: "Welches ist das größte Tier bei den Bremer Stadtmusikanten?", answer: "Esel", points: 2 },
+      { question: "Auch ein blindes ... findet mal ein Korn.", answer: "Huhn", points: 2 },
+      { question: "Der frühe Vogel fängt den ...", answer: "Wurm", points: 2 },
+      { question: "Lied von Helge Schneider: ...klo", answer: "Katzeklo", points: 2 }
+    ]
+  },
   { title: "Türchen 8", questions: [{ question: "Was ist ein typischer Weihnachtsmann-Name in vielen Geschichten?", options: ["Nikolaus", "Gustav", "Tobias", "Marius"], answer: 0, points: 2 }] },
   { title: "Türchen 9", questions: [{ question: "Welches Getränk passt besonders zu einem kalten Winterabend?", options: ["Kakao", "Limonade", "Soda", "Eistee"], answer: 0, points: 2 }] },
   { title: "Türchen 10", questions: [{ question: "Was wird in der Weihnachtszeit oft auf dem Adventskranz gesetzt?", options: ["Kerzen", "Bilder", "Steine", "Blumen"], answer: 0, points: 2 }] },
@@ -119,6 +138,7 @@ let openDay = null;
 let wordTimer = null;
 let wordTimerKey = null;
 let wordDeadline = null;
+let liveQuizInterval = null;
 let activeAudio = null;
 const audioPlayCounts = {};
 
@@ -134,7 +154,7 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    for (const dayIndex of [1, 2, 3, 4]) {
+    for (const dayIndex of [1, 2, 3, 4, 6]) {
       if (typeof parsed[dayIndex]?.[0] === "number") {
         delete parsed[dayIndex];
         progressChanged = true;
@@ -194,7 +214,7 @@ function isCorrectAnswer(question, answer) {
     return typeof answer === "string"
       && answer.trim().toLocaleLowerCase("de-DE") === question.answer.toLocaleLowerCase("de-DE");
   }
-  if (question.type === "text") {
+  if (question.type === "text" || (typeof question.answer === "string" && !question.options)) {
     if (typeof answer !== "string") return false;
     const normalize = (value) => value.trim().toLocaleLowerCase("de-DE").replace(/\s+/g, " ");
     const acceptedAnswers = [question.answer, ...(question.acceptedAnswers ?? [])];
@@ -259,10 +279,21 @@ function openQuiz(dayIndex) {
 function renderIntro() {
   const quiz = QUIZZES[openDay];
   const completed = isComplete(openDay);
-  const answeredCount = Object.keys(answersFor(openDay)).length;
+  const answers = answersFor(openDay);
+  const answeredCount = quiz.questions.reduce((count, _, index) => (
+    count + (Object.hasOwn(answers, index) ? 1 : 0)
+  ), 0);
   dialogContent.replaceChildren();
 
   if (quiz.questions.length === 0) {
+    if (quiz.challenge) {
+      const challenge = document.createElement("p");
+      challenge.className = "minigame-challenge";
+      challenge.textContent = quiz.challenge;
+      dialogContent.append(challenge);
+      return;
+    }
+
     const message = document.createElement("p");
     message.className = "empty-message";
     message.textContent = "Dieses Türchen wird noch mit einem Quiz befüllt. Schau bald wieder vorbei!";
@@ -282,6 +313,8 @@ function renderIntro() {
     description.textContent = `Erkenne die Champions an ihrer Pick-Voiceline. Jede Audiodatei kannst du bis zu 3-mal abspielen. Gib danach den Namen des Champions ein. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "text") {
     description.textContent = `Beantworte die Fragen über uns. Gib deine Antwort jeweils ins Textfeld ein. Für jede richtige Antwort bekommst du Punkte.`;
+  } else if (quiz.type === "live") {
+    description.textContent = `Beantworte so viele Fragen wie möglich. Für alle Fragen hast du zusammen 1 Minute Zeit. Falsche Antworten kannst du erneut versuchen.`;
   } else {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} ${quiz.questions.length === 1 ? "Frage" : "Fragen"} auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.`;
   }
@@ -299,8 +332,10 @@ function renderIntro() {
   startButton.type = "button";
   startButton.textContent = completed
     ? "Zusammenfassung ansehen"
-    : answeredCount > 0 ? "Quiz fortsetzen" : "Quiz starten";
-  startButton.addEventListener("click", completed ? renderResult : renderQuestion);
+    : answeredCount > 0 || Number.isFinite(answers._deadline) ? "Quiz fortsetzen" : "Quiz starten";
+  startButton.addEventListener("click", completed
+    ? renderResult
+    : quiz.type === "live" ? startLiveQuiz : renderQuestion);
 
   dialogContent.append(description);
   if (progressMessage.textContent) dialogContent.append(progressMessage);
@@ -309,6 +344,11 @@ function renderIntro() {
 
 function renderQuestion() {
   const quiz = QUIZZES[openDay];
+  if (quiz.type === "live") {
+    renderLiveQuiz();
+    return;
+  }
+
   const answers = answersFor(openDay);
   const questionIndex = quiz.questions.findIndex((_, index) => !Object.hasOwn(answers, index));
   dialogContent.replaceChildren();
@@ -370,6 +410,138 @@ function renderQuestion() {
   });
 
   dialogContent.append(progressText, questionText, choices);
+}
+
+function startLiveQuiz() {
+  const quiz = QUIZZES[openDay];
+  const answers = answersFor(openDay);
+  if (!Number.isFinite(answers._deadline)) {
+    answers._deadline = Date.now() + quiz.timeLimit * 1000;
+    progress[openDay] = answers;
+    saveProgress();
+  }
+  renderQuestion();
+}
+
+function renderLiveQuiz() {
+  clearInterval(liveQuizInterval);
+  liveQuizInterval = null;
+
+  const quiz = QUIZZES[openDay];
+  const answers = answersFor(openDay);
+  if (quiz.questions.every((_, index) => Object.hasOwn(answers, index))) {
+    delete answers._deadline;
+    progress[openDay] = answers;
+    saveProgress();
+    renderResult();
+    return;
+  }
+
+  if (!Number.isFinite(answers._deadline)) {
+    answers._deadline = Date.now() + quiz.timeLimit * 1000;
+    progress[openDay] = answers;
+    saveProgress();
+  }
+
+  const timer = document.createElement("p");
+  timer.className = "word-timer";
+  timer.setAttribute("role", "timer");
+  const list = document.createElement("div");
+  list.className = "live-quiz-list";
+
+  const updateTimer = () => {
+    const secondsLeft = Math.max(0, Math.ceil((answers._deadline - Date.now()) / 1000));
+    timer.textContent = `Noch ${secondsLeft} Sekunden`;
+    timer.classList.toggle("word-timer--urgent", secondsLeft <= 10);
+    if (secondsLeft === 0) finishLiveQuiz(true);
+  };
+
+  quiz.questions.forEach((question, questionIndex) => {
+    const row = document.createElement("form");
+    const savedAnswer = answers[questionIndex];
+    row.className = `live-quiz-row${savedAnswer !== undefined ? " is-correct" : ""}`;
+    const label = document.createElement("label");
+    label.className = "live-quiz-question";
+    label.htmlFor = `live-answer-${questionIndex}`;
+    label.textContent = question.question;
+
+    const input = document.createElement("input");
+    input.className = "word-input live-quiz-input";
+    input.id = `live-answer-${questionIndex}`;
+    input.type = "text";
+    input.autocomplete = "off";
+    input.spellcheck = false;
+    input.placeholder = "Antwort";
+    input.value = savedAnswer ?? "";
+    input.disabled = savedAnswer !== undefined;
+    input.setAttribute("aria-label", `Antwort: ${question.question}`);
+
+    const feedback = document.createElement("span");
+    feedback.className = "live-quiz-feedback";
+    feedback.setAttribute("aria-live", "polite");
+    feedback.textContent = savedAnswer !== undefined ? "Richtig!" : "";
+
+    const submit = document.createElement("button");
+    submit.className = "live-quiz-submit";
+    submit.type = "submit";
+    submit.textContent = "Prüfen";
+    submit.disabled = savedAnswer !== undefined;
+
+    row.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const answer = input.value.trim();
+      if (!answer || Object.hasOwn(answersFor(openDay), questionIndex)) return;
+
+      if (!isCorrectAnswer(question, answer)) {
+        input.value = "";
+        feedback.textContent = "Falsch – versuch es noch einmal.";
+        input.focus();
+        return;
+      }
+
+      const currentAnswers = answersFor(openDay);
+      currentAnswers[questionIndex] = answer;
+      progress[openDay] = currentAnswers;
+      input.disabled = true;
+      submit.disabled = true;
+      row.classList.add("is-correct");
+      feedback.textContent = "Richtig!";
+      saveProgress();
+      renderCalendar();
+
+      if (quiz.questions.every((_, index) => Object.hasOwn(currentAnswers, index))) {
+        finishLiveQuiz(false);
+      }
+    });
+
+    row.append(label, input, submit, feedback);
+    list.append(row);
+  });
+
+  dialogContent.replaceChildren(timer, list);
+  updateTimer();
+  if (openDay !== null && answers._deadline > Date.now()) {
+    liveQuizInterval = setInterval(updateTimer, 200);
+  }
+}
+
+function finishLiveQuiz(timedOut) {
+  clearInterval(liveQuizInterval);
+  liveQuizInterval = null;
+
+  const answers = answersFor(openDay);
+  const quiz = QUIZZES[openDay];
+  if (timedOut) {
+    quiz.questions.forEach((_, index) => {
+      if (!Object.hasOwn(answers, index)) answers[index] = "";
+    });
+    answers._timedOut = true;
+  }
+  delete answers._deadline;
+  progress[openDay] = answers;
+  saveProgress();
+  renderCalendar();
+  renderResult();
 }
 
 function renderWordQuestion(question, questionIndex, progressText, questionText) {
@@ -762,6 +934,8 @@ function submitAnswer(questionIndex, selectedIndex) {
 }
 
 function renderResult() {
+  const quiz = QUIZZES[openDay];
+  const answers = answersFor(openDay);
   const result = document.createElement("div");
   result.className = "result-card";
   const heading = document.createElement("p");
@@ -770,14 +944,20 @@ function renderResult() {
   const points = document.createElement("strong");
   points.className = "result-points";
   points.textContent = `${pointsFor(openDay)} Punkte`;
+  if (quiz.type === "live" && answers._timedOut) {
+    const timeoutMessage = document.createElement("p");
+    timeoutMessage.className = "feedback incorrect";
+    timeoutMessage.textContent = "Die Zeit ist abgelaufen.";
+    result.append(heading, points, timeoutMessage);
+  } else {
+    result.append(heading, points);
+  }
   const summaryHeading = document.createElement("h3");
   summaryHeading.className = "summary-heading";
   summaryHeading.textContent = "Deine Antworten";
   const summary = document.createElement("ol");
   summary.className = "answer-summary";
 
-  const quiz = QUIZZES[openDay];
-  const answers = answersFor(openDay);
   quiz.questions.forEach((question, questionIndex) => {
     const answer = answers[questionIndex];
     const isCorrect = isCorrectAnswer(question, answer);
@@ -789,9 +969,9 @@ function renderResult() {
     status.textContent = isCorrect ? "Richtig" : "Falsch";
     const questionLabel = document.createElement("span");
     questionLabel.className = "answer-summary-question";
-    questionLabel.textContent = `Frage ${questionIndex + 1}`;
+    questionLabel.textContent = quiz.type === "live" ? question.question : `Frage ${questionIndex + 1}`;
 
-    const userAnswer = question.type === "word" || question.type === "image" || question.type === "audio" || question.type === "text"
+    const userAnswer = question.type === "word" || question.type === "image" || question.type === "audio" || question.type === "text" || typeof question.answer === "string"
       ? (typeof answer === "string" && answer.trim() ? answer.trim() : "Keine Antwort (Zeit abgelaufen)")
       : question.options[answer] ?? "Keine Antwort";
     const answerText = document.createElement("span");
@@ -802,19 +982,21 @@ function renderResult() {
     if (!isCorrect) {
       const correctAnswer = document.createElement("span");
       correctAnswer.className = "answer-summary-correct";
-      correctAnswer.textContent = `Richtige Antwort: ${question.type === "word" || question.type === "image" || question.type === "audio" || question.type === "text" ? question.answer : question.options[question.answer]}`;
+      correctAnswer.textContent = `Richtige Antwort: ${question.type === "word" || question.type === "image" || question.type === "audio" || question.type === "text" || typeof question.answer === "string" ? question.answer : question.options[question.answer]}`;
       item.append(correctAnswer);
     }
     summary.append(item);
   });
 
-  result.append(heading, points, summaryHeading, summary);
+  result.append(summaryHeading, summary);
   dialogContent.append(result);
 }
 
 function closeDialog() {
   clearInterval(wordTimer);
   wordTimer = null;
+  clearInterval(liveQuizInterval);
+  liveQuizInterval = null;
   activeAudio?.pause();
   activeAudio = null;
   overlay.hidden = true;
