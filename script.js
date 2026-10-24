@@ -234,7 +234,95 @@ const QUIZZES = [
       { type: "ability-audio", audio: "abilities-sound/Yasuo_Original_SFX_W_MovingWall_OnCast_0.ogg", champion: "Yasuo", answer: "W", points: 3 }
     ]
   },
-  { title: "Türchen 15", questions: [{ question: "Welche Stimmung passt am besten zu einer Schneelandschaft?", options: ["Winterlich", "Tropisch", "Wüstenscharf", "Stürmisch"], answer: 0, points: 3 }] },
+  {
+    title: "Türchen 15",
+    type: "who-am-i",
+    questions: [
+      {
+        answer: "Ryan Reynolds",
+        clues: [
+          "Obwohl man meist mein Gesicht kennt, habe ich auch ikonischen Figuren meine Stimme geliehen wie zum Beispiel einem sprechenden gelben Pokémon im Live-Action-Film „Meisterdetektiv Pikachu“.",
+          "Neben der Schauspielerei bin ich ein erfolgreicher Unternehmer: Mir gehörten Anteile an Aviation Gin und 2020 habe ich zusammen mit ein paar Freunden den walisischen Fußballverein Wrexham AFC gekauft.",
+          "Ich bin für meinen extrem trockenen und humorvollen Social-Media-Mock-Ton bekannt, besonders im Schlagabtausch mit meiner Ehefrau, der Schauspielerin Blake Lively."
+        ]
+      },
+      {
+        answer: "Tolkin",
+        clues: [
+          "Mein Pseudonym ist im Grunde ein kleiner Buchstabendreher und hat einen naheliegenden Ursprung: Es ist mein bürgerlicher Vorname rückwärts buchstabiert.",
+          "Heute bin ich ein erfolgreicher Streamer.",
+          "Nach meiner aktiven Spielerkarriere bin ich dem E-Sport treu geblieben und regelmäßig als offizieller Analytiker, Experte und Kommentator bei großen deutschsprachigen Turnier- und Liga-Übertragungen im Einsatz."
+        ]
+      },
+      {
+        answer: "Lucario",
+        clues: [
+          "Ich bin eines der bekanntesten Wesen aus der 4. Generation (Sinnoh).",
+          "Laut offiziellen Daten wiege ich exakt 54,0 Kilogramm bei einer Körpergröße von 1,20 Metern. Im Nationalen Pokédex trage ich die Nummer 448 und in meiner Debüt-Region Sinnoh konnte man mich nicht wild fangen, sondern erhielt mein Ei auf der Eiseninsel.",
+          "Ich bin ein blau-schwarzes, aufrecht gehendes Pokémon."
+        ]
+      },
+      {
+        answer: "Ed Sheeran",
+        clues: [
+          "Ich habe eine kleine Gastrolle in der 7. Staffel der Kult-Serie „Game of Thrones“ gespielt.",
+          "Heute bin ich einer der erfolgreichsten Solo-Künstler der Welt mit englischen Mega-Hits.",
+          "Ich bin ein rothaariger britischer Singer-Songwriter mit Gitarre."
+        ]
+      },
+      {
+        answer: "Jhin",
+        clues: [
+          "Ich trage eine modifizierte Schulterprothese, die nicht etwa eine körperliche Behinderung kaschiert, sondern als getarnte Halterung für vier massive Geschosse dient.",
+          "In meiner düsteren Vergangenheit terrorisierte ich jahrelang als berüchtigter „Geist-Dämon“ die Provinzen von Ionia, bevor ich schließlich von einem dreiköpfigen Trupp Shen, dessen Vater Kusho und Zed. Nach jahrelanger Jagd im Tuula-Gefängnis eingekerkert wurde.",
+          "Mein gesamtes Dasein, meine visuelle Ästhetik, mein Magazininhalt, meine Fähigkeiten und sogar mein Champion-Design drehen sich zwanghaft um eine einzige, perfekte Zahl."
+        ]
+      },
+      {
+        answer: "Hinata",
+        acceptedAnswers: ["Shoyo Hinata", "Shōyō Hinata", "Hinata Shoyo", "Hinata Shōyō"],
+        clues: [
+          "Laut offiziellen Daten bin ich am 21. Juni 1996 geboren, wiege exakt 51,9 Kilogramm bei einer Körpergröße von 162,8 Zentimetern und trage die Identifikationsnummer 10 auf meiner Kleidung.",
+          "An meiner Schule in der Präfektur Miyagi trage ich den ungewöhnlichen Titel des „größten Köders“, da ich durch meine extreme Antrittsgeschwindigkeit und Sprungkraft die gegnerische Aufmerksamkeit komplett auf mich ziehe.",
+          "Ich spiele an der Karasuno-Oberschule, deren Symbol der Rabe ist und stehe dort in einer ständigen Rivalität mit dem genialen Zuspieler Tobio Kageyama."
+        ]
+      },
+      {
+        answer: "Goose",
+        clues: [
+          "Ich bin ein nicht-menschlicher Charakter im MCU. In meiner Spezies-Anatomie verbergen sich sogenannte Taschen-Dimensionen.",
+          "Obwohl mächtige außerirdische Rassen vor meiner Spezies in Todesangst geraten, halten mich Erdenbewohner fälschlicherweise für eine völlig harmlose, niedliche Kreatur.",
+          "Ich bin dafür verantwortlich, dass der S.H.I.E.L.D.-Direktor Nick Fury sein linkes Auge verlor, da ich ihn nach einem gemeinsamen Abenteuer unabsichtlich im Gesicht kratzte."
+        ]
+      },
+      {
+        answer: "Ohnezahn",
+        acceptedAnswers: ["Toothless"],
+        clues: [
+          "In der literarischen Erstausgabe von 2003 war ich ein winziges, grünes Exemplar der Gattung „Common or Garden“, das problemlos auf eine Handfläche passte. Für meine filmische Adaption wurde meine Spezies-Physiologie komplett neu erfunden und massiv skaliert.",
+          "Das akustische Sound-Design meines Schreis basiert auf einer gemischten Tonspur aus den Rufen eines Elefantenbabys, eines Tigerjungen, dem Gesang eines Walrosses und der Stimme des Sound-Designers Randy Thom. Mein visuelles Design wurde direkt von den Bewegungsabläufen einer Black-Footed-Cat namens „Sulky“ inspiriert.",
+          "Ich besitze die anatomische Besonderheit, meine Beißwerkzeuge vollständig im eigenen Kieferknochen zu versenken, was mir bei der ersten Begegnung mit meinem Begleiter fälschlicherweise den Namen einbrachte."
+        ]
+      },
+      {
+        answer: "Jennifer Lawrence",
+        clues: [
+          "Ich wurde am 15. August 1990 in Indian Hills (Kentucky) geboren und bin 1,75 Meter groß. Im Alter von 22 Jahren und 193 Tagen wurde ich die zweitjüngste Person der Geschichte, die mit dem Oscar als Beste Hauptdarstellerin ausgezeichnet wurde.",
+          "Für eine berühmte Filmreihe musste ich jahrelang täglich ein stundenlanges Ganzkörper-Make-up über mich ergehen lassen, um in meine Rolle zu schlüpfen.",
+          "Bei der Oscar-Verleihung 2013 stolperte ich in meiner voluminösen Christian-Dior-Robe auf den Stufen zur Bühne."
+        ]
+      },
+      {
+        answer: "Robert Downey Jr.",
+        acceptedAnswers: ["RDJ"],
+        clues: [
+          "Nach meiner Entlassung und anschließenden Rehabilitation war ich jahrelang für große Filmstudios nicht versicherbar. Erst als Mel Gibson persönlich die Kautions- und Versicherungsprämien für mich hinterlegte, konnte ich 2003 im Film „The Singing Detective“ meine erste große Hauptrolle feiern.",
+          "Für meine Darstellung des Kirk Lazarus in „Tropic Thunder“ war ich für den Nebenrollen-Oscar nominiert, bevor ich 2024 für meine Rolle als Lewis Strauss in Christopher Nolans „Oppenheimer“ den Oscar als Bester Nebendarsteller gewann.",
+          "Ich bin ein extrem erfolgreicher Hollywood-Star und prägte über ein Jahrzehnt lang das Marvel Cinematic Universe in einer ikonischen Rüstung."
+        ]
+      }
+    ]
+  },
   { title: "Türchen 16", questions: [{ question: "Was ist das Gegenteil von warm?", options: ["Kalt", "Nass", "Leicht", "Fett"], answer: 0, points: 3 }] },
   { title: "Türchen 17", questions: [{ question: "Wie nennt man das Klingeln von Glocken im Winter?", options: ["Festlichkeit", "Oberton", "Winterklingen", "Windschein"], answer: 0, points: 3 }] },
   { title: "Türchen 18", questions: [{ question: "Welches Wort passt zu einer verschneiten und ruhigen Nacht?", options: ["Stille", "Laut", "Wild", "Voll"], answer: 0, points: 3 }] },
@@ -279,7 +367,7 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13]) {
+    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14]) {
       if (typeof parsed[dayIndex]?.[0] === "number") {
         delete parsed[dayIndex];
         progressChanged = true;
@@ -324,12 +412,28 @@ function pointsFor(dayIndex) {
       ? answers._manualPoints
       : 0;
   }
-  return quiz.questions.reduce((total, question, questionIndex) => (
-    total + (isCorrectAnswer(question, answers[questionIndex]) ? question.points : 0)
-  ), 0);
+  return quiz.questions.reduce((total, question, questionIndex) => {
+    const answer = answers[questionIndex];
+    if (quiz.type === "who-am-i") {
+      return total + (answer?.completed && Number.isSafeInteger(answer.points) ? answer.points : 0);
+    }
+    return total + (isCorrectAnswer(question, answer) ? question.points : 0);
+  }, 0);
+}
+
+function isQuestionComplete(question, answer) {
+  return Array.isArray(question.clues)
+    ? answer?.completed === true
+    : answer !== undefined;
 }
 
 function isCorrectAnswer(question, answer) {
+  if (Array.isArray(question.clues)) {
+    if (typeof answer?.guess !== "string") return false;
+    const normalize = (value) => value.toLocaleLowerCase("de-DE").replace(/\s+/g, "");
+    return [question.answer, ...(question.acceptedAnswers ?? [])]
+      .some((acceptedAnswer) => normalize(answer.guess) === normalize(acceptedAnswer));
+  }
   if (question.type === "word") {
     return typeof answer === "string"
       && answer.trim().toLocaleLowerCase("de-DE") === question.answer.toLocaleLowerCase("de-DE");
@@ -376,7 +480,9 @@ function isComplete(dayIndex) {
       && answersFor(dayIndex)._manualPoints >= 0;
   }
   return quiz.questions.length > 0
-    && quiz.questions.every((_, questionIndex) => Object.hasOwn(answersFor(dayIndex), questionIndex));
+    && quiz.questions.every((question, questionIndex) => (
+      isQuestionComplete(question, answersFor(dayIndex)[questionIndex])
+    ));
 }
 
 function renderCalendar() {
@@ -430,9 +536,10 @@ function renderIntro() {
   const quiz = QUIZZES[openDay];
   const completed = isComplete(openDay);
   const answers = answersFor(openDay);
-  const answeredCount = quiz.questions.reduce((count, _, index) => (
-    count + (Object.hasOwn(answers, index) ? 1 : 0)
+  const answeredCount = quiz.questions.reduce((count, question, index) => (
+    count + (isQuestionComplete(question, answers[index]) ? 1 : 0)
   ), 0);
+  const hasProgress = quiz.questions.some((_, index) => Object.hasOwn(answers, index));
   dialogContent.replaceChildren();
 
   if (quiz.questions.length === 0) {
@@ -454,7 +561,9 @@ function renderIntro() {
 
   const description = document.createElement("p");
   description.className = "quiz-intro";
-  if (quiz.questions[0].type === "word") {
+  if (quiz.type === "who-am-i") {
+    description.textContent = "Errate die gesuchte Person anhand von bis zu drei Hinweisen. Für eine richtige Antwort beim ersten Hinweis gibt es 3 Punkte, beim zweiten 2 und beim dritten 1 Punkt. Ohne richtige Antwort gibt es 0 Punkte. Es gibt kein Zeitlimit; Groß- und Kleinschreibung sowie Leerzeichen werden ignoriert.";
+  } else if (quiz.questions[0].type === "word") {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Entwirre die Buchstaben und gib das richtige Wort ein. Für jedes Wort hast du 30 Sekunden Zeit und für jede richtige Lösung bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "image") {
     const subject = quiz.imagePrompt
@@ -497,7 +606,7 @@ function renderIntro() {
   startButton.type = "button";
   startButton.textContent = completed
     ? "Zusammenfassung ansehen"
-    : answeredCount > 0 || Number.isFinite(answers._deadline) ? "Quiz fortsetzen" : "Quiz starten";
+    : hasProgress || Number.isFinite(answers._deadline) ? "Quiz fortsetzen" : "Quiz starten";
   startButton.addEventListener("click", completed
     ? renderResult
     : quiz.type === "live" ? startLiveQuiz : renderQuestion);
@@ -568,7 +677,9 @@ function renderQuestion() {
   }
 
   const answers = answersFor(openDay);
-  const questionIndex = quiz.questions.findIndex((_, index) => !Object.hasOwn(answers, index));
+  const questionIndex = quiz.questions.findIndex((question, index) => (
+    !isQuestionComplete(question, answers[index])
+  ));
   dialogContent.replaceChildren();
 
   if (quiz.questions.length === 0) {
@@ -619,6 +730,11 @@ function renderQuestion() {
 
   if (question.type === "text") {
     renderTextQuestion(question, questionIndex, progressText, questionText);
+    return;
+  }
+
+  if (quiz.type === "who-am-i") {
+    renderWhoAmIQuestion(question, questionIndex, progressText);
     return;
   }
 
@@ -1011,6 +1127,104 @@ function renderTextQuestion(question, questionIndex, progressText, questionText)
   input.focus();
 }
 
+function renderWhoAmIQuestion(question, questionIndex, progressText) {
+  const answers = answersFor(openDay);
+  const savedAnswer = answers[questionIndex];
+  const clueIndex = Number.isInteger(savedAnswer?.clueIndex)
+    ? Math.min(Math.max(savedAnswer.clueIndex, 0), question.clues.length - 1)
+    : 0;
+
+  const clues = document.createElement("ol");
+  clues.className = "who-am-i-clues";
+  clues.start = 1;
+  question.clues.slice(0, clueIndex + 1).forEach((clue) => {
+    const item = document.createElement("li");
+    item.textContent = clue;
+    clues.append(item);
+  });
+
+  const feedback = savedAnswer?.lastGuess
+    ? document.createElement("p")
+    : null;
+  if (feedback) {
+    feedback.className = "feedback incorrect";
+    feedback.textContent = `„${savedAnswer.lastGuess}“ war leider nicht richtig. Hier kommt Hinweis ${clueIndex + 1}.`;
+  }
+
+  const form = document.createElement("form");
+  form.className = "answers";
+  const input = document.createElement("input");
+  input.className = "word-input";
+  input.type = "text";
+  input.autocomplete = "off";
+  input.spellcheck = false;
+  input.placeholder = "Wer bin ich?";
+  input.setAttribute("aria-label", "Gesuchte Person");
+
+  const submitButton = document.createElement("button");
+  submitButton.className = "primary-button";
+  submitButton.type = "submit";
+  submitButton.textContent = "Antwort prüfen";
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const guess = input.value.trim();
+    if (!guess) {
+      input.focus();
+      return;
+    }
+
+    const isCorrect = isCorrectAnswer(question, { guess });
+    const nextClueIndex = isCorrect || clueIndex === question.clues.length - 1
+      ? clueIndex
+      : clueIndex + 1;
+    const updatedAnswer = {
+      clueIndex: nextClueIndex,
+      guess,
+      completed: isCorrect || clueIndex === question.clues.length - 1,
+      points: isCorrect ? question.clues.length - clueIndex : 0
+    };
+    if (!updatedAnswer.completed) updatedAnswer.lastGuess = guess;
+    answers[questionIndex] = updatedAnswer;
+    progress[openDay] = answers;
+    saveProgress();
+    renderCalendar();
+
+    if (updatedAnswer.completed) {
+      dialogContent.replaceChildren();
+      renderWhoAmIResolution(question, updatedAnswer, questionIndex);
+    } else {
+      renderQuestion();
+    }
+  });
+
+  form.append(input, submitButton);
+  dialogContent.append(progressText);
+  if (feedback) dialogContent.append(feedback);
+  dialogContent.append(clues, form);
+  input.focus();
+}
+
+function renderWhoAmIResolution(question, answer, questionIndex) {
+  const quiz = QUIZZES[openDay];
+  const isCorrect = isCorrectAnswer(question, answer);
+  const feedback = document.createElement("p");
+  feedback.className = `feedback ${isCorrect ? "correct" : "incorrect"}`;
+  feedback.textContent = isCorrect
+    ? `Richtig! +${answer.points} ${answer.points === 1 ? "Punkt" : "Punkte"}`
+    : `Leider nicht ganz. Gesucht war „${question.answer}“.`;
+
+  const nextButton = document.createElement("button");
+  nextButton.className = "primary-button";
+  nextButton.type = "button";
+  nextButton.textContent = questionIndex + 1 === quiz.questions.length
+    ? "Ergebnis ansehen"
+    : "Nächste Person";
+  nextButton.addEventListener("click", renderQuestion);
+  dialogContent.append(feedback, nextButton);
+  nextButton.focus();
+}
+
 function startWordTimer(questionIndex, timerDisplay, durationSeconds = 30) {
   const timerKey = `${openDay}:${questionIndex}`;
   if (wordTimerKey !== timerKey) {
@@ -1254,9 +1468,13 @@ function renderResult() {
     questionLabel.className = "answer-summary-question";
     questionLabel.textContent = quiz.type === "live"
       ? question.year ?? question.question
+      : quiz.type === "who-am-i"
+      ? `Person ${questionIndex + 1}`
       : `Frage ${questionIndex + 1}`;
 
-    const userAnswer = question.type === "word" || question.type === "image" || question.type === "audio" || question.type === "text" || typeof question.answer === "string"
+    const userAnswer = quiz.type === "who-am-i"
+      ? answer?.guess?.trim() || "Keine Antwort"
+      : question.type === "word" || question.type === "image" || question.type === "audio" || question.type === "text" || typeof question.answer === "string"
       ? (typeof answer === "string" && answer.trim() ? answer.trim() : "Keine Antwort (Zeit abgelaufen)")
       : question.options[answer] ?? "Keine Antwort";
     const answerText = document.createElement("span");
