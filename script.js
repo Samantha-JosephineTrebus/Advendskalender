@@ -52,6 +52,7 @@ const QUIZZES = [
   },
   {
     title: "Türchen 4",
+    welcomeMessage: "Ich wünsche dir heute ganz viel Glück und bin sehr stolz auf dich!",
     questions: [
       { type: "text", question: "Was ist mein Lieblingsgetränk?", answer: "RedBull", points: 2 },
       { type: "text", question: "Welcher Red Bull ist mein Lieblings-Red-Bull?", answer: "Weiß", acceptedAnswers: ["Kokosnuss"], points: 2 },
@@ -323,8 +324,37 @@ const QUIZZES = [
       }
     ]
   },
-  { title: "Türchen 16", questions: [{ question: "Was ist das Gegenteil von warm?", options: ["Kalt", "Nass", "Leicht", "Fett"], answer: 0, points: 3 }] },
-  { title: "Türchen 17", questions: [{ question: "Wie nennt man das Klingeln von Glocken im Winter?", options: ["Festlichkeit", "Oberton", "Winterklingen", "Windschein"], answer: 0, points: 3 }] },
+  {
+    title: "Türchen 16",
+    questions: [
+      { type: "song", audio: "songs-erraten-2/Adele_-_Rolling_in_the_Deep.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Rolling in the Deep", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Imagine_Dragons_x_JID_-_Enemy.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Enemy", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Justin_Bieber_-_Love_Yourself.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Love Yourself", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Katy_Perry_-_Dark_Horse.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Dark Horse", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Kesha_-_TiK_ToK.mp3", question: "Welcher Songtitel ist zu hören?", answer: "TiK ToK", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Lady_Gaga_-_Just_Dance.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Just Dance", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Linkin_Park_-_Numb.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Numb", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Maroon_5_-_Payphone.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Payphone", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Olivia_Rodrigo_-_Cant_Catch_Me_Now.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Can't Catch Me Now", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Pitbull_-_Timber.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Timber", points: 2 }
+    ]
+  },
+  {
+    title: "Türchen 17",
+    introDescription: "In diesem Quiz warten 10 MCU Fragen auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.",
+    questions: [
+      { question: "In welchem Film wird die „Avengers Initiative“ zum ersten Mal erwähnt?", options: ["Iron Man", "The First Avenger", "Thor", "Iron Man 2"], answer: 0, points: 3 },
+      { question: "In welchem Film taucht der Reality Stone (als Äther) zum ersten Mal auf?", options: ["Thor: The Dark World", "Avengers: Age of Ultron", "Doctor Strange", "Guardians of the Galaxy"], answer: 0, points: 3 },
+      { question: "Welcher Protokoll-Befehl aktiviert in Iron Man 3 sämtliche von Tony Stark jemals gebauten Notfall-Rüstungen gleichzeitig?", options: ["House Party Protocol", "Omega Directive", "Clean Slate Protocol", "Iron Legion Protocol"], answer: 0, points: 3 },
+      { question: "Welchen Stamm Wakandas führt M’Baku an?", options: ["Die Jabari", "Die Bergwerkstämme", "Die Grenzstämme", "Die Flussstämme"], answer: 0, points: 3 },
+      { question: "Auf welchem Planeten wird Stormbreaker geschmiedet?", options: ["Svartalfheim", "Nidavellir", "Vormir", "Muspelheim"], answer: 1, points: 3 },
+      { question: "In Spider-Man: Far From Home hinterlässt Tony Stark Peter Parker eine hochtechnisierte Brille mit einer KI. Wofür steht das Akronym E.D.I.T.H.?", options: ["Even Dead, I’m The Hero", "Every Defense Is In Total Harmony", "Electronic Data Intelligence Tactical Hub", "Early Detection In Threat Handling"], answer: 0, points: 3 },
+      { question: "Welches Fach belegte Thor nach eigener Aussage auf Asgard als Wahlfach, um die Sprache einer bestimmten Spezies zu erlernen?", options: ["Sakaaranisch", "Chitauri", "Groot", "Kree"], answer: 2, points: 3 },
+      { question: "Wie heißt der Heimatplanet von Thanos, bevor er durch Überbevölkerung und Ressourcenmangel zugrunde gerichtet wurde?", options: ["Xandar", "Titan", "Hala", "Sakaar"], answer: 1, points: 3 },
+      { question: "Welches Lied hört Peter Quill auf seinem Walkman in der berühmten Eröffnungsszene von Guardians of the Galaxy Vol. 1 auf Morag?", options: ["Mr. Blue Sky", "Come and Get Your Love", "Hooked on a Feeling", "Fooled Around and Fell in Love"], answer: 1, points: 3 },
+      { question: "Wie lautet der Name der kleinen, hochtechnisierten Aufklärungsdrohne, die Sam Wilson (Falcon) im MCU als treuen Begleiter einsetzt?", options: ["Specter", "Redwing", "Talon", "Falcon-1"], answer: 1, points: 3 }
+    ]
+  },
   { title: "Türchen 18", questions: [{ question: "Welches Wort passt zu einer verschneiten und ruhigen Nacht?", options: ["Stille", "Laut", "Wild", "Voll"], answer: 0, points: 3 }] },
   { title: "Türchen 19", questions: [{ question: "Was hängt man oft als erste Deko vor das Fenster?", options: ["Einen Kranz", "Eine Lampe", "Ein Bett", "Eine Tasche"], answer: 0, points: 3 }] },
   { title: "Türchen 20", questions: [{ question: "Welches Getränk wird oft mit Zimt und Sahne serviert?", options: ["Glühwein", "Energiegetränk", "Saft", "Mojito"], answer: 0, points: 3 }] },
@@ -367,7 +397,7 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14]) {
+    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]) {
       if (typeof parsed[dayIndex]?.[0] === "number") {
         delete parsed[dayIndex];
         progressChanged = true;
@@ -529,6 +559,7 @@ function openQuiz(dayIndex) {
   dialogTitle.textContent = quiz.title;
   renderIntro();
   overlay.hidden = false;
+  document.body.classList.add("dialog-open");
   closeDialogButton.focus();
 }
 
@@ -561,6 +592,12 @@ function renderIntro() {
 
   const description = document.createElement("p");
   description.className = "quiz-intro";
+  if (quiz.welcomeMessage) {
+    const welcomeMessage = document.createElement("p");
+    welcomeMessage.className = "quiz-welcome";
+    welcomeMessage.textContent = quiz.welcomeMessage;
+    dialogContent.append(welcomeMessage);
+  }
   if (quiz.type === "who-am-i") {
     description.textContent = "Errate die gesuchte Person anhand von bis zu drei Hinweisen. Für eine richtige Antwort beim ersten Hinweis gibt es 3 Punkte, beim zweiten 2 und beim dritten 1 Punkt. Ohne richtige Antwort gibt es 0 Punkte. Es gibt kein Zeitlimit; Groß- und Kleinschreibung sowie Leerzeichen werden ignoriert.";
   } else if (quiz.questions[0].type === "word") {
@@ -590,7 +627,8 @@ function renderIntro() {
       : `${minutes} Minute${minutes === 1 ? "" : "n"} und ${seconds} Sekunden`;
     description.textContent = `Beantworte so viele Fragen wie möglich. Für alle Fragen hast du zusammen ${timeLimit} Zeit. Falsche Antworten kannst du erneut versuchen.`;
   } else {
-    description.textContent = `In diesem Quiz warten ${quiz.questions.length} ${quiz.questions.length === 1 ? "Frage" : "Fragen"} auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.`;
+    description.textContent = quiz.introDescription
+      ?? `In diesem Quiz warten ${quiz.questions.length} ${quiz.questions.length === 1 ? "Frage" : "Fragen"} auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.`;
   }
 
   const progressMessage = document.createElement("p");
@@ -1503,6 +1541,7 @@ function closeDialog() {
   activeAudio?.pause();
   activeAudio = null;
   overlay.hidden = true;
+  document.body.classList.remove("dialog-open");
   openDay = null;
 }
 
