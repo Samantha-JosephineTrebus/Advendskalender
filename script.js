@@ -326,21 +326,6 @@ const QUIZZES = [
   },
   {
     title: "Türchen 16",
-    questions: [
-      { type: "song", audio: "songs-erraten-2/Adele_-_Rolling_in_the_Deep.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Rolling in the Deep", points: 2 },
-      { type: "song", audio: "songs-erraten-2/Imagine_Dragons_x_JID_-_Enemy.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Enemy", points: 2 },
-      { type: "song", audio: "songs-erraten-2/Justin_Bieber_-_Love_Yourself.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Love Yourself", points: 2 },
-      { type: "song", audio: "songs-erraten-2/Katy_Perry_-_Dark_Horse.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Dark Horse", points: 2 },
-      { type: "song", audio: "songs-erraten-2/Kesha_-_TiK_ToK.mp3", question: "Welcher Songtitel ist zu hören?", answer: "TiK ToK", points: 2 },
-      { type: "song", audio: "songs-erraten-2/Lady_Gaga_-_Just_Dance.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Just Dance", points: 2 },
-      { type: "song", audio: "songs-erraten-2/Linkin_Park_-_Numb.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Numb", points: 2 },
-      { type: "song", audio: "songs-erraten-2/Maroon_5_-_Payphone.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Payphone", points: 2 },
-      { type: "song", audio: "songs-erraten-2/Olivia_Rodrigo_-_Cant_Catch_Me_Now.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Can't Catch Me Now", points: 2 },
-      { type: "song", audio: "songs-erraten-2/Pitbull_-_Timber.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Timber", points: 2 }
-    ]
-  },
-  {
-    title: "Türchen 17",
     introDescription: "In diesem Quiz warten 10 MCU Fragen auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.",
     questions: [
       { question: "In welchem Film wird die „Avengers Initiative“ zum ersten Mal erwähnt?", options: ["Iron Man", "The First Avenger", "Thor", "Iron Man 2"], answer: 0, points: 3 },
@@ -353,6 +338,21 @@ const QUIZZES = [
       { question: "Wie heißt der Heimatplanet von Thanos, bevor er durch Überbevölkerung und Ressourcenmangel zugrunde gerichtet wurde?", options: ["Xandar", "Titan", "Hala", "Sakaar"], answer: 1, points: 3 },
       { question: "Welches Lied hört Peter Quill auf seinem Walkman in der berühmten Eröffnungsszene von Guardians of the Galaxy Vol. 1 auf Morag?", options: ["Mr. Blue Sky", "Come and Get Your Love", "Hooked on a Feeling", "Fooled Around and Fell in Love"], answer: 1, points: 3 },
       { question: "Wie lautet der Name der kleinen, hochtechnisierten Aufklärungsdrohne, die Sam Wilson (Falcon) im MCU als treuen Begleiter einsetzt?", options: ["Specter", "Redwing", "Talon", "Falcon-1"], answer: 1, points: 3 }
+    ]
+  },
+  {
+    title: "Türchen 17",
+    questions: [
+      { type: "song", audio: "songs-erraten-2/Adele_-_Rolling_in_the_Deep.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Rolling in the Deep", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Imagine_Dragons_x_JID_-_Enemy.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Enemy", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Justin_Bieber_-_Love_Yourself.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Love Yourself", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Katy_Perry_-_Dark_Horse.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Dark Horse", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Kesha_-_TiK_ToK.mp3", question: "Welcher Songtitel ist zu hören?", answer: "TiK ToK", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Lady_Gaga_-_Just_Dance.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Just Dance", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Linkin_Park_-_Numb.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Numb", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Maroon_5_-_Payphone.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Payphone", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Olivia_Rodrigo_-_Cant_Catch_Me_Now.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Can't Catch Me Now", points: 2 },
+      { type: "song", audio: "songs-erraten-2/Pitbull_-_Timber.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Timber", points: 2 }
     ]
   },
   { title: "Türchen 18", questions: [{ question: "Welches Wort passt zu einer verschneiten und ruhigen Nacht?", options: ["Stille", "Laut", "Wild", "Voll"], answer: 0, points: 3 }] },
