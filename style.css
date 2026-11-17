@@ -591,6 +591,11 @@ h1 span {
 .word-input::placeholder { color: #b5c5e8; }
 .word-input:focus-visible { outline: 2px solid var(--ice-bright); outline-offset: 2px; }
 
+.scale-control { display: grid; gap: 8px; }
+.scale-input { width: 100%; margin: 8px 0; accent-color: var(--ice-bright); cursor: pointer; }
+.scale-value { color: var(--ice-bright); font-size: 1.4rem; font-weight: 700; text-align: center; }
+.scale-labels { display: flex; justify-content: space-between; color: #d7e2ff; font-size: .9rem; }
+
 .answer-button, .primary-button {
   width: 100%;
   padding: 13px 15px;

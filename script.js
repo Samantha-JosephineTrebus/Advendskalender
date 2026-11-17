@@ -53,17 +53,18 @@ const QUIZZES = [
   {
     title: "Türchen 4",
     welcomeMessage: "Ich wünsche dir heute ganz viel Glück und bin sehr stolz auf dich!",
+    textDescription: "Beantworte die Fragen zu Lost Bitcoin.",
     questions: [
-      { type: "text", question: "Was ist mein Lieblingsgetränk?", answer: "RedBull", points: 2 },
-      { type: "text", question: "Welcher Red Bull ist mein Lieblings-Red-Bull?", answer: "Weiß", acceptedAnswers: ["Kokosnuss"], points: 2 },
-      { type: "text", question: "Was ist mein Lieblingsessen?", answer: "Sushi", points: 2 },
-      { type: "text", question: "Was gab es bei unserem ersten Date zu essen?", answer: "Nudeln", acceptedAnswers: ["Nudeln mit Pesto"], points: 2 },
-      { type: "text", question: "Welchen Film haben wir bei unserem ersten Date geschaut?", answer: "Captain Marvel", points: 2 },
-      { type: "text", question: "Was ist mein Lieblingsauto?", answer: "Camaro", points: 2 },
-      { type: "text", question: "Welches Pokémon haben wir aus Knete gebastelt?", answer: "Plinfa", points: 2 },
-      { type: "text", question: "Was haben die Angestellten in Ägypten aus unseren Handtüchern gefaltet?", answer: "Affe", acceptedAnswers: ["Elefant", "Herz"], points: 2 },
-      { type: "text", question: "In welchem Jahr sind wir zusammengekommen?", answer: "2022", points: 2 },
-      { type: "text", question: "Wie heißt mein Lieblingsbuch?", answer: "Izara", points: 2 }
+      { type: "text", question: "Wann hast du die Demo veröffentlicht?", answer: "11.11.2026", points: 2 },
+      { type: "text", question: "Wie viel kostet es, den Staubsauger freizuschalten?", answer: "200", points: 2 },
+      { type: "text", question: "Gibt es in Lost Bitcoin Fahrradräder?", answer: "Ja", points: 2 },
+      { type: "text", question: "Sind alle vier Pfoten der Katze weiß?", answer: "Ja", points: 2 },
+      { type: "text", question: "In welcher Farbe ist „Word Shop“ über dem Shop geschrieben?", answer: "Blau oder Türkis", acceptedAnswers: ["Blau", "Türkis", "Türkisblau"], points: 2 },
+      { type: "text", question: "Wann hast du deinen Discord-Server eröffnet?", answer: "25.10.2026", points: 2 },
+      { type: "text", question: "Welche Farbe hat die Drohne überwiegend?", answer: "Weiß oder Beige", acceptedAnswers: ["Weiß", "Beige"], points: 2 },
+      { type: "text", question: "Wie viele Updates gibt es für das Lauftempo?", answer: "5", acceptedAnswers: ["Fünf"], points: 2 },
+      { type: "text", question: "Wie hoch kann man mit allen Sprung-Updates springen?", answer: "2,8 Meter", acceptedAnswers: ["2,8 m", "2.8 Meter", "2.8 m"], points: 2 },
+      { type: "text", question: "Wie aufgeregt bist du heute auf einer Skala von 1 bis 10?", answer: "1 bis 10", scale: { min: 1, max: 10 }, points: 2 }
     ]
   },
   {
@@ -355,9 +356,59 @@ const QUIZZES = [
       { type: "song", audio: "songs-erraten-2/Pitbull_-_Timber.mp3", question: "Welcher Songtitel ist zu hören?", answer: "Timber", points: 2 }
     ]
   },
-  { title: "Türchen 18", questions: [{ question: "Welches Wort passt zu einer verschneiten und ruhigen Nacht?", options: ["Stille", "Laut", "Wild", "Voll"], answer: 0, points: 3 }] },
-  { title: "Türchen 19", questions: [{ question: "Was hängt man oft als erste Deko vor das Fenster?", options: ["Einen Kranz", "Eine Lampe", "Ein Bett", "Eine Tasche"], answer: 0, points: 3 }] },
-  { title: "Türchen 20", questions: [{ question: "Welches Getränk wird oft mit Zimt und Sahne serviert?", options: ["Glühwein", "Energiegetränk", "Saft", "Mojito"], answer: 0, points: 3 }] },
+  {
+    title: "Türchen 18",
+    questionTimeLimit: 60,
+    imagePrompt: "Aus welchem Film oder welcher Serie stammt diese Karte?",
+    imageAlt: "Karte aus einem Film oder einer Serie zum Erraten",
+    imageAnswerPlaceholder: "Name des Films oder der Serie",
+    questions: [
+      { type: "image", image: "maps/asgard.jpg", answer: "Asgard", points: 2 },
+      { type: "image", image: "maps/black_clover.jpg", answer: "Black Clover", points: 2 },
+      { type: "image", image: "maps/der_herr_der_ringe.jpg", answer: "Der Herr der Ringe", points: 2 },
+      { type: "image", image: "maps/die_tribute_von_panem.jpg", answer: "Die Tribute von Panem", points: 2 },
+      { type: "image", image: "maps/drachen_zaehmen_leichtgemacht.jfif", answer: "Drachenzähmen leicht gemacht", acceptedAnswers: ["Drachen zähmen leicht gemacht"], points: 2 },
+      { type: "image", image: "maps/game_of_thrones.jpg", answer: "Game of Thrones", points: 2 },
+      { type: "image", image: "maps/hunter_x_hunter.jfif", answer: "Hunter x Hunter", points: 2 },
+      { type: "image", image: "maps/narnia.jpg", answer: "Narnia", points: 2 },
+      { type: "image", image: "maps/naruto.jfif", answer: "Naruto", points: 2 },
+      { type: "image", image: "maps/one_piece.jfif", answer: "One Piece", points: 2 }
+    ]
+  },
+  {
+    title: "Türchen 19",
+    questionTimeLimit: 60,
+    imagePrompt: "Welche berühmte Person ist auf dem Kinderbild zu sehen?",
+    imageAlt: "Kinderfoto einer berühmten Person zum Erraten",
+    imageAnswerPlaceholder: "Name der Person",
+    questions: [
+      { type: "image", image: "kinderbilder/andrew_garfield.jfif", answer: "Andrew Garfield", points: 2 },
+      { type: "image", image: "kinderbilder/chris_hemsworth.jpeg", answer: "Chris Hemsworth", points: 2 },
+      { type: "image", image: "kinderbilder/dylan_obrien.jpg", answer: "Dylan O'Brien", acceptedAnswers: ["Dylan O’Brien"], points: 2 },
+      { type: "image", image: "kinderbilder/elizabeth_olsen.jpg", answer: "Elizabeth Olsen", points: 2 },
+      { type: "image", image: "kinderbilder/julia_beautx.jpg", answer: "Julia Beautx", points: 2 },
+      { type: "image", image: "kinderbilder/mckenna_grace.jpg", answer: "Mckenna Grace", points: 2 },
+      { type: "image", image: "kinderbilder/robert_downey-junior.png", answer: "Robert Downey Jr.", acceptedAnswers: ["Robert Downey Junior", "RDJ"], points: 2 },
+      { type: "image", image: "kinderbilder/ronaldo.png", answer: "Ronaldo", acceptedAnswers: ["Cristiano Ronaldo", "CR7"], points: 2 },
+      { type: "image", image: "kinderbilder/tom_hiddleston.png", answer: "Tom Hiddleston", points: 2 },
+      { type: "image", image: "kinderbilder/trymacs.jpg", answer: "Trymacs", points: 2 }
+    ]
+  },
+  {
+    title: "Türchen 20",
+    questions: [
+      { type: "text", question: "Was ist mein Lieblingsgetränk?", answer: "RedBull", points: 2 },
+      { type: "text", question: "Welcher Red Bull ist mein Lieblings-Red-Bull?", answer: "Weiß", acceptedAnswers: ["Kokosnuss"], points: 2 },
+      { type: "text", question: "Was ist mein Lieblingsessen?", answer: "Sushi", points: 2 },
+      { type: "text", question: "Was gab es bei unserem ersten Date zu essen?", answer: "Nudeln", acceptedAnswers: ["Nudeln mit Pesto"], points: 2 },
+      { type: "text", question: "Welchen Film haben wir bei unserem ersten Date geschaut?", answer: "Captain Marvel", points: 2 },
+      { type: "text", question: "Was ist mein Lieblingsauto?", answer: "Camaro", points: 2 },
+      { type: "text", question: "Welches Pokémon haben wir aus Knete gebastelt?", answer: "Plinfa", points: 2 },
+      { type: "text", question: "Was haben die Angestellten in Ägypten aus unseren Handtüchern gefaltet?", answer: "Affe", acceptedAnswers: ["Elefant", "Herz"], points: 2 },
+      { type: "text", question: "In welchem Jahr sind wir zusammengekommen?", answer: "2022", points: 2 },
+      { type: "text", question: "Wie heißt mein Lieblingsbuch?", answer: "Izara", points: 2 }
+    ]
+  },
   { title: "Türchen 21", questions: [{ question: "Welche Farbe eignet sich besonders für weiße Weihnachten?", options: ["Silber", "Tiefes Blau", "Schwarz", "Orange"], answer: 0, points: 3 }] },
   { title: "Türchen 22", questions: [{ question: "Wie nennt man eine kleine, festliche Leuchte im Fenster?", options: ["Lichterkette", "Kübelschrank", "Zelt", "Wolke"], answer: 0, points: 3 }] },
   { title: "Türchen 23", questions: [{ question: "Was macht man oft am Abend an Weihnachten?", options: ["Geschenke öffnen", "Sport treiben", "Klettern", "Reisen"], answer: 0, points: 4 }] },
@@ -365,8 +416,9 @@ const QUIZZES = [
 ];
 
 const DOOR_ORDER = [18, 3, 12, 7, 22, 1, 15, 9, 24, 5, 20, 11, 4, 17, 2, 14, 8, 21, 6, 19, 10, 23, 13, 16];
-const STORAGE_KEY = "adventskalender-fortschritt-v3";
-const LEGACY_STORAGE_KEY = "adventskalender-fortschritt-v2";
+const STORAGE_KEY = "adventskalender-fortschritt-v4";
+const LEGACY_STORAGE_KEY = "adventskalender-fortschritt-v3";
+const OLDER_STORAGE_KEY = "adventskalender-fortschritt-v2";
 const calendar = document.querySelector("#calendar");
 const scoreDisplay = document.querySelector("#score");
 const overlay = document.querySelector("#overlay");
@@ -388,7 +440,9 @@ const audioPlayCounts = {};
 function loadProgress() {
   try {
     const currentProgress = localStorage.getItem(STORAGE_KEY);
-    const saved = currentProgress ?? localStorage.getItem(LEGACY_STORAGE_KEY);
+    const saved = currentProgress
+      ?? localStorage.getItem(LEGACY_STORAGE_KEY)
+      ?? localStorage.getItem(OLDER_STORAGE_KEY);
     if (saved === null) return {};
 
     const parsed = JSON.parse(saved);
@@ -397,7 +451,12 @@ function loadProgress() {
     }
 
     let progressChanged = false;
-    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]) {
+    if (currentProgress === null) {
+      delete parsed[3];
+      delete parsed[19];
+      progressChanged = true;
+    }
+    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]) {
       if (typeof parsed[dayIndex]?.[0] === "number") {
         delete parsed[dayIndex];
         progressChanged = true;
@@ -490,6 +549,13 @@ function isCorrectAnswer(question, answer) {
     return typeof answer === "string"
       && answer.trim().toLocaleLowerCase("de-DE").replace(/\s+/g, " ")
         === question.answer.toLocaleLowerCase("de-DE").replace(/\s+/g, " ");
+  }
+  if (question.scale) {
+    const value = Number(answer);
+    return typeof answer === "string"
+      && Number.isInteger(value)
+      && value >= question.scale.min
+      && value <= question.scale.max;
   }
   if (question.type === "text" || (typeof question.answer === "string" && !question.options)) {
     if (typeof answer !== "string") return false;
@@ -604,11 +670,13 @@ function renderIntro() {
     description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Entwirre die Buchstaben und gib das richtige Wort ein. Für jedes Wort hast du 30 Sekunden Zeit und für jede richtige Lösung bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "image") {
     const subject = quiz.imagePrompt
-      ? "Erkenne die Fähigkeiten auf den Bildern und gib ihre Namen ein."
+      ? quiz.imagePrompt
       : "Erkenne die Champions auf den Bildern und gib ihre Namen ein.";
+    const timeLimit = quiz.questionTimeLimit ?? 30;
+    const timeLimitText = timeLimit === 60 ? "1 Minute" : `${timeLimit} Sekunden`;
     description.textContent = quiz.timeLimit === false
       ? `${subject} Für jede richtige Antwort bekommst du Punkte.`
-      : `${subject} Pro Bild hast du 30 Sekunden Zeit. Für jede richtige Antwort bekommst du Punkte.`;
+      : `${subject} Pro Bild hast du ${timeLimitText} Zeit. Für jede richtige Antwort bekommst du Punkte.`;
   } else if (quiz.questions[0].type === "audio") {
     description.textContent = quiz.audioDescription
       ?? `Erkenne die Champions an ihrer Voiceline. Jede Audiodatei kannst du bis zu 3-mal abspielen. Gib danach den Namen des Champions ein. Für jede richtige Antwort bekommst du Punkte.`;
@@ -1042,7 +1110,7 @@ function renderImageQuestion(question, questionIndex, progressText) {
   dialogContent.append(progressText, image, questionText);
   if (timerDisplay) dialogContent.append(timerDisplay);
   dialogContent.append(form);
-  if (timerDisplay) startWordTimer(questionIndex, timerDisplay);
+  if (timerDisplay) startWordTimer(questionIndex, timerDisplay, quiz.questionTimeLimit ?? 30);
   input.focus();
 }
 
@@ -1137,12 +1205,42 @@ function renderTextQuestion(question, questionIndex, progressText, questionText)
   const form = document.createElement("form");
   form.className = "answers";
   const input = document.createElement("input");
-  input.className = "word-input";
-  input.type = "text";
+  input.className = question.scale ? "scale-input" : "word-input";
+  input.type = question.scale ? "range" : "text";
+  if (question.scale) {
+    input.id = `scale-question-${questionIndex}`;
+    input.min = String(question.scale.min);
+    input.max = String(question.scale.max);
+    input.step = "1";
+    input.value = String(Math.ceil((question.scale.min + question.scale.max) / 2));
+  }
   input.autocomplete = "off";
   input.spellcheck = false;
-  input.placeholder = "Deine Antwort";
-  input.setAttribute("aria-label", "Deine Antwort");
+  input.placeholder = question.scale ? "" : "Deine Antwort";
+  input.setAttribute("aria-label", question.scale
+    ? `Aufregung auf einer Skala von ${question.scale.min} bis ${question.scale.max}`
+    : "Deine Antwort");
+  let answerField = input;
+  if (question.scale) {
+    const scaleControl = document.createElement("div");
+    scaleControl.className = "scale-control";
+    const valueDisplay = document.createElement("output");
+    valueDisplay.className = "scale-value";
+    valueDisplay.htmlFor = input.id;
+    valueDisplay.textContent = input.value;
+    input.addEventListener("input", () => {
+      valueDisplay.textContent = input.value;
+    });
+    const labels = document.createElement("div");
+    labels.className = "scale-labels";
+    const minimumLabel = document.createElement("span");
+    minimumLabel.textContent = `${question.scale.min} – gar nicht`;
+    const maximumLabel = document.createElement("span");
+    maximumLabel.textContent = `${question.scale.max} – sehr`;
+    labels.append(minimumLabel, maximumLabel);
+    scaleControl.append(input, valueDisplay, labels);
+    answerField = scaleControl;
+  }
   const submitButton = document.createElement("button");
   submitButton.className = "primary-button";
   submitButton.type = "submit";
@@ -1157,7 +1255,7 @@ function renderTextQuestion(question, questionIndex, progressText, questionText)
     submitWordAnswer(questionIndex, input.value.trim());
   });
 
-  form.append(input, submitButton);
+  form.append(answerField, submitButton);
   dialogContent.append(progressText, questionText);
   if (timerDisplay) dialogContent.append(timerDisplay);
   dialogContent.append(form);
