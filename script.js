@@ -64,6 +64,7 @@ const QUIZZES = [
       { type: "text", question: "Welche Farbe hat die Drohne überwiegend?", answer: "Weiß oder Beige", acceptedAnswers: ["Weiß", "Beige"], points: 2 },
       { type: "text", question: "Wie viele Updates gibt es für das Lauftempo?", answer: "5", acceptedAnswers: ["Fünf"], points: 2 },
       { type: "text", question: "Wie hoch kann man mit allen Sprung-Updates springen?", answer: "2,8 Meter", acceptedAnswers: ["2,8 m", "2.8 Meter", "2.8 m"], points: 2 },
+      { type: "song", audio: "My_Ex_-_dzern.mp3", question: "Wie heißt der Songtitel?", answer: "My Ex", acceptedAnswers: ["My ex", "my ex"], points: 2 },
       { type: "text", question: "Wie aufgeregt bist du heute auf einer Skala von 1 bis 10?", answer: "1 bis 10", scale: { min: 1, max: 10 }, points: 2 }
     ]
   },
