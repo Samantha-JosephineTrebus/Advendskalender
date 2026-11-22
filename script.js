@@ -62,6 +62,7 @@ const RANKING_CONFIGS = {
 const QUIZZES = [
   {
     title: "Türchen 1",
+    questionTimeLimit: 90,
     questions: [
       { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "R E G E B A N I A T", answer: "RAGEBAITEN", points: 1 },
       { type: "word", question: "Bilde aus den Buchstaben das richtige Wort:", scrambled: "A T A C A H R N", answer: "NACHTARA", points: 1 },
@@ -633,6 +634,15 @@ function createQuizActions(...items) {
   return actions;
 }
 
+// Zeitangabe für die Einleitungstexte: 30 → „30 Sekunden“, 60 → „1 Minute“, 90 → „1,5 Minuten“
+function formatTimeLimit(seconds) {
+  if (seconds === 60) return "1 Minute";
+  if (seconds > 60 && seconds % 30 === 0) {
+    return `${String(seconds / 60).replace(".", ",")} Minuten`;
+  }
+  return `${seconds} Sekunden`;
+}
+
 function isEmojiOnly(text) {
   return /\p{Extended_Pictographic}/u.test(text)
     && /^[\p{Extended_Pictographic}\p{Emoji_Component}‍️\s]+$/u.test(text);
@@ -1032,16 +1042,14 @@ function renderIntro() {
   if (quiz.type === "who-am-i") {
     description.textContent = "Errate die gesuchte Person anhand von bis zu drei Hinweisen. Für eine richtige Antwort beim ersten Hinweis gibt es 3 Punkte, beim zweiten 2 und beim dritten 1 Punkt.";
   } else if (quiz.questions[0].type === "word") {
-    description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Für jedes Wort hast du 30 Sekunden Zeit.`;
+    description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Für jedes Wort hast du ${formatTimeLimit(quiz.questionTimeLimit ?? 30)} Zeit.`;
   } else if (quiz.questions[0].type === "image") {
     const subject = quiz.imagePrompt
       ? quiz.imagePrompt
       : "Erkenne die Champions auf den Bildern und gib ihre Namen ein.";
-    const timeLimit = quiz.questionTimeLimit ?? 30;
-    const timeLimitText = timeLimit === 60 ? "1 Minute" : `${timeLimit} Sekunden`;
     description.textContent = quiz.timeLimit === false
       ? subject
-      : `${subject} Pro Bild hast du ${timeLimitText} Zeit.`;
+      : `${subject} Pro Bild hast du ${formatTimeLimit(quiz.questionTimeLimit ?? 30)} Zeit.`;
   } else if (quiz.questions[0].type === "audio") {
     description.textContent = quiz.audioDescription
       ?? "Erkenne die Champions an ihrer Voiceline. Gib den Namen des Champions ein.";
@@ -1698,7 +1706,7 @@ function renderWordQuestion(question, questionIndex, progressText, questionText)
     createQuizBody(questionText, createQuizMedia([scrambledWord], "word")),
     form
   );
-  startWordTimer(questionIndex, timerDisplay);
+  startWordTimer(questionIndex, timerDisplay, quiz.questionTimeLimit ?? 30);
   input.focus();
 }
 

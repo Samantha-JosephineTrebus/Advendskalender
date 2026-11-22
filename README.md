@@ -6,7 +6,7 @@ Bei einem Quiz mit normalem Fortschritt lautet der Button beim ersten Öffnen **
 
 ## Türchen 01
 
-> In diesem Quiz warten 15 Buchstabensalate auf dich. Für jedes Wort hast du 30 Sekunden Zeit.
+> In diesem Quiz warten 15 Buchstabensalate auf dich. Für jedes Wort hast du 1,5 Minuten Zeit.
 
 Button: **Quiz starten**
 
