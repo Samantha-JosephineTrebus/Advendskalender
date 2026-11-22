@@ -47,11 +47,18 @@
   <div class="overlay" id="overlay" hidden>
     <section class="dialog glass-panel" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
       <button class="close-button" id="close-dialog" type="button" aria-label="Türchen schließen">×</button>
-      <span class="dialog-ornament" aria-hidden="true">✦</span>
-      <p class="dialog-day" id="dialog-day"></p>
-      <h2 id="dialog-title"></h2>
+      <header class="dialog-header">
+        <p class="dialog-day" id="dialog-day"></p>
+        <h2 id="dialog-title"></h2>
+        <span class="dialog-ornament" aria-hidden="true">✦</span>
+      </header>
       <div class="dialog-content" id="dialog-content"></div>
     </section>
+  </div>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Vergrößertes Bild" hidden>
+    <button class="close-button lightbox-close" id="close-lightbox" type="button" aria-label="Bild schließen">×</button>
+    <img class="lightbox-image" id="lightbox-image" alt="">
   </div>
 
   <p class="storage-warning" id="storage-warning" role="alert" hidden></p>

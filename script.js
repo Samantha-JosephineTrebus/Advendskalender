@@ -559,6 +559,11 @@ const dialogContent = document.querySelector("#dialog-content");
 const dialogPanel = document.querySelector(".dialog");
 const closeDialogButton = document.querySelector("#close-dialog");
 const storageWarning = document.querySelector("#storage-warning");
+const lightbox = document.querySelector("#lightbox");
+const lightboxImage = document.querySelector("#lightbox-image");
+const closeLightboxButton = document.querySelector("#close-lightbox");
+const FIT_MIN_SCALE = 0.68;
+const ZOOM_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 
 let progress = loadProgress();
 let openDay = null;
@@ -570,7 +575,153 @@ let activeAudio = null;
 let selectedWealthPersonId = null;
 let wealthFeedback = null;
 let wealthFeedbackTimer = null;
+let fitFrame = 0;
+let lightboxReturnFocus = null;
 const audioPlayCounts = {};
+
+// ---------- Layout-Bausteine für alle Quiz-Ansichten ----------
+
+function setDialogView(view) {
+  dialogPanel.classList.toggle("dialog--intro", view === "intro");
+  dialogPanel.classList.toggle("dialog--stage", view === "stage");
+  dialogContent.style.removeProperty("--quiz-progress");
+  scheduleStageFit();
+}
+
+function createQuizStatus(...items) {
+  const status = document.createElement("div");
+  status.className = "quiz-status";
+  status.append(...items.filter(Boolean));
+  return status;
+}
+
+function createQuizMedia(items, modifier = "") {
+  const media = document.createElement("div");
+  media.className = `quiz-media${modifier ? ` quiz-media--${modifier}` : ""}`;
+  media.append(...items.filter(Boolean));
+  return media;
+}
+
+function createQuizAnswer(items, compact = false) {
+  const answer = document.createElement("div");
+  answer.className = `quiz-answer${compact ? " quiz-answer--compact" : ""}`;
+  answer.append(...items.filter(Boolean));
+  return answer;
+}
+
+function createQuizActions(...items) {
+  const actions = document.createElement("div");
+  actions.className = "quiz-actions";
+  actions.append(...items.filter(Boolean));
+  return actions;
+}
+
+function isEmojiOnly(text) {
+  return /\p{Extended_Pictographic}/u.test(text)
+    && /^[\p{Extended_Pictographic}\p{Emoji_Component}‍️\s]+$/u.test(text);
+}
+
+function createZoomBadge() {
+  const badge = document.createElement("span");
+  badge.className = "zoom-badge";
+  badge.setAttribute("aria-hidden", "true");
+  badge.innerHTML = ZOOM_ICON;
+  return badge;
+}
+
+function createZoomableImage({ src, alt = "", className = "", name = alt }) {
+  const frame = document.createElement("button");
+  frame.className = "zoom-frame";
+  frame.type = "button";
+  frame.setAttribute("aria-label", `${name || "Bild"} vergrößern`);
+  const image = document.createElement("img");
+  if (className) image.className = className;
+  image.alt = alt;
+  image.addEventListener("load", () => {
+    if (image.naturalWidth && image.naturalHeight) {
+      frame.style.setProperty("--ratio", String(image.naturalWidth / image.naturalHeight));
+    }
+  });
+  image.src = src;
+  frame.append(image, createZoomBadge());
+  frame.addEventListener("click", () => openLightbox(src, name));
+  return frame;
+}
+
+function openLightbox(src, alt = "") {
+  lightboxReturnFocus = document.activeElement;
+  lightboxImage.classList.remove("is-loaded");
+  lightboxImage.style.removeProperty("--ratio");
+  lightboxImage.onload = () => {
+    if (lightboxImage.naturalWidth && lightboxImage.naturalHeight) {
+      lightboxImage.style.setProperty("--ratio", String(lightboxImage.naturalWidth / lightboxImage.naturalHeight));
+    }
+    lightboxImage.classList.add("is-loaded");
+  };
+  lightboxImage.alt = alt;
+  lightboxImage.src = src;
+  lightbox.hidden = false;
+  closeLightboxButton.focus();
+}
+
+function closeLightbox() {
+  if (lightbox.hidden) return false;
+  lightbox.hidden = true;
+  lightboxImage.onload = null;
+  lightboxImage.removeAttribute("src");
+  const answerInput = dialogContent.querySelector(".word-input:not(:disabled)");
+  const returnTarget = answerInput ?? (lightboxReturnFocus?.isConnected ? lightboxReturnFocus : null);
+  returnTarget?.focus();
+  lightboxReturnFocus = null;
+  return true;
+}
+
+// Passt die Schriftgröße der Quiz-Ansicht so an, dass nichts gescrollt werden muss.
+function scheduleStageFit() {
+  if (fitFrame) return;
+  fitFrame = requestAnimationFrame(() => {
+    fitFrame = 0;
+    fitStage();
+  });
+}
+
+function stageOverflows() {
+  // Auf Handys dürfen lange Listen in ihrem eigenen Bereich scrollen, damit die Schrift lesbar bleibt.
+  const isSmallScreen = window.matchMedia("(max-width: 560px)").matches;
+  const boxes = [
+    dialogContent,
+    ...dialogContent.querySelectorAll(".quiz-media, .answer-summary, .ranking-result-list, .ranking-timeline")
+  ].filter((box) => !(isSmallScreen && box.matches(".quiz-media--list, .answer-summary, .ranking-result-list, .ranking-timeline")));
+  return boxes.some((box) => (
+    box.scrollHeight > box.clientHeight || box.scrollWidth > box.clientWidth
+  ));
+}
+
+function fitStage() {
+  dialogContent.classList.remove("is-overflowing");
+  if (overlay.hidden || !dialogPanel.classList.contains("dialog--stage")) {
+    dialogContent.style.removeProperty("--fit");
+    return;
+  }
+  const setScale = (scale) => dialogContent.style.setProperty("--fit", scale.toFixed(3));
+  setScale(1);
+  if (!stageOverflows()) return;
+  setScale(FIT_MIN_SCALE);
+  if (stageOverflows()) {
+    // Notlösung für sehr kleine Bildschirme: lange Listen scrollen dann innerhalb ihres Bereichs.
+    dialogContent.classList.add("is-overflowing");
+    return;
+  }
+  let low = FIT_MIN_SCALE;
+  let high = 1;
+  for (let step = 0; step < 7; step += 1) {
+    const middle = (low + high) / 2;
+    setScale(middle);
+    if (stageOverflows()) high = middle;
+    else low = middle;
+  }
+  setScale(low);
+}
 
 function loadProgress() {
   try {
@@ -792,6 +943,7 @@ function openQuiz(dayIndex) {
   openDay = dayIndex;
   const quiz = QUIZZES[dayIndex];
   dialogPanel.classList.toggle("dialog--ranking-quiz", Boolean(RANKING_CONFIGS[quiz.type]));
+  dialogPanel.classList.toggle("dialog--wide", Boolean(RANKING_CONFIGS[quiz.type]) || quiz.liveLayout === "movie-list");
   dialogDay.textContent = `Dezember ${dayIndex + 1}`;
   dialogTitle.textContent = quiz.title;
   renderIntro();
@@ -809,6 +961,7 @@ function renderIntro() {
   ), 0);
   const hasProgress = quiz.questions.some((_, index) => Object.hasOwn(answers, index));
   dialogContent.replaceChildren();
+  setDialogView("intro");
 
   const rankingConfig = RANKING_CONFIGS[quiz.type];
   if (rankingConfig) {
@@ -987,6 +1140,7 @@ function renderQuestion() {
     !isQuestionComplete(question, answers[index])
   ));
   dialogContent.replaceChildren();
+  setDialogView("stage");
 
   if (quiz.questions.length === 0) {
     const message = document.createElement("p");
@@ -1002,6 +1156,7 @@ function renderQuestion() {
   }
 
   const question = quiz.questions[questionIndex];
+  dialogContent.style.setProperty("--quiz-progress", String(questionIndex / quiz.questions.length));
   const progressText = document.createElement("p");
   progressText.className = "question-progress";
   progressText.textContent = `Frage ${questionIndex + 1} von ${quiz.questions.length}`;
@@ -1058,7 +1213,7 @@ function renderQuestion() {
     choices.append(button);
   });
 
-  dialogContent.append(progressText, questionText, choices);
+  dialogContent.append(createQuizStatus(progressText), questionText, createQuizMedia([choices], "choices"));
 }
 
 function renderRankingQuiz() {
@@ -1072,10 +1227,12 @@ function renderRankingQuiz() {
   }
 
   dialogContent.replaceChildren();
+  setDialogView("stage");
+  dialogContent.style.setProperty("--quiz-progress", String(state.placed.length / config.people.length));
   const status = document.createElement("p");
   status.className = "ranking-status";
   status.textContent = `Richtig eingeordnet: ${state.placed.length} von ${config.people.length} · Leben: ${"♥".repeat(state.lives)}${"♡".repeat(5 - state.lives)}`;
-  dialogContent.append(status);
+  dialogContent.append(createQuizStatus(status));
 
   if (wealthFeedback) {
     const feedback = document.createElement("p");
@@ -1137,10 +1294,7 @@ function renderRankingQuiz() {
     const isRecent = wealthFeedback?.correct && wealthFeedback.personId === person.id;
     entry.className = `ranking-entry${isAnchor ? " is-anchor" : ""}${isRecent ? " is-correct" : ""}`;
     if (isAnchor) anchorEntry = entry;
-    const image = document.createElement("img");
-    image.className = "ranking-image";
-    image.src = person.image;
-    image.alt = "";
+    const image = createZoomableImage({ src: person.image, className: "ranking-image", name: person.name });
     const details = document.createElement("span");
     details.className = "ranking-details";
     const name = document.createElement("strong");
@@ -1158,21 +1312,28 @@ function renderRankingQuiz() {
   });
   addPosition(timelinePeople.length);
   dialogContent.append(timeline);
+  // Mit natürlicher Breite messen: Passt die zentrierte Zeitleiste hinein, bleibt der Anker in der Mitte.
+  // Sonst schrumpfen die Einträge, damit nichts seitlich gescrollt werden muss.
+  timeline.classList.add("is-centered");
   const timelineRect = timeline.getBoundingClientRect();
   const anchorRect = anchorEntry.getBoundingClientRect();
   const leftWidth = anchorRect.left - timelineRect.left + timeline.scrollLeft;
   const rightWidth = timeline.scrollWidth - leftWidth - anchorEntry.offsetWidth;
-  if (leftWidth < rightWidth) {
+  const balanceWidth = Math.abs(rightWidth - leftWidth);
+  const fitsCentered = timeline.scrollWidth + balanceWidth <= timeline.clientWidth;
+  timeline.classList.toggle("is-centered", fitsCentered);
+  const timelineFontSize = parseFloat(getComputedStyle(timeline).fontSize) || 16;
+  if (fitsCentered && leftWidth < rightWidth) {
     const spacer = document.createElement("span");
     spacer.className = "ranking-spacer";
     spacer.setAttribute("aria-hidden", "true");
-    spacer.style.flexBasis = `${rightWidth - leftWidth}px`;
+    spacer.style.flexBasis = `${(rightWidth - leftWidth) / timelineFontSize}em`;
     timeline.prepend(spacer);
-  } else if (rightWidth < leftWidth) {
+  } else if (fitsCentered && rightWidth < leftWidth) {
     const spacer = document.createElement("span");
     spacer.className = "ranking-spacer";
     spacer.setAttribute("aria-hidden", "true");
-    spacer.style.flexBasis = `${leftWidth - rightWidth}px`;
+    spacer.style.flexBasis = `${(leftWidth - rightWidth) / timelineFontSize}em`;
     timeline.append(spacer);
   }
   const centeredTimelineRect = timeline.getBoundingClientRect();
@@ -1210,7 +1371,16 @@ function renderRankingQuiz() {
       event.dataTransfer.setData("text/plain", person.id);
       event.dataTransfer.effectAllowed = "move";
     });
-    pool.append(card);
+    const zoomButton = document.createElement("button");
+    zoomButton.className = "zoom-button";
+    zoomButton.type = "button";
+    zoomButton.setAttribute("aria-label", `${person.name} vergrößern`);
+    zoomButton.innerHTML = ZOOM_ICON;
+    zoomButton.addEventListener("click", () => openLightbox(person.image, person.name));
+    const poolItem = document.createElement("div");
+    poolItem.className = "ranking-pool-item";
+    poolItem.append(card, zoomButton);
+    pool.append(poolItem);
   });
   dialogContent.append(poolHeading, pool);
 }
@@ -1282,8 +1452,15 @@ function renderLiveQuiz() {
   timer.setAttribute("role", "timer");
   const list = document.createElement("div");
   list.className = `live-quiz-list${quiz.liveLayout === "movie-list" ? " live-quiz-list--movie" : ""}`;
+  list.style.setProperty("--rows", String(Math.ceil(quiz.questions.length / 2)));
+  const movieColumnCount = 4;
+  const updateLiveProgress = () => {
+    const currentAnswers = answersFor(openDay);
+    const answeredCount = quiz.questions.filter((_, index) => Object.hasOwn(currentAnswers, index)).length;
+    dialogContent.style.setProperty("--quiz-progress", String(answeredCount / quiz.questions.length));
+  };
   const movieColumns = quiz.liveLayout === "movie-list"
-    ? Array.from({ length: 2 }, () => {
+    ? Array.from({ length: movieColumnCount }, () => {
       const column = document.createElement("div");
       column.className = "live-quiz-column";
       const header = document.createElement("div");
@@ -1352,6 +1529,9 @@ function renderLiveQuiz() {
       if (!isCorrectAnswer(question, answer)) {
         input.value = "";
         feedback.textContent = "Falsch – versuch es noch einmal.";
+        row.classList.remove("is-wrong");
+        void row.offsetWidth;
+        row.classList.add("is-wrong");
         input.focus();
         return;
       }
@@ -1362,26 +1542,32 @@ function renderLiveQuiz() {
       if (quiz.correctAnswerColor === "green") input.value = question.answer;
       input.disabled = true;
       submit.disabled = true;
+      row.classList.remove("is-wrong");
       row.classList.add("is-correct");
       feedback.textContent = "Richtig!";
       saveProgress();
       renderCalendar();
+      updateLiveProgress();
 
       if (quiz.questions.every((_, index) => Object.hasOwn(currentAnswers, index))) {
         finishLiveQuiz(false);
       }
     });
 
+    input.addEventListener("input", () => row.classList.remove("is-wrong"));
+
     row.append(label, input, submit, feedback);
     if (movieColumns) {
-      const columnIndex = questionIndex < Math.ceil(quiz.questions.length / 2) ? 0 : 1;
+      const columnIndex = Math.floor(questionIndex / Math.ceil(quiz.questions.length / movieColumnCount));
       movieColumns[columnIndex].append(row);
     } else {
       list.append(row);
     }
   });
 
-  dialogContent.replaceChildren(timer, list);
+  dialogContent.replaceChildren(createQuizStatus(timer), createQuizMedia([list], "list"));
+  setDialogView("stage");
+  updateLiveProgress();
   updateTimer();
   if (openDay !== null && answers._deadline > Date.now()) {
     liveQuizInterval = setInterval(updateTimer, 200);
@@ -1444,18 +1630,25 @@ function renderWordQuestion(question, questionIndex, progressText, questionText)
     submitWordAnswer(questionIndex, input.value.trim());
   });
 
+  form.classList.add("quiz-actions");
   form.append(input, submitButton);
-  dialogContent.append(progressText, questionText, scrambledWord, timerDisplay, form);
+  dialogContent.append(
+    createQuizStatus(progressText, timerDisplay),
+    questionText,
+    createQuizMedia([scrambledWord], "word"),
+    form
+  );
   startWordTimer(questionIndex, timerDisplay);
   input.focus();
 }
 
 function renderImageQuestion(question, questionIndex, progressText) {
   const quiz = QUIZZES[openDay];
-  const image = document.createElement("img");
-  image.className = `image-quiz-image${quiz.timeLimit === false ? " image-quiz-image--large" : ""}`;
-  image.src = question.image;
-  image.alt = quiz.imageAlt ?? "Bild zum Erraten";
+  const image = createZoomableImage({
+    src: question.image,
+    alt: quiz.imageAlt ?? "Bild zum Erraten",
+    className: `image-quiz-image${quiz.timeLimit === false ? " image-quiz-image--large" : ""}`
+  });
 
   const questionText = document.createElement("p");
   questionText.className = "question-text";
@@ -1491,10 +1684,14 @@ function renderImageQuestion(question, questionIndex, progressText) {
     submitWordAnswer(questionIndex, input.value.trim());
   });
 
+  form.classList.add("quiz-actions");
   form.append(input, submitButton);
-  dialogContent.append(progressText, image, questionText);
-  if (timerDisplay) dialogContent.append(timerDisplay);
-  dialogContent.append(form);
+  dialogContent.append(
+    createQuizStatus(progressText, timerDisplay),
+    questionText,
+    createQuizMedia([image], "image"),
+    form
+  );
   if (timerDisplay) startWordTimer(questionIndex, timerDisplay, quiz.questionTimeLimit ?? 30);
   input.focus();
 }
@@ -1574,8 +1771,9 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
     submitWordAnswer(questionIndex, input.value.trim());
   });
 
+  form.classList.add("quiz-actions");
   form.append(input, submitButton);
-  dialogContent.append(progressText, questionText, player, form);
+  dialogContent.append(createQuizStatus(progressText), questionText, createQuizMedia([player], "audio"), form);
   input.focus();
 }
 
@@ -1640,10 +1838,14 @@ function renderTextQuestion(question, questionIndex, progressText, questionText)
     submitWordAnswer(questionIndex, input.value.trim());
   });
 
+  form.classList.add("quiz-actions");
   form.append(answerField, submitButton);
-  dialogContent.append(progressText, questionText);
-  if (timerDisplay) dialogContent.append(timerDisplay);
-  dialogContent.append(form);
+  if (isEmojiOnly(questionText.textContent)) questionText.classList.add("question-text--emoji");
+  dialogContent.append(
+    createQuizStatus(progressText, timerDisplay),
+    createQuizMedia([questionText], "prompt"),
+    form
+  );
   if (timerDisplay) startWordTimer(questionIndex, timerDisplay, quiz.questionTimeLimit);
   input.focus();
 }
@@ -1719,10 +1921,11 @@ function renderWhoAmIQuestion(question, questionIndex, progressText) {
     }
   });
 
+  form.classList.add("quiz-actions");
   form.append(input, submitButton);
-  dialogContent.append(progressText);
+  dialogContent.append(createQuizStatus(progressText));
   if (feedback) dialogContent.append(feedback);
-  dialogContent.append(clues, form);
+  dialogContent.append(createQuizMedia([clues], "clues"), form);
   input.focus();
 }
 
@@ -1742,7 +1945,7 @@ function renderWhoAmIResolution(question, answer, questionIndex) {
     ? "Ergebnis ansehen"
     : "Nächste Person";
   nextButton.addEventListener("click", renderQuestion);
-  dialogContent.append(feedback, nextButton);
+  dialogContent.append(createQuizAnswer([feedback]), createQuizActions(nextButton));
   nextButton.focus();
 }
 
@@ -1816,7 +2019,7 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
   nextButton.type = "button";
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
-  dialogContent.append(feedback, nextButton);
+  dialogContent.append(createQuizAnswer([feedback]), createQuizActions(nextButton));
   nextButton.focus();
 }
 
@@ -1845,9 +2048,7 @@ function renderTextResolution(question, answer, isCorrect, timedOut, questionInd
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
 
-  dialogContent.append(feedback, solution);
-  if (submittedAnswer) dialogContent.append(submittedAnswer);
-  dialogContent.append(nextButton);
+  dialogContent.append(createQuizAnswer([feedback, solution, submittedAnswer]), createQuizActions(nextButton));
   nextButton.focus();
 }
 
@@ -1876,7 +2077,7 @@ function renderAudioResolution(question, answer, isCorrect, questionIndex, quiz)
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
 
-  dialogContent.append(feedback, solution, submittedAnswer, nextButton);
+  dialogContent.append(createQuizAnswer([feedback, solution, submittedAnswer]), createQuizActions(nextButton));
   nextButton.focus();
 }
 
@@ -1901,22 +2102,26 @@ function renderImageResolution(question, answer, isCorrect, timedOut, questionIn
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
 
-  dialogContent.append(feedback);
-  if (question.revealImage) {
-    const image = document.createElement("img");
-    image.className = "image-quiz-image image-quiz-image--reveal";
-    image.src = question.revealImage;
-    image.alt = `${question.answer} im vollständigen Bild`;
-    dialogContent.append(image);
-  }
-  dialogContent.append(solution);
-  if (!isCorrect && !timedOut && answer) {
-    const submittedAnswer = document.createElement("p");
+  const submittedAnswer = !isCorrect && !timedOut && answer ? document.createElement("p") : null;
+  if (submittedAnswer) {
     submittedAnswer.className = "image-quiz-submitted-answer";
     submittedAnswer.textContent = `Deine Antwort: ${answer}`;
-    dialogContent.append(submittedAnswer);
   }
-  dialogContent.append(nextButton);
+  if (question.revealImage) {
+    const image = createZoomableImage({
+      src: question.revealImage,
+      alt: `${question.answer} im vollständigen Bild`,
+      className: "image-quiz-image image-quiz-image--reveal"
+    });
+    dialogContent.append(
+      createQuizAnswer([feedback], true),
+      createQuizMedia([image], "image"),
+      createQuizAnswer([solution, submittedAnswer], true)
+    );
+  } else {
+    dialogContent.append(createQuizAnswer([feedback, solution, submittedAnswer]));
+  }
+  dialogContent.append(createQuizActions(nextButton));
   nextButton.focus();
 }
 
@@ -1952,14 +2157,14 @@ function submitAnswer(questionIndex, selectedIndex) {
   nextButton.type = "button";
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
-  dialogContent.append(feedback);
-  if (explanation) dialogContent.append(explanation);
-  dialogContent.append(nextButton);
+  dialogContent.append(createQuizAnswer([feedback, explanation], true), createQuizActions(nextButton));
   nextButton.focus();
 }
 
 function renderResult() {
   const quiz = QUIZZES[openDay];
+  dialogContent.replaceChildren();
+  setDialogView("stage");
   if (RANKING_CONFIGS[quiz.type]) {
     renderRankingResult();
     return;
@@ -1985,7 +2190,7 @@ function renderResult() {
   summaryHeading.className = "summary-heading";
   summaryHeading.textContent = "Deine Antworten";
   const summary = document.createElement("ol");
-  summary.className = "answer-summary";
+  summary.className = `answer-summary${quiz.questions.length > 20 ? " answer-summary--dense" : ""}`;
 
   quiz.questions.forEach((question, questionIndex) => {
     const answer = answers[questionIndex];
@@ -2055,9 +2260,7 @@ function renderRankingResult() {
     .sort((first, second) => config.getValue(first) - config.getValue(second))
     .forEach((person) => {
     const item = document.createElement("li");
-    const image = document.createElement("img");
-    image.src = person.image;
-    image.alt = "";
+    const image = createZoomableImage({ src: person.image, name: person.name });
     const name = document.createElement("span");
     name.textContent = person.name;
     const value = document.createElement("strong");
@@ -2080,9 +2283,11 @@ function closeDialog() {
   liveQuizInterval = null;
   activeAudio?.pause();
   activeAudio = null;
+  closeLightbox();
   overlay.hidden = true;
   document.body.classList.remove("dialog-open");
-  dialogPanel.classList.remove("dialog--ranking-quiz");
+  dialogPanel.classList.remove("dialog--ranking-quiz", "dialog--wide", "dialog--stage", "dialog--intro");
+  dialogContent.style.removeProperty("--fit");
   openDay = null;
 }
 
@@ -2090,8 +2295,22 @@ closeDialogButton.addEventListener("click", closeDialog);
 overlay.addEventListener("click", (event) => {
   if (event.target === overlay) closeDialog();
 });
+lightbox.addEventListener("click", closeLightbox);
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !overlay.hidden) closeDialog();
+  if (event.key !== "Escape") return;
+  if (closeLightbox()) return;
+  if (!overlay.hidden) closeDialog();
 });
+
+new MutationObserver((mutations) => {
+  const onlyTimerChanged = mutations.every((mutation) => {
+    const element = mutation.target instanceof Element ? mutation.target : mutation.target.parentElement;
+    return Boolean(element?.closest("[role='timer']"));
+  });
+  if (!onlyTimerChanged) scheduleStageFit();
+}).observe(dialogContent, { childList: true, subtree: true });
+new ResizeObserver(scheduleStageFit).observe(dialogPanel);
+dialogContent.addEventListener("load", scheduleStageFit, true);
+document.fonts?.ready.then(scheduleStageFit);
 
 renderCalendar();
