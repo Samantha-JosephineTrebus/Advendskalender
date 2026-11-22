@@ -1,3 +1,64 @@
+const WEALTH_PEOPLE = [
+  { id: "robert-pattinson", name: "Robert Pattinson", wealth: 80_000_000, image: "higher_or_lower/robert_pattinson.png", displayWealth: "80 Mio." },
+  { id: "tom-hiddleston", name: "Tom Hiddleston", wealth: 40_000_000, image: "higher_or_lower/tom_hiddleston.png", displayWealth: "40 Mio." },
+  { id: "zendaya", name: "Zendaya", wealth: 30_000_000, image: "higher_or_lower/zendaya.png", displayWealth: "30 Mio." },
+  { id: "joseph-zada", name: "Joseph Zada", wealth: 500_000, image: "higher_or_lower/joseph_zada.png", displayWealth: "500 Tsd." },
+  { id: "mckenna-grace", name: "Mckenna Grace", wealth: 2_000_000, image: "higher_or_lower/mckenna_grace.png", displayWealth: "2 Mio." },
+  { id: "robert-downey-jr", name: "Robert Downey Jr.", wealth: 290_000_000, image: "higher_or_lower/robert_downey_jr.png", displayWealth: "290 Mio." },
+  { id: "elizabeth-olsen", name: "Elizabeth Olsen", wealth: 11_000_000, image: "higher_or_lower/elizabeth_olsen.png", displayWealth: "11 Mio." },
+  { id: "leonardo-dicaprio", name: "Leonardo DiCaprio", wealth: 250_000_000, image: "higher_or_lower/leonardo_dicaprio.png", displayWealth: "250 Mio." },
+  { id: "papaplatte", name: "Papaplatte", wealth: 8_000_000, image: "higher_or_lower/papaplatte.png", displayWealth: "8 Mio." },
+  { id: "eli", name: "Eli", wealth: 25_000_000, image: "higher_or_lower/eli.png", displayWealth: "25 Mio." }
+];
+
+const RELEASE_GAMES = [
+  { id: "fortnite", name: "Fortnite", releaseDate: Date.UTC(2017, 6, 25), image: "higher_or_lower_2/Fortnite.png", displayDate: "25. Juli 2017" },
+  { id: "league-of-legends", name: "League of Legends", releaseDate: Date.UTC(2009, 9, 27), image: "higher_or_lower_2/lol.jfif", displayDate: "27. Oktober 2009" },
+  { id: "pokemon-go", name: "Pokémon Go", releaseDate: Date.UTC(2016, 6, 13), image: "higher_or_lower_2/pokemon_go.jfif", displayDate: "13. Juli 2016" },
+  { id: "clash-of-clans", name: "Clash of Clans", releaseDate: Date.UTC(2012, 7, 2), image: "higher_or_lower_2/clash_of_clans.jfif", displayDate: "2. August 2012" },
+  { id: "aniimo", name: "Aniimo", releaseDate: Date.UTC(2026, 8, 16), image: "higher_or_lower_2/aniimo.jfif", displayDate: "16. September 2026" },
+  { id: "world-of-warcraft", name: "World of Warcraft", releaseDate: Date.UTC(2004, 10, 23), image: "higher_or_lower_2/wow.jfif", displayDate: "23. November 2004" },
+  { id: "elden-ring", name: "Elden Ring", releaseDate: Date.UTC(2022, 1, 25), image: "higher_or_lower_2/elden_ring.jfif", displayDate: "25. Februar 2022" },
+  { id: "super-mario-bros", name: "Super Mario Bros.", releaseDate: Date.UTC(1985, 8, 13), image: "higher_or_lower_2/super_mario_bros.jfif", displayDate: "13. September 1985" },
+  { id: "wardogs", name: "Wardogs", releaseDate: Date.UTC(2026, 8, 10), image: "higher_or_lower_2/wardogs.jfif", displayDate: "10. September 2026" },
+  { id: "minecraft", name: "Minecraft", releaseDate: Date.UTC(2009, 4, 1), image: "higher_or_lower_2/minecraft.jpg", displayDate: "Mai 2009" }
+];
+
+const RANKING_CONFIGS = {
+  "wealth-ranking": {
+    answersKey: "_wealth",
+    people: WEALTH_PEOPLE,
+    anchor: {
+      id: "jennifer-lawrence",
+      name: "Jennifer Lawrence",
+      wealth: 155_000_000,
+      image: "higher_or_lower/Jennifer_lawrence.png",
+      displayWealth: "155 Mio."
+    },
+    getValue: (person) => person.wealth,
+    getDisplayValue: (person) => person.displayWealth,
+    intro: "Ordne zehn Personen nach ihrem geschätzten Vermögen ein.",
+    timelineHeading: "Vermögens-Zeitleiste",
+    completedMessage: "Du hast alle Personen richtig eingeordnet."
+  },
+  "release-date-ranking": {
+    answersKey: "_releaseDate",
+    people: RELEASE_GAMES,
+    anchor: {
+      id: "csgo",
+      name: "CS:GO",
+      releaseDate: Date.UTC(2012, 7, 21),
+      image: "higher_or_lower_2/csgo.jfif",
+      displayDate: "21. August 2012"
+    },
+    getValue: (game) => game.releaseDate,
+    getDisplayValue: (game) => game.displayDate,
+    intro: "Ordne zehn Spiele nach ihrem Veröffentlichungsdatum ein.",
+    timelineHeading: "Veröffentlichungs-Zeitleiste",
+    completedMessage: "Du hast alle Spiele richtig eingeordnet."
+  }
+};
+
 const QUIZZES = [
   {
     title: "Türchen 1",
@@ -189,8 +250,8 @@ const QUIZZES = [
   { title: "Türchen 11", challenge: "Minigame-Tag", manualScore: true, questions: [] },
   {
     title: "Türchen 12",
+    audioDescription: "Erkenne die Champions an ihrem Lachen.",
     audioPrompt: "Welcher Champion ist in seiner Laugh-Voiceline zu hören?",
-    audioDescription: "Erkenne die Champions an ihrem Laugh. Jede Audiodatei kannst du bis zu 3-mal abspielen. Für jede richtige Antwort bekommst du Punkte.",
     questions: [
       { type: "audio", audio: "champion-laugh/Bel'Veth_Original_Laugh.ogg", answer: "Bel'Veth", acceptedAnswers: ["BelVeth", "Bel Veth"], points: 2 },
       { type: "audio", audio: "champion-laugh/Cassiopeia_Original_Laugh_3.ogg", answer: "Cassiopeia", points: 2 },
@@ -207,7 +268,7 @@ const QUIZZES = [
   {
     title: "Türchen 13",
     questionTimeLimit: 30,
-    textDescription: "Erkenne Filme, Anime und Serien anhand der Emojis. Du hast pro Frage 30 Sekunden Zeit. Gib den gesuchten Titel ein. Für jede richtige Antwort bekommst du Punkte.",
+    textDescription: "Erkenne Filme, Anime und Serien anhand der Emojis. Du hast pro Frage 30 Sekunden Zeit. Gib den gesuchten Titel ein.",
     questions: [
       { type: "text", question: "👹⚔️", answer: "Demon Slayer", points: 3 },
       { type: "text", question: "🎈⬆️", answer: "Up", points: 3 },
@@ -224,6 +285,7 @@ const QUIZZES = [
   {
     title: "Türchen 14",
     abilityAudioQuiz: true,
+    introDescription: "Höre dir den Fähigkeitssound an und gib den Championnamen zusammen mit Q, W, E oder R ein.",
     questions: [
       { type: "ability-audio", audio: "abilities-sound/Alistar_Original_SFX_W_OnCast_0.ogg", champion: "Alistar", answer: "W", points: 3 },
       { type: "ability-audio", audio: "abilities-sound/Galio_Original_SFX_Q_OnCast.ogg", champion: "Galio", answer: "Q", points: 3 },
@@ -328,7 +390,7 @@ const QUIZZES = [
   },
   {
     title: "Türchen 16",
-    introDescription: "In diesem Quiz warten 10 MCU Fragen auf dich. Wähle bei jeder Frage die passende Antwort und sammle Punkte für richtige Lösungen.",
+    introDescription: "In diesem Quiz warten 10 MCU Fragen auf dich.",
     questions: [
       { question: "In welchem Film wird die „Avengers Initiative“ zum ersten Mal erwähnt?", options: ["Iron Man", "The First Avenger", "Thor", "Iron Man 2"], answer: 0, points: 3 },
       { question: "In welchem Film taucht der Reality Stone (als Äther) zum ersten Mal auf?", options: ["Thor: The Dark World", "Avengers: Age of Ultron", "Doctor Strange", "Guardians of the Galaxy"], answer: 0, points: 3 },
@@ -397,6 +459,7 @@ const QUIZZES = [
   },
   {
     title: "Türchen 20",
+    textDescription: "Beantworte die Fragen über uns/mich.",
     questions: [
       { type: "text", question: "Was ist mein Lieblingsgetränk?", answer: "RedBull", points: 2 },
       { type: "text", question: "Welcher Red Bull ist mein Lieblings-Red-Bull?", answer: "Weiß", acceptedAnswers: ["Kokosnuss"], points: 2 },
@@ -410,22 +473,90 @@ const QUIZZES = [
       { type: "text", question: "Wie heißt mein Lieblingsbuch?", answer: "Izara", points: 2 }
     ]
   },
-  { title: "Türchen 21", questions: [{ question: "Welche Farbe eignet sich besonders für weiße Weihnachten?", options: ["Silber", "Tiefes Blau", "Schwarz", "Orange"], answer: 0, points: 3 }] },
-  { title: "Türchen 22", questions: [{ question: "Wie nennt man eine kleine, festliche Leuchte im Fenster?", options: ["Lichterkette", "Kübelschrank", "Zelt", "Wolke"], answer: 0, points: 3 }] },
-  { title: "Türchen 23", questions: [{ question: "Was macht man oft am Abend an Weihnachten?", options: ["Geschenke öffnen", "Sport treiben", "Klettern", "Reisen"], answer: 0, points: 4 }] },
-  { title: "Türchen 24", questions: [{ question: "Welches Gefühl passt am besten zu einem perfekten Adventskalender?", options: ["Freude", "Trost", "Betrübnis", "Langeweile"], answer: 0, points: 4 }] }
+  { title: "Türchen 21", type: "wealth-ranking", questions: [] },
+  { title: "Türchen 22", type: "release-date-ranking", questions: [] },
+  {
+    title: "Türchen 23",
+    welcomeMessage: "Wahr oder falsch: Tiere",
+    introDescription: "Beantworte 20 Aussagen aus der Tierwelt. Wähle jeweils „Wahr“ oder „Falsch“.",
+    questions: [
+      { question: "Oktopusse haben drei Herzen.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Zwei Herzen pumpen Blut durch die Kiemen, ein drittes versorgt den restlichen Körper.", points: 1 },
+      { question: "Goldfische haben ein Gedächtnis von nur drei Sekunden.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Das ist ein Mythos. Goldfische können sich Wochen bis Monate an Dinge wie Futterzeiten oder Personen erinnern.", points: 1 },
+      { question: "Fledermäuse sind blind.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Fledermäuse können sehen. Zusätzlich orientieren sich viele Arten per Echoortung.", points: 1 },
+      { question: "Wombats produzieren würfelförmigen Kot.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Sie markieren damit ihr Revier, und die Würfel rollen nicht weg.", points: 1 },
+      { question: "Flamingos sind von Natur aus rosa, egal was sie fressen.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Ihre Farbe kommt von Karotinoiden in der Nahrung, etwa Krebstieren und Algen. Junge Flamingos sind grau.", points: 1 },
+      { question: "Strauße stecken bei Gefahr den Kopf in den Sand.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Bei Gefahr legen sie sich flach auf den Boden oder rennen weg.", points: 1 },
+      { question: "Kamele speichern Wasser in ihren Höckern.", options: ["Wahr", "Falsch"], answer: 1, explanation: "In den Höckern ist Fett als Energiereserve, kein Wasser.", points: 1 },
+      { question: "Delfine schlafen mit nur einer Gehirnhälfte.", options: ["Wahr", "Falsch"], answer: 0, explanation: "So können sie weiter atmen und schwimmen.", points: 1 },
+      { question: "Faultiere schlafen in freier Wildbahn etwa 20 Stunden am Tag.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Das stimmt nur in Gefangenschaft. In der Wildnis schlafen sie meist nur etwa 9 bis 10 Stunden.", points: 1 },
+      { question: "Der Blauwal ist das größte Tier, das jemals auf der Erde gelebt hat.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Er wird bis zu etwa 30 Meter lang und ist damit größer als jeder bekannte Dinosaurier.", points: 1 },
+      { question: "Honigbienen sterben, nachdem sie ein Säugetier gestochen haben.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Der Stachel hat Widerhaken und bleibt in der Haut stecken. Dabei wird er samt Giftdrüse aus dem Körper gerissen.", points: 1 },
+      { question: "Haie haben ein Skelett aus Knochen.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Das Skelett von Haien besteht aus Knorpel.", points: 1 },
+      { question: "Giraffen haben viel mehr Halswirbel als Menschen.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Beide haben sieben Halswirbel. Bei Giraffen sind sie nur sehr lang.", points: 1 },
+      { question: "Pinguine leben am Nordpol.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Pinguine leben fast nur auf der Südhalbkugel. Am Nordpol gibt es keine Pinguine.", points: 1 },
+      { question: "Bei Seepferdchen tragen die Männchen den Nachwuchs aus.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Die Weibchen legen die Eier in die Bruttasche des Männchens, und es bringt die Jungen zur Welt.", points: 1 },
+      { question: "Kolibris können rückwärts fliegen.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Sie können sogar in der Luft stehen bleiben und rückwärts fliegen.", points: 1 },
+      { question: "Elefanten können nicht springen.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Sie sind zu schwer und haben einen Körperbau, der Sprünge nicht zulässt.", points: 1 },
+      { question: "Chamäleons ändern ihre Farbe vor allem, um sich zu tarnen.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Meist dient der Farbwechsel der Kommunikation, etwa bei Stimmung oder Revierkämpfen, und der Temperaturregulierung.", points: 1 },
+      { question: "Krokodile können ihre Zunge nicht herausstrecken.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Ihre Zunge ist am Gaumen festgewachsen.", points: 1 },
+      { question: "Katzen schnurren nur, wenn sie glücklich sind.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Katzen schnurren auch bei Stress, Angst oder Schmerzen, vermutlich um sich zu beruhigen.", points: 1 }
+    ]
+  },
+  {
+    title: "Türchen 24",
+    welcomeMessage: "Wahr oder falsch: Prominente",
+    introDescription: "Beantworte 20 Aussagen über Prominente. Wähle jeweils „Wahr“ oder „Falsch“.",
+    questions: [
+      { question: "Dwayne „The Rock“ Johnson hat früher in der NFL gespielt.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Er spielte College-Football und wurde danach von einem Team der kanadischen CFL entlassen. In der NFL stand er nie. Danach wurde er Wrestler.", points: 1 },
+      { question: "Lady Gagas bürgerlicher Name ist Stefani Germanotta.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Stefani Germanotta ist ihr bürgerlicher Name.", points: 1 },
+      { question: "Keanu Reeves wurde in Beirut im Libanon geboren.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Aufgewachsen ist er unter anderem in Toronto.", points: 1 },
+      { question: "Arnold Schwarzenegger war Gouverneur von Kalifornien.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Er hatte das Amt von 2003 bis 2011 inne.", points: 1 },
+      { question: "Elon Musk wurde in den USA geboren.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Er kommt aus Pretoria in Südafrika.", points: 1 },
+      { question: "Rihanna stammt aus Barbados.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Rihanna wurde auf Barbados geboren.", points: 1 },
+      { question: "Taylor Swift wurde in Texas geboren.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Sie wurde in Pennsylvania geboren.", points: 1 },
+      { question: "Cristiano Ronaldo hat die Champions League noch nie gewonnen.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Er hat die Champions League fünfmal gewonnen.", points: 1 },
+      { question: "Lionel Messi ist Weltmeister.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Er gewann 2022 mit Argentinien die Weltmeisterschaft.", points: 1 },
+      { question: "Leonardo DiCaprio gewann seinen ersten Oscar für „The Revenant“.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Er gewann den Oscar für seine Rolle in „The Revenant“ im Jahr 2016.", points: 1 },
+      { question: "Justin Bieber wurde über YouTube entdeckt.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Sein späterer Manager Scooter Braun wurde durch seine Videos auf ihn aufmerksam.", points: 1 },
+      { question: "Shakira stammt aus Mexiko.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Sie kommt aus Kolumbien.", points: 1 },
+      { question: "Adele stammt aus London.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Sie wurde im Londoner Stadtteil Tottenham geboren.", points: 1 },
+      { question: "Bill Gates hat sein Studium in Harvard abgeschlossen.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Er brach sein Studium ab, um Microsoft aufzubauen.", points: 1 },
+      { question: "Eminem heißt bürgerlich Marshall Mathers.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Sein vollständiger bürgerlicher Name ist Marshall Bruce Mathers III.", points: 1 },
+      { question: "Beyoncé war Mitglied von Destiny's Child.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Beyoncé war Mitglied der Girlgroup Destiny's Child.", points: 1 },
+      { question: "Zendaya hat noch nie einen Emmy gewonnen.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Sie gewann für „Euphoria“ Emmys in den Jahren 2020 und 2022.", points: 1 },
+      { question: "Billie Eilish gewann mit 18 Jahren alle vier Grammy-Hauptkategorien in einem Jahr.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Das gelang ihr im Jahr 2020. Sie war die jüngste Person, die alle vier Hauptkategorien in einem Jahr gewann.", points: 1 },
+      { question: "Snoop Dogg heißt bürgerlich Calvin Broadus.", options: ["Wahr", "Falsch"], answer: 0, explanation: "Sein bürgerlicher Name ist Calvin Cordozar Broadus Jr.", points: 1 },
+      { question: "Ryan Reynolds ist Amerikaner.", options: ["Wahr", "Falsch"], answer: 1, explanation: "Er wurde in Vancouver geboren und ist Kanadier.", points: 1 }
+    ]
+  }
 ];
 
+function swapQuizContents(firstDay, secondDay) {
+  const firstQuiz = QUIZZES[firstDay - 1];
+  const secondQuiz = QUIZZES[secondDay - 1];
+  QUIZZES[firstDay - 1] = { ...secondQuiz, title: firstQuiz.title };
+  QUIZZES[secondDay - 1] = { ...firstQuiz, title: secondQuiz.title };
+}
+
+swapQuizContents(3, 21);
+swapQuizContents(14, 18);
+swapQuizContents(10, 23);
+swapQuizContents(20, 24);
+
 const DOOR_ORDER = [18, 3, 12, 7, 22, 1, 15, 9, 24, 5, 20, 11, 4, 17, 2, 14, 8, 21, 6, 19, 10, 23, 13, 16];
-const STORAGE_KEY = "adventskalender-fortschritt-v4";
-const LEGACY_STORAGE_KEY = "adventskalender-fortschritt-v3";
-const OLDER_STORAGE_KEY = "adventskalender-fortschritt-v2";
+const STORAGE_KEY = "adventskalender-fortschritt-v7";
+const LEGACY_STORAGE_KEY = "adventskalender-fortschritt-v6";
+const OLDER_STORAGE_KEY = "adventskalender-fortschritt-v5";
+const OLDEST_STORAGE_KEY = "adventskalender-fortschritt-v4";
+const OLDESTEST_STORAGE_KEY = "adventskalender-fortschritt-v3";
+const ANCIENT_STORAGE_KEY = "adventskalender-fortschritt-v2";
 const calendar = document.querySelector("#calendar");
 const scoreDisplay = document.querySelector("#score");
 const overlay = document.querySelector("#overlay");
 const dialogDay = document.querySelector("#dialog-day");
 const dialogTitle = document.querySelector("#dialog-title");
 const dialogContent = document.querySelector("#dialog-content");
+const dialogPanel = document.querySelector(".dialog");
 const closeDialogButton = document.querySelector("#close-dialog");
 const storageWarning = document.querySelector("#storage-warning");
 
@@ -436,14 +567,21 @@ let wordTimerKey = null;
 let wordDeadline = null;
 let liveQuizInterval = null;
 let activeAudio = null;
+let selectedWealthPersonId = null;
+let wealthFeedback = null;
+let wealthFeedbackTimer = null;
 const audioPlayCounts = {};
 
 function loadProgress() {
   try {
     const currentProgress = localStorage.getItem(STORAGE_KEY);
+    const legacyProgress = currentProgress === null ? localStorage.getItem(LEGACY_STORAGE_KEY) : null;
     const saved = currentProgress
-      ?? localStorage.getItem(LEGACY_STORAGE_KEY)
-      ?? localStorage.getItem(OLDER_STORAGE_KEY);
+      ?? legacyProgress
+      ?? localStorage.getItem(OLDER_STORAGE_KEY)
+      ?? localStorage.getItem(OLDEST_STORAGE_KEY)
+      ?? localStorage.getItem(OLDESTEST_STORAGE_KEY)
+      ?? localStorage.getItem(ANCIENT_STORAGE_KEY);
     if (saved === null) return {};
 
     const parsed = JSON.parse(saved);
@@ -453,14 +591,24 @@ function loadProgress() {
 
     let progressChanged = false;
     if (currentProgress === null) {
+      for (const dayIndex of [2, 9, 13, 17, 19, 20, 22, 23]) {
+        if (Object.hasOwn(parsed, dayIndex)) {
+          delete parsed[dayIndex];
+          progressChanged = true;
+        }
+      }
       delete parsed[3];
       delete parsed[19];
       progressChanged = true;
-    }
-    for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]) {
-      if (typeof parsed[dayIndex]?.[0] === "number") {
-        delete parsed[dayIndex];
+      if (legacyProgress === null && typeof parsed[22]?.[0] === "number") {
+        delete parsed[22];
         progressChanged = true;
+      }
+      for (const dayIndex of [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23]) {
+        if (typeof parsed[dayIndex]?.[0] === "number") {
+          delete parsed[dayIndex];
+          progressChanged = true;
+        }
       }
     }
     if (currentProgress === null || progressChanged) {
@@ -494,9 +642,25 @@ function answersFor(dayIndex) {
   return answers && typeof answers === "object" && !Array.isArray(answers) ? answers : {};
 }
 
+function rankingStateFor(answers, quizType) {
+  const config = RANKING_CONFIGS[quizType];
+  const saved = answers[config.answersKey];
+  const knownIds = new Set(config.people.map((person) => person.id));
+  const placed = Array.isArray(saved?.placed)
+    ? [...new Set(saved.placed.filter((id) => knownIds.has(id)))]
+    : [];
+  const lives = Number.isInteger(saved?.lives) ? Math.min(Math.max(saved.lives, 0), 5) : 5;
+  return {
+    placed,
+    lives,
+    gameOver: saved?.gameOver === true || lives === 0 || placed.length === config.people.length
+  };
+}
+
 function pointsFor(dayIndex) {
   const quiz = QUIZZES[dayIndex];
   const answers = answersFor(dayIndex);
+  if (RANKING_CONFIGS[quiz.type]) return rankingStateFor(answers, quiz.type).placed.length;
   if (quiz.manualScore) {
     return Number.isSafeInteger(answers._manualPoints) && answers._manualPoints >= 0
       ? answers._manualPoints
@@ -572,6 +736,7 @@ function isCorrectAnswer(question, answer) {
 
 function isComplete(dayIndex) {
   const quiz = QUIZZES[dayIndex];
+  if (RANKING_CONFIGS[quiz.type]) return rankingStateFor(answersFor(dayIndex), quiz.type).gameOver;
   if (quiz.manualScore) {
     return Number.isSafeInteger(answersFor(dayIndex)._manualPoints)
       && answersFor(dayIndex)._manualPoints >= 0;
@@ -620,8 +785,13 @@ function renderCalendar() {
 }
 
 function openQuiz(dayIndex) {
+  clearTimeout(wealthFeedbackTimer);
+  wealthFeedbackTimer = null;
+  wealthFeedback = null;
+  selectedWealthPersonId = null;
   openDay = dayIndex;
   const quiz = QUIZZES[dayIndex];
+  dialogPanel.classList.toggle("dialog--ranking-quiz", Boolean(RANKING_CONFIGS[quiz.type]));
   dialogDay.textContent = `Dezember ${dayIndex + 1}`;
   dialogTitle.textContent = quiz.title;
   renderIntro();
@@ -639,6 +809,30 @@ function renderIntro() {
   ), 0);
   const hasProgress = quiz.questions.some((_, index) => Object.hasOwn(answers, index));
   dialogContent.replaceChildren();
+
+  const rankingConfig = RANKING_CONFIGS[quiz.type];
+  if (rankingConfig) {
+    const rankingState = rankingStateFor(answers, quiz.type);
+    const description = document.createElement("p");
+    description.className = "quiz-intro";
+    description.textContent = rankingConfig.intro;
+    const progressMessage = document.createElement("p");
+    progressMessage.className = "intro-progress";
+    progressMessage.textContent = rankingState.gameOver
+      ? "Dieses Quiz ist abgeschlossen."
+      : rankingState.placed.length > 0
+        ? `Bereits richtig eingeordnet: ${rankingState.placed.length} von ${rankingConfig.people.length} · Leben: ${rankingState.lives}`
+        : "Du hast fünf Leben.";
+    const startButton = document.createElement("button");
+    startButton.className = "primary-button";
+    startButton.type = "button";
+    startButton.textContent = rankingState.gameOver
+      ? "Zusammenfassung ansehen"
+      : rankingState.placed.length > 0 ? "Quiz fortsetzen" : "Quiz starten";
+    startButton.addEventListener("click", rankingState.gameOver ? renderResult : renderRankingQuiz);
+    dialogContent.append(description, progressMessage, startButton);
+    return;
+  }
 
   if (quiz.questions.length === 0) {
     if (quiz.challenge) {
@@ -666,9 +860,9 @@ function renderIntro() {
     dialogContent.append(welcomeMessage);
   }
   if (quiz.type === "who-am-i") {
-    description.textContent = "Errate die gesuchte Person anhand von bis zu drei Hinweisen. Für eine richtige Antwort beim ersten Hinweis gibt es 3 Punkte, beim zweiten 2 und beim dritten 1 Punkt. Ohne richtige Antwort gibt es 0 Punkte. Es gibt kein Zeitlimit; Groß- und Kleinschreibung sowie Leerzeichen werden ignoriert.";
+    description.textContent = "Errate die gesuchte Person anhand von bis zu drei Hinweisen. Für eine richtige Antwort beim ersten Hinweis gibt es 3 Punkte, beim zweiten 2 und beim dritten 1 Punkt.";
   } else if (quiz.questions[0].type === "word") {
-    description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Entwirre die Buchstaben und gib das richtige Wort ein. Für jedes Wort hast du 30 Sekunden Zeit und für jede richtige Lösung bekommst du Punkte.`;
+    description.textContent = `In diesem Quiz warten ${quiz.questions.length} Buchstabensalate auf dich. Für jedes Wort hast du 30 Sekunden Zeit.`;
   } else if (quiz.questions[0].type === "image") {
     const subject = quiz.imagePrompt
       ? quiz.imagePrompt
@@ -676,15 +870,16 @@ function renderIntro() {
     const timeLimit = quiz.questionTimeLimit ?? 30;
     const timeLimitText = timeLimit === 60 ? "1 Minute" : `${timeLimit} Sekunden`;
     description.textContent = quiz.timeLimit === false
-      ? `${subject} Für jede richtige Antwort bekommst du Punkte.`
-      : `${subject} Pro Bild hast du ${timeLimitText} Zeit. Für jede richtige Antwort bekommst du Punkte.`;
+      ? subject
+      : `${subject} Pro Bild hast du ${timeLimitText} Zeit.`;
   } else if (quiz.questions[0].type === "audio") {
     description.textContent = quiz.audioDescription
-      ?? `Erkenne die Champions an ihrer Voiceline. Jede Audiodatei kannst du bis zu 3-mal abspielen. Gib danach den Namen des Champions ein. Für jede richtige Antwort bekommst du Punkte.`;
+      ?? "Erkenne die Champions an ihrer Voiceline. Gib den Namen des Champions ein.";
   } else if (quiz.abilityAudioQuiz) {
-    description.textContent = "Höre dir den Fähigkeitssound an und gib den Championnamen zusammen mit Q, W, E oder R ein. Jede Audiodatei kannst du bis zu 3-mal abspielen. Für jede richtige Antwort bekommst du Punkte.";
+    description.textContent = quiz.introDescription
+      ?? "Höre dir den Fähigkeitssound an und gib den Championnamen zusammen mit Q, W, E oder R ein.";
   } else if (quiz.questions[0].type === "song") {
-    description.textContent = `Höre dir den Song an und errate den Titel. Du kannst die Audiodatei bis zu 3-mal abspielen. Für die richtige Antwort bekommst du Punkte.`;
+    description.textContent = "Höre dir den Song an und errate den Titel.";
   } else if (quiz.questions[0].type === "text") {
     description.textContent = quiz.textDescription
       ?? `Beantworte die Fragen über uns. Gib deine Antwort jeweils ins Textfeld ein. Für jede richtige Antwort bekommst du Punkte.`;
@@ -778,6 +973,10 @@ function renderManualScoreInput(answers) {
 
 function renderQuestion() {
   const quiz = QUIZZES[openDay];
+  if (RANKING_CONFIGS[quiz.type]) {
+    renderRankingQuiz();
+    return;
+  }
   if (quiz.type === "live") {
     renderLiveQuiz();
     return;
@@ -860,6 +1059,191 @@ function renderQuestion() {
   });
 
   dialogContent.append(progressText, questionText, choices);
+}
+
+function renderRankingQuiz() {
+  const quizType = QUIZZES[openDay].type;
+  const config = RANKING_CONFIGS[quizType];
+  const answers = answersFor(openDay);
+  const state = rankingStateFor(answers, quizType);
+  if (state.gameOver && !wealthFeedback) {
+    renderResult();
+    return;
+  }
+
+  dialogContent.replaceChildren();
+  const status = document.createElement("p");
+  status.className = "ranking-status";
+  status.textContent = `Richtig eingeordnet: ${state.placed.length} von ${config.people.length} · Leben: ${"♥".repeat(state.lives)}${"♡".repeat(5 - state.lives)}`;
+  dialogContent.append(status);
+
+  if (wealthFeedback) {
+    const feedback = document.createElement("p");
+    feedback.className = `feedback ${wealthFeedback.correct ? "correct" : "incorrect"} ranking-feedback`;
+    feedback.textContent = wealthFeedback.correct
+      ? "Richtig eingeordnet!"
+      : `Falsch eingeordnet – ${config.people.find((person) => person.id === wealthFeedback.personId).name} kommt zurück in die Auswahl.`;
+    dialogContent.append(feedback);
+  } else {
+    const prompt = document.createElement("p");
+    prompt.className = "ranking-instruction";
+    prompt.textContent = `Ziehe ${quizType === "release-date-ranking" ? "ein Spiel" : "eine Person"} in die Zeitleiste oder wähle ${quizType === "release-date-ranking" ? "es" : "sie"} aus und tippe auf „Hier einordnen“.`;
+    dialogContent.append(prompt);
+  }
+
+  const timelineHeading = document.createElement("h3");
+  timelineHeading.className = "ranking-section-heading";
+  timelineHeading.textContent = config.timelineHeading;
+  dialogContent.append(timelineHeading);
+
+  const placedPeople = config.people.filter((person) => state.placed.includes(person.id));
+  const timelinePeople = [...placedPeople, config.anchor].sort((first, second) => (
+    config.getValue(first) - config.getValue(second)
+  ));
+  const timeline = document.createElement("div");
+  timeline.className = "ranking-timeline";
+  timeline.classList.toggle("has-selection", Boolean(selectedWealthPersonId));
+  let anchorEntry = null;
+
+  const addPosition = (position) => {
+    const slot = document.createElement("button");
+    slot.className = "ranking-slot";
+    slot.type = "button";
+    slot.textContent = "＋";
+    slot.setAttribute("aria-label", `An Position ${position + 1} einordnen`);
+    slot.title = "An dieser Stelle einordnen";
+    slot.disabled = Boolean(wealthFeedback);
+    slot.addEventListener("click", () => placeRankingItem(selectedWealthPersonId, position, timelinePeople, config));
+    slot.addEventListener("dragover", (event) => {
+      if (!wealthFeedback) {
+        event.preventDefault();
+        slot.classList.add("is-drag-over");
+      }
+    });
+    slot.addEventListener("dragleave", () => slot.classList.remove("is-drag-over"));
+    slot.addEventListener("drop", (event) => {
+      event.preventDefault();
+      slot.classList.remove("is-drag-over");
+      const personId = event.dataTransfer.getData("text/plain") || selectedWealthPersonId;
+      placeRankingItem(personId, position, timelinePeople, config);
+    });
+    timeline.append(slot);
+  };
+
+  timelinePeople.forEach((person, index) => {
+    addPosition(index);
+    const entry = document.createElement("div");
+    const isAnchor = person.id === config.anchor.id;
+    const isRecent = wealthFeedback?.correct && wealthFeedback.personId === person.id;
+    entry.className = `ranking-entry${isAnchor ? " is-anchor" : ""}${isRecent ? " is-correct" : ""}`;
+    if (isAnchor) anchorEntry = entry;
+    const image = document.createElement("img");
+    image.className = "ranking-image";
+    image.src = person.image;
+    image.alt = "";
+    const details = document.createElement("span");
+    details.className = "ranking-details";
+    const name = document.createElement("strong");
+    name.textContent = person.name;
+    const amount = document.createElement("span");
+    amount.className = "ranking-value";
+    amount.textContent = config.getDisplayValue(person);
+    details.append(name);
+    if (isAnchor || state.placed.includes(person.id)) details.append(amount);
+    const marker = document.createElement("span");
+    marker.className = "ranking-rank";
+    marker.textContent = String(index + 1);
+    entry.append(marker, image, details);
+    timeline.append(entry);
+  });
+  addPosition(timelinePeople.length);
+  dialogContent.append(timeline);
+  const timelineRect = timeline.getBoundingClientRect();
+  const anchorRect = anchorEntry.getBoundingClientRect();
+  const leftWidth = anchorRect.left - timelineRect.left + timeline.scrollLeft;
+  const rightWidth = timeline.scrollWidth - leftWidth - anchorEntry.offsetWidth;
+  if (leftWidth < rightWidth) {
+    const spacer = document.createElement("span");
+    spacer.className = "ranking-spacer";
+    spacer.setAttribute("aria-hidden", "true");
+    spacer.style.flexBasis = `${rightWidth - leftWidth}px`;
+    timeline.prepend(spacer);
+  } else if (rightWidth < leftWidth) {
+    const spacer = document.createElement("span");
+    spacer.className = "ranking-spacer";
+    spacer.setAttribute("aria-hidden", "true");
+    spacer.style.flexBasis = `${leftWidth - rightWidth}px`;
+    timeline.append(spacer);
+  }
+  const centeredTimelineRect = timeline.getBoundingClientRect();
+  const centeredAnchorRect = anchorEntry.getBoundingClientRect();
+  timeline.scrollLeft += centeredAnchorRect.left - centeredTimelineRect.left
+    + centeredAnchorRect.width / 2 - timeline.clientWidth / 2;
+
+  const poolHeading = document.createElement("h3");
+  poolHeading.className = "ranking-section-heading";
+  poolHeading.textContent = `Noch auszuwählen (${config.people.length - state.placed.length})`;
+  const pool = document.createElement("div");
+  pool.className = "ranking-pool";
+  config.people.filter((person) => !state.placed.includes(person.id)).forEach((person) => {
+    const card = document.createElement("button");
+    const isSelected = selectedWealthPersonId === person.id;
+    const isIncorrect = wealthFeedback && !wealthFeedback.correct && wealthFeedback.personId === person.id;
+    card.className = `ranking-person${isSelected ? " is-selected" : ""}${isIncorrect ? " is-incorrect" : ""}`;
+    card.type = "button";
+    card.draggable = !wealthFeedback;
+    card.disabled = Boolean(wealthFeedback);
+    card.setAttribute("aria-pressed", String(isSelected));
+    card.setAttribute("aria-label", `${person.name}${isSelected ? ", ausgewählt" : ", Person auswählen"}`);
+    const image = document.createElement("img");
+    image.src = person.image;
+    image.alt = "";
+    const name = document.createElement("span");
+    name.textContent = person.name;
+    card.append(image, name);
+    card.addEventListener("click", () => {
+      selectedWealthPersonId = isSelected ? null : person.id;
+      renderRankingQuiz();
+    });
+    card.addEventListener("dragstart", (event) => {
+      selectedWealthPersonId = person.id;
+      event.dataTransfer.setData("text/plain", person.id);
+      event.dataTransfer.effectAllowed = "move";
+    });
+    pool.append(card);
+  });
+  dialogContent.append(poolHeading, pool);
+}
+
+function placeRankingItem(personId, position, timelinePeople, config) {
+  const person = config.people.find((item) => item.id === personId);
+  const answers = answersFor(openDay);
+  const quizType = QUIZZES[openDay].type;
+  const state = rankingStateFor(answers, quizType);
+  if (!person || state.gameOver || wealthFeedback || state.placed.includes(personId)) return;
+
+  const lower = timelinePeople[position - 1];
+  const upper = timelinePeople[position];
+  const value = config.getValue(person);
+  const isCorrect = (!lower || value > config.getValue(lower))
+    && (!upper || value < config.getValue(upper));
+  if (isCorrect) state.placed.push(personId);
+  else state.lives -= 1;
+  state.gameOver = state.lives === 0 || state.placed.length === config.people.length;
+  answers[config.answersKey] = state;
+  progress[openDay] = answers;
+  selectedWealthPersonId = null;
+  wealthFeedback = { personId, correct: isCorrect };
+  saveProgress();
+  renderCalendar();
+  renderRankingQuiz();
+
+  clearTimeout(wealthFeedbackTimer);
+  const rankingDay = openDay;
+  wealthFeedbackTimer = setTimeout(() => {
+    wealthFeedback = null;
+    if (openDay === rankingDay) renderRankingQuiz();
+  }, 3000);
 }
 
 function startLiveQuiz() {
@@ -1558,17 +1942,28 @@ function submitAnswer(questionIndex, selectedIndex) {
   feedback.textContent = isCorrect
     ? `Richtig! +${question.points} ${question.points === 1 ? "Punkt" : "Punkte"}`
     : "Leider nicht ganz. Die richtige Antwort ist markiert.";
+  const explanation = question.explanation ? document.createElement("p") : null;
+  if (explanation) {
+    explanation.className = "true-false-explanation";
+    explanation.textContent = question.explanation;
+  }
   const nextButton = document.createElement("button");
   nextButton.className = "primary-button";
   nextButton.type = "button";
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
-  dialogContent.append(feedback, nextButton);
+  dialogContent.append(feedback);
+  if (explanation) dialogContent.append(explanation);
+  dialogContent.append(nextButton);
   nextButton.focus();
 }
 
 function renderResult() {
   const quiz = QUIZZES[openDay];
+  if (RANKING_CONFIGS[quiz.type]) {
+    renderRankingResult();
+    return;
+  }
   const answers = answersFor(openDay);
   const result = document.createElement("div");
   result.className = "result-card";
@@ -1632,7 +2027,53 @@ function renderResult() {
   dialogContent.append(result);
 }
 
+function renderRankingResult() {
+  const quizType = QUIZZES[openDay].type;
+  const config = RANKING_CONFIGS[quizType];
+  const state = rankingStateFor(answersFor(openDay), quizType);
+  const result = document.createElement("div");
+  result.className = "result-card";
+  const heading = document.createElement("p");
+  heading.className = "result-heading";
+  heading.textContent = state.placed.length === config.people.length
+    ? "Perfekt eingeordnet!"
+    : "Quiz abgeschlossen!";
+  const points = document.createElement("strong");
+  points.className = "result-points";
+  points.textContent = `${state.placed.length} von ${config.people.length} richtig · ${pointsFor(openDay)} Punkte`;
+  const message = document.createElement("p");
+  message.className = "ranking-result-message";
+  message.textContent = state.lives === 0
+    ? "Deine fünf Leben sind aufgebraucht."
+    : config.completedMessage;
+  const summaryHeading = document.createElement("h3");
+  summaryHeading.className = "summary-heading";
+  summaryHeading.textContent = "Die vollständige Reihenfolge";
+  const summary = document.createElement("ol");
+  summary.className = "ranking-result-list";
+  [...config.people, config.anchor]
+    .sort((first, second) => config.getValue(first) - config.getValue(second))
+    .forEach((person) => {
+    const item = document.createElement("li");
+    const image = document.createElement("img");
+    image.src = person.image;
+    image.alt = "";
+    const name = document.createElement("span");
+    name.textContent = person.name;
+    const value = document.createElement("strong");
+    value.textContent = config.getDisplayValue(person);
+    item.append(image, name, value);
+    summary.append(item);
+  });
+  result.append(heading, points, message, summaryHeading, summary);
+  dialogContent.replaceChildren(result);
+}
+
 function closeDialog() {
+  clearTimeout(wealthFeedbackTimer);
+  wealthFeedbackTimer = null;
+  wealthFeedback = null;
+  selectedWealthPersonId = null;
   clearInterval(wordTimer);
   wordTimer = null;
   clearInterval(liveQuizInterval);
@@ -1641,6 +2082,7 @@ function closeDialog() {
   activeAudio = null;
   overlay.hidden = true;
   document.body.classList.remove("dialog-open");
+  dialogPanel.classList.remove("dialog--ranking-quiz");
   openDay = null;
 }
 
