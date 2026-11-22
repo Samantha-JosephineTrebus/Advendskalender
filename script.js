@@ -204,6 +204,7 @@ const QUIZZES = [
     type: "live",
     timeLimit: 300,
     liveLayout: "movie-list",
+    livePrompt: "Trage die MCU-Filme in der Reihenfolge ihrer Veröffentlichung ein.",
     correctAnswerColor: "green",
     questions: [
       { year: "2008", answer: "Iron Man", points: 2 },
@@ -602,11 +603,27 @@ function createQuizMedia(items, modifier = "") {
   return media;
 }
 
-function createQuizAnswer(items, compact = false) {
+// Frage und Inhalt bilden eine Gruppe, die zwischen Statuszeile und Antwortbereich mittig steht.
+function createQuizBody(...items) {
+  const body = document.createElement("div");
+  body.className = "quiz-body";
+  body.append(...items.filter(Boolean));
+  return body;
+}
+
+function createQuizAnswer(items) {
   const answer = document.createElement("div");
-  answer.className = `quiz-answer${compact ? " quiz-answer--compact" : ""}`;
+  answer.className = "quiz-answer";
   answer.append(...items.filter(Boolean));
   return answer;
+}
+
+function createSecondaryButton(text, modifier) {
+  const button = document.createElement("button");
+  button.className = `secondary-button secondary-button--${modifier}`;
+  button.type = "button";
+  button.textContent = text;
+  return button;
 }
 
 function createQuizActions(...items) {
@@ -1199,8 +1216,11 @@ function renderQuestion() {
     return;
   }
 
+  const isTrueFalse = question.options.length === 2
+    && question.options[0] === "Wahr"
+    && question.options[1] === "Falsch";
   const choices = document.createElement("div");
-  choices.className = "answers";
+  choices.className = `answers${isTrueFalse ? " answers--true-false" : ""}`;
   choices.setAttribute("role", "group");
   choices.setAttribute("aria-label", "Antwortmöglichkeiten");
 
@@ -1208,12 +1228,28 @@ function renderQuestion() {
     const button = document.createElement("button");
     button.className = "answer-button";
     button.type = "button";
-    button.textContent = option;
+    // Kennzeichen vor der Antwort: A–D bei Auswahlfragen, ✓/✕ bei Wahr oder falsch
+    const badge = document.createElement("span");
+    badge.className = "answer-badge";
+    badge.setAttribute("aria-hidden", "true");
+    badge.textContent = isTrueFalse ? ["✓", "✕"][optionIndex] : String.fromCharCode(65 + optionIndex);
+    const label = document.createElement("span");
+    label.className = "answer-label";
+    label.textContent = option;
+    button.append(badge, label);
     button.addEventListener("click", () => submitAnswer(questionIndex, optionIndex));
     choices.append(button);
   });
 
-  dialogContent.append(createQuizStatus(progressText), questionText, createQuizMedia([choices], "choices"));
+  // Frage und Antworten liegen gemeinsam auf einer Quiz-Karte
+  const card = document.createElement("div");
+  card.className = "choice-card";
+  card.append(questionText, choices);
+
+  dialogContent.append(
+    createQuizStatus(progressText),
+    createQuizBody(createQuizMedia([card], "choices"))
+  );
 }
 
 function renderRankingQuiz() {
@@ -1231,8 +1267,25 @@ function renderRankingQuiz() {
   dialogContent.style.setProperty("--quiz-progress", String(state.placed.length / config.people.length));
   const status = document.createElement("p");
   status.className = "ranking-status";
-  status.textContent = `Richtig eingeordnet: ${state.placed.length} von ${config.people.length} · Leben: ${"♥".repeat(state.lives)}${"♡".repeat(5 - state.lives)}`;
-  dialogContent.append(createQuizStatus(status));
+  status.textContent = `Richtig eingeordnet: ${state.placed.length} von ${config.people.length}`;
+  const lives = document.createElement("p");
+  lives.className = `ranking-lives${wealthFeedback && !wealthFeedback.correct ? " is-hit" : ""}`;
+  lives.setAttribute("aria-label", `Leben: ${state.lives} von 5`);
+  const livesLabel = document.createElement("span");
+  livesLabel.className = "ranking-lives-label";
+  livesLabel.textContent = "Leben:";
+  const fullHearts = document.createElement("span");
+  fullHearts.className = "ranking-hearts";
+  fullHearts.textContent = "♥".repeat(state.lives);
+  const lostHearts = document.createElement("span");
+  lostHearts.className = "ranking-hearts ranking-hearts--lost";
+  lostHearts.textContent = "♡".repeat(5 - state.lives);
+  lives.append(livesLabel, fullHearts, lostHearts);
+  dialogContent.append(createQuizStatus(status, lives));
+
+  // Anweisung und Zeitleiste stehen mittig zwischen Statuszeile und Auswahl.
+  const body = createQuizBody();
+  dialogContent.append(body);
 
   if (wealthFeedback) {
     const feedback = document.createElement("p");
@@ -1240,18 +1293,18 @@ function renderRankingQuiz() {
     feedback.textContent = wealthFeedback.correct
       ? "Richtig eingeordnet!"
       : `Falsch eingeordnet – ${config.people.find((person) => person.id === wealthFeedback.personId).name} kommt zurück in die Auswahl.`;
-    dialogContent.append(feedback);
+    body.append(feedback);
   } else {
     const prompt = document.createElement("p");
     prompt.className = "ranking-instruction";
     prompt.textContent = `Ziehe ${quizType === "release-date-ranking" ? "ein Spiel" : "eine Person"} in die Zeitleiste oder wähle ${quizType === "release-date-ranking" ? "es" : "sie"} aus und tippe auf „Hier einordnen“.`;
-    dialogContent.append(prompt);
+    body.append(prompt);
   }
 
   const timelineHeading = document.createElement("h3");
   timelineHeading.className = "ranking-section-heading";
   timelineHeading.textContent = config.timelineHeading;
-  dialogContent.append(timelineHeading);
+  body.append(timelineHeading);
 
   const placedPeople = config.people.filter((person) => state.placed.includes(person.id));
   const timelinePeople = [...placedPeople, config.anchor].sort((first, second) => (
@@ -1311,7 +1364,7 @@ function renderRankingQuiz() {
     timeline.append(entry);
   });
   addPosition(timelinePeople.length);
-  dialogContent.append(timeline);
+  body.append(timeline);
   // Mit natürlicher Breite messen: Passt die zentrierte Zeitleiste hinein, bleibt der Anker in der Mitte.
   // Sonst schrumpfen die Einträge, damit nichts seitlich gescrollt werden muss.
   timeline.classList.add("is-centered");
@@ -1382,7 +1435,10 @@ function renderRankingQuiz() {
     poolItem.append(card, zoomButton);
     pool.append(poolItem);
   });
-  dialogContent.append(poolHeading, pool);
+  const poolSection = document.createElement("div");
+  poolSection.className = "ranking-pool-section";
+  poolSection.append(poolHeading, pool);
+  dialogContent.append(poolSection);
 }
 
 function placeRankingItem(personId, position, timelinePeople, config) {
@@ -1565,7 +1621,12 @@ function renderLiveQuiz() {
     }
   });
 
-  dialogContent.replaceChildren(createQuizStatus(timer), createQuizMedia([list], "list"));
+  const livePrompt = quiz.livePrompt ? document.createElement("p") : null;
+  if (livePrompt) {
+    livePrompt.className = "question-text";
+    livePrompt.textContent = quiz.livePrompt;
+  }
+  dialogContent.replaceChildren(createQuizStatus(timer), createQuizBody(livePrompt, createQuizMedia([list], "list")));
   setDialogView("stage");
   updateLiveProgress();
   updateTimer();
@@ -1634,8 +1695,7 @@ function renderWordQuestion(question, questionIndex, progressText, questionText)
   form.append(input, submitButton);
   dialogContent.append(
     createQuizStatus(progressText, timerDisplay),
-    questionText,
-    createQuizMedia([scrambledWord], "word"),
+    createQuizBody(questionText, createQuizMedia([scrambledWord], "word")),
     form
   );
   startWordTimer(questionIndex, timerDisplay);
@@ -1688,8 +1748,7 @@ function renderImageQuestion(question, questionIndex, progressText) {
   form.append(input, submitButton);
   dialogContent.append(
     createQuizStatus(progressText, timerDisplay),
-    questionText,
-    createQuizMedia([image], "image"),
+    createQuizBody(questionText, createQuizMedia([image], "image")),
     form
   );
   if (timerDisplay) startWordTimer(questionIndex, timerDisplay, quiz.questionTimeLimit ?? 30);
@@ -1708,7 +1767,7 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
   const player = document.createElement("div");
   player.className = "audio-quiz-player";
   const playButton = document.createElement("button");
-  playButton.className = "primary-button";
+  playButton.className = "secondary-button secondary-button--play";
   playButton.type = "button";
   const attempts = document.createElement("p");
   attempts.className = "audio-quiz-attempts";
@@ -1773,7 +1832,11 @@ function renderAudioQuestion(question, questionIndex, progressText, questionText
 
   form.classList.add("quiz-actions");
   form.append(input, submitButton);
-  dialogContent.append(createQuizStatus(progressText), questionText, createQuizMedia([player], "audio"), form);
+  dialogContent.append(
+    createQuizStatus(progressText),
+    createQuizBody(questionText, createQuizMedia([player], "audio")),
+    form
+  );
   input.focus();
 }
 
@@ -1843,7 +1906,7 @@ function renderTextQuestion(question, questionIndex, progressText, questionText)
   if (isEmojiOnly(questionText.textContent)) questionText.classList.add("question-text--emoji");
   dialogContent.append(
     createQuizStatus(progressText, timerDisplay),
-    createQuizMedia([questionText], "prompt"),
+    createQuizBody(createQuizMedia([questionText], "prompt")),
     form
   );
   if (timerDisplay) startWordTimer(questionIndex, timerDisplay, quiz.questionTimeLimit);
@@ -1921,11 +1984,24 @@ function renderWhoAmIQuestion(question, questionIndex, progressText) {
     }
   });
 
+  // Weiteren Hinweis aufdecken, ohne zu raten – die mögliche Punktzahl sinkt dabei wie bei einer falschen Antwort.
+  const hasMoreClues = clueIndex < question.clues.length - 1;
+  const hintButton = hasMoreClues ? createSecondaryButton("Weiterer Hinweis", "hint") : null;
+  hintButton?.addEventListener("click", () => {
+    const { lastGuess, ...currentAnswer } = answers[questionIndex] ?? {};
+    answers[questionIndex] = { ...currentAnswer, clueIndex: clueIndex + 1, completed: false };
+    progress[openDay] = answers;
+    saveProgress();
+    renderQuestion();
+  });
+
   form.classList.add("quiz-actions");
   form.append(input, submitButton);
-  dialogContent.append(createQuizStatus(progressText));
-  if (feedback) dialogContent.append(feedback);
-  dialogContent.append(createQuizMedia([clues], "clues"), form);
+  dialogContent.append(
+    createQuizStatus(progressText),
+    createQuizBody(feedback, createQuizMedia([clues], "clues"), hintButton),
+    form
+  );
   input.focus();
 }
 
@@ -1945,7 +2021,7 @@ function renderWhoAmIResolution(question, answer, questionIndex) {
     ? "Ergebnis ansehen"
     : "Nächste Person";
   nextButton.addEventListener("click", renderQuestion);
-  dialogContent.append(createQuizAnswer([feedback]), createQuizActions(nextButton));
+  dialogContent.append(createQuizBody(createQuizAnswer([feedback])), createQuizActions(nextButton));
   nextButton.focus();
 }
 
@@ -2019,7 +2095,7 @@ function submitWordAnswer(questionIndex, answer, timedOut = false) {
   nextButton.type = "button";
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
-  dialogContent.append(createQuizAnswer([feedback]), createQuizActions(nextButton));
+  dialogContent.append(createQuizBody(createQuizAnswer([feedback])), createQuizActions(nextButton));
   nextButton.focus();
 }
 
@@ -2048,7 +2124,7 @@ function renderTextResolution(question, answer, isCorrect, timedOut, questionInd
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
 
-  dialogContent.append(createQuizAnswer([feedback, solution, submittedAnswer]), createQuizActions(nextButton));
+  dialogContent.append(createQuizBody(createQuizAnswer([feedback, solution, submittedAnswer])), createQuizActions(nextButton));
   nextButton.focus();
 }
 
@@ -2077,7 +2153,7 @@ function renderAudioResolution(question, answer, isCorrect, questionIndex, quiz)
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
 
-  dialogContent.append(createQuizAnswer([feedback, solution, submittedAnswer]), createQuizActions(nextButton));
+  dialogContent.append(createQuizBody(createQuizAnswer([feedback, solution, submittedAnswer])), createQuizActions(nextButton));
   nextButton.focus();
 }
 
@@ -2113,13 +2189,13 @@ function renderImageResolution(question, answer, isCorrect, timedOut, questionIn
       alt: `${question.answer} im vollständigen Bild`,
       className: "image-quiz-image image-quiz-image--reveal"
     });
-    dialogContent.append(
-      createQuizAnswer([feedback], true),
+    dialogContent.append(createQuizBody(
+      createQuizAnswer([feedback]),
       createQuizMedia([image], "image"),
-      createQuizAnswer([solution, submittedAnswer], true)
-    );
+      createQuizAnswer([solution, submittedAnswer])
+    ));
   } else {
-    dialogContent.append(createQuizAnswer([feedback, solution, submittedAnswer]));
+    dialogContent.append(createQuizBody(createQuizAnswer([feedback, solution, submittedAnswer])));
   }
   dialogContent.append(createQuizActions(nextButton));
   nextButton.focus();
@@ -2157,7 +2233,11 @@ function submitAnswer(questionIndex, selectedIndex) {
   nextButton.type = "button";
   nextButton.textContent = questionIndex + 1 === quiz.questions.length ? "Ergebnis ansehen" : "Nächste Frage";
   nextButton.addEventListener("click", renderQuestion);
-  dialogContent.append(createQuizAnswer([feedback, explanation], true), createQuizActions(nextButton));
+  const answerTarget = dialogContent.querySelector(".choice-card")
+    ?? dialogContent.querySelector(".quiz-body")
+    ?? dialogContent;
+  answerTarget.append(createQuizAnswer([feedback, explanation]));
+  dialogContent.append(createQuizActions(nextButton));
   nextButton.focus();
 }
 
