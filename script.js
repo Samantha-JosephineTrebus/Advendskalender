@@ -1189,7 +1189,7 @@ function renderQuestion() {
   questionText.className = "question-text";
   questionText.textContent = question.question
     ?? (question.type === "ability-audio"
-      ? `${question.champion}: Welche Fähigkeit hörst du?`
+      ? "Welche Fähigkeit hörst du?"
       : question.type === "audio"
       ? quiz.audioPrompt ?? "Welcher Champion ist in der Voiceline zu hören?"
       : question.type === "song" ? "Welcher Songtitel ist zu hören?" : "");
